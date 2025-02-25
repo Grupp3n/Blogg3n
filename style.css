@@ -16,7 +16,8 @@ body {
 
 .container {
     display: flex;
-    background-color: white;
+    
+    background-color:aquamarine;
     width: 50rem;
     height: 50rem;
     justify-content: center;
