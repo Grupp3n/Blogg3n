@@ -11,14 +11,26 @@ header {
 }
 
 body {    
+    display: flex;
+    flex-direction: column;
     background-color: green;
+    justify-content: center;
+    align-items: center;
 }
 
 .container {
     display: flex;
-    
+    justify-content: center;
+    align-items: center;
+}
+
+.container_inside {
+    display: flex;
+
+    align-items: center;
+
     background-color:aquamarine;
-    width: 50rem;
+    width: 50em;
     height: 50rem;
     justify-content: center;
     
