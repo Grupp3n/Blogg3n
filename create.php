@@ -56,7 +56,7 @@
                         userID int UNSIGNED NOT NULL,
                         textInput NVARCHAR(250) NOT NULL,
                         timeCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                        FOREIGN KEY (userID) REFERENCES Users(id)
+                        FOREIGN KEY (userID) REFERENCES Users(id) ON DELETE CASCADE
             )";
 
             $conn->exec($query);
@@ -78,8 +78,9 @@
                         postID int UNSIGNED NOT NULL,
                         textInput NVARCHAR(250) NOT NULL,
                         timeCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                        FOREIGN KEY (userID) REFERENCES Users(id),
-                        FOREIGN KEY (postID) REFERENCES Posts(id)
+                        on delete CASCADE,
+                        FOREIGN KEY (userID) REFERENCES Users(id) ON DELETE CASCADE,
+                        FOREIGN KEY (postID) REFERENCES Posts(id) ON DELETE CASCADE
             )";
 
             $conn->exec($query);
