@@ -7,16 +7,13 @@
     <title>Nexlify</title>
 </head>
 <body>
-    <div class="sticky-ad">
-        <img src="ad.gif" alt="Sticky Ad" class="ad-image">
-    </div>
-
-    <header class="placeholder_header">
-        <img src="logo.jpeg" alt="Blog Logo" class="logo">
+    <header>
+        
+        
         <button onclick="window.location.href='create_post.php'">Gör ett inlägg</button>
-        <input type="text" id="title" placeholder="TITLE" class="title-input">
+        <img src="img/transparent logo.png" alt="Nexlify" class="Logo">
         <button onclick="window.location.href='login.php'">Log In</button>
-    </header>    
+    </header>
 
     <main>
         <div class="main-content">
