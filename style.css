@@ -1,0 +1,37 @@
+* {
+    gap: 0;
+    margin: 0;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background-color: blue;
+}
+
+body {    
+    display: flex;
+    flex-direction: column;
+    background-color: green;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container_inside {
+    display: flex;
+
+    align-items: center;
+
+    background-color:aquamarine;
+    width: 50em;
+    height: 50rem;
+    justify-content: center;
+    
+}
