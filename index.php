@@ -4,19 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>SKOLA</title>
+    <title>Nexlify</title>
 </head>
 <body>
-    <header>
-        <h1>BLOGG</h1>
-    </header>
+    <header class="placeholder_header">
+        <img src="logo.jpeg" alt="Blog Logo" class="logo">
+        <button onclick="window.location.href='create_post.php'">Gör ett inlägg</button>
+        <input type="text" id="title" placeholder="TITLE" class="title-input">
+        <button onclick="window.location.href='login.php'">Log In</button>
+    </header>    
 
-    <div class="container">
-        <div class="container_inside">
-            <p>DETTA ÄR LITE TEXT</p>
+    <main>
+        <div class="main-content">
+            <?php
+                require '';
+                $sql = 'SELECT id, title, content FROM posts';
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute();
+                $post = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            ?>
         </div>
-    </div>
-
-    
+    </main>
 </body>
 </html>
