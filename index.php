@@ -8,7 +8,9 @@
 </head>
 <body>
     <header>
-        
+    <div class="sticky-ad">
+        <img src="ad.gif" alt="Sticky Ad" class="ad-image">
+    </div>
         
         <button onclick="window.location.href='create_post.php'">Gör ett inlägg</button>
         <img src="img/transparent logo.png" alt="Nexlify" class="Logo">
