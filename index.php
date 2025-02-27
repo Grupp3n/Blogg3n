@@ -8,7 +8,11 @@
 </head>
 <body>
     <header>
-        <h1>BLOGG</h1>
+        
+        
+        <button onclick="window.location.href='create_post.php'">Gör ett inlägg</button>
+        <img src="img/transparent logo.png" alt="Nexlify" class="Logo">
+        <button onclick="window.location.href='login.php'">Log In</button>
     </header>
 
     <div class="container">
