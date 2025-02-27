@@ -68,55 +68,20 @@ button {
 
 
 /* HÄR SKRIVER PHILLIP SIN KOD */
-.placeholder_header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 2%;
-    background-color: #000;
-    flex-wrap: wrap;
-}
-
-button {
-    background-color: #fff;
-    color: #000;
-    border: none;
-    padding: 2% 4%; 
-    cursor: pointer;
-    margin: 1%;
-}
-
-.title-input {
-    background-color: #fff;
-    color: #000;
-    border: none;
-    padding: 2%;
-    flex-grow: 1;
-    margin: 1%;
-    min-width: 20%;
-}
-
-.logo {
-    height: 10%; 
-    max-height: 80px; 
-    margin: 0 1%; 
-    object-fit: contain;
-}
-
 .sticky-ad {
     position: fixed;
     top: 35%;
     right: 3%; 
     z-index: 1000; 
-    width: 160px;
+    width: 150px;
     height: 320px; 
     background-color: transparent;
 }
 
 .ad-image {
-    width: 110%; 
-    height: 140%; 
-    object-fit: cover; 
+    width: 200%; 
+    height: 135%; 
+    object-fit:fill;
     border: 2px solid #fff; 
     border-radius: 5px; 
 }

@@ -21,11 +21,25 @@
         <div class="main-content">
             <?php
                 require '';
-                $sql = 'SELECT id, title, content FROM posts';
+                $sql = 'SELECT id, title, content, image_path FROM posts
+                        ORDER BY created_at DESC LIMIT 1';
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute();
                 $post = $stmt->fetch(PDO::FETCH_ASSOC);
 
+                if ($post) {
+                    echo '<div class="post-preview" onclick="window.location.href=\'post.php?id=' . $post['id'] . '\'">';
+                    if ($post['image_path']) {
+                        echo '<img src="' . htmlspecialchars($post['image_path']) . '" alt="' . htmlspecialchars($post['title']) . '">';
+                    }
+                    echo '</div>';
+                    echo '<h1>' . htmlspecialchars($post['title']) . '</h1>';
+                    echo '<p>' . htmlspecialchars(substr($post['content'], 0, 200)) . '...</p>';
+                } else {
+                    echo '<div class="post-preview"';
+                    echo '<p>No posts posted</p>';
+                    echo '</div>';
+                }
             ?>
         </div>
     </main>
