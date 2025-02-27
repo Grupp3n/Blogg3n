@@ -81,4 +81,23 @@ button {
     margin: 0 1%; 
     object-fit: contain;
 }
+
+.sticky-ad {
+    position: fixed;
+    top: 35%; /* Adjust this to position vertically as needed */
+    right: 3%; /* Stick to the right side */
+    z-index: 1000; /* Ensure it stays on top of other content */
+    width: 160px; /* Match this to your GIF’s width or adjust */
+    height: 320px; /* Match this to your GIF’s height or adjust */
+    /* Remove or match the background to the GIF’s background if it’s not black */
+    background-color: transparent; /* Remove black background to avoid gaps */
+}
+
+.ad-image {
+    width: 110%; /* Fill the container width */
+    height: 140%; /* Fill the container height */
+    object-fit: cover; /* Use cover to fill the container, cropping if necessary to remove black space */
+    border: 2px solid #fff; /* Keep the border visible */
+    border-radius: 5px; /* Keep rounded corners if desired */
+}
 /* SLUT */
