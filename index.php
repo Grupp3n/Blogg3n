@@ -20,9 +20,9 @@
     <main>
         <div class="main-content">
             <?php
-                require '';
-                $sql = 'SELECT id, title, content, image_path FROM posts
-                        ORDER BY created_at DESC LIMIT 1';
+                require 'db_connect.php';
+                $sql = 'SELECT id, userID, textInput FROM posts
+                        ORDER BY timeCreated DESC LIMIT 1';
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute();
                 $post = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -42,6 +42,30 @@
                 }
             ?>
         </div>
+
+        <aside>
+            <h2>Top Headlines</h2>
+            <div class="post-thumbnails">
+                <?php
+                $sql = "SELECT id, textInput AS title FROM Posts ORDER BY timeCreated DESC LIMIT 4";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute();
+                $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                if (count($posts) > 0) {
+                    foreach ($posts as $post) {
+                        echo '<div class="thumbnail" onclick="window.location.href=\'post.php?id=' . $post['id'] . '\'">';
+                        echo '</div>'; 
+                        echo '<p>' . htmlspecialchars(substr($post['title'], 0, 50)) . '...</p>';
+                    }
+                } else {
+                    echo '<div class="thumbnail">';
+                    echo '<p>No posts posted</p>';
+                    echo '</div>';
+                }
+                ?>
+            </div>
+        </aside>
     </main>
 </body>
 </html>
