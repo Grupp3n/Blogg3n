@@ -55,6 +55,7 @@
                         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                         userID int UNSIGNED NOT NULL,
                         textInput NVARCHAR(250) NOT NULL,
+                        image MEDIUMBLOB,
                         timeCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         FOREIGN KEY (userID) REFERENCES Users(id) ON DELETE CASCADE
             )";
@@ -85,6 +86,27 @@
             $conn->exec($query);
             
             echo "Tabellen för Comments skapades Framgångsrikt <p style='color: red;'>✔</p><br>";
+
+            $conn = null;
+        }
+
+        if(isset($_POST['createLikesTableButton'])) {           
+
+            $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            $query = "CREATE TABLE Likes (
+                        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                        userID int UNSIGNED NOT NULL,
+                        postID int UNSIGNED NOT NULL,
+                        count int UNSIGNED,
+                        FOREIGN KEY (userID) REFERENCES Users(id) ON DELETE CASCADE,
+                        FOREIGN KEY (postID) REFERENCES Posts(id) ON DELETE CASCADE
+            )";
+
+            $conn->exec($query);
+            
+            echo "Tabellen för Likes skapades Framgångsrikt <p style='color: red;'>✔</p><br>";
 
             $conn = null;
         }
@@ -132,6 +154,7 @@
                     <button name="createUserTableButton">Skapa Users table</button>
                     <button name="createPostsTableButton">Skapa Posts table</button>
                     <button name="createCommentsTableButton">Skapa Comments table</button>
+                    <button name="createLikesTableButton">Skapa Likes table</button>
                     <button name="dropsTableButton">Drop Tables</button>
                 </form>
             </div>
