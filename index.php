@@ -40,6 +40,8 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
     <header>
         <?php if (isset($_SESSION['INLOGGAD']) && $_SESSION['INLOGGAD'] === true) : ?>
             <button onclick="window.location.href='create_post.php'">Gör ett inlägg</button>
+        <?php else: ?>
+                <div></div>
         <?php endif; ?>
         
         <!-- Log in "button" if SESSION inloggad är false -->
