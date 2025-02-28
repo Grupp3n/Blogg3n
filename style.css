@@ -1,8 +1,7 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    box-sizing: border-box;
+    box-sizing: border-box;    
 }
 
 header {
@@ -103,6 +102,7 @@ button {
     width: 80rem;
     background: #333;
     color: white;
+    resize: none;
 }
 
 .post_submit_button {
@@ -116,9 +116,11 @@ button {
     margin: 0;
     padding: 0;
   }
-  
+    
   .cube {
-    position: relative;    
+    /* position: relative;     */
+    width: 100%;
+    flex-direction: column;
   }
   
   .ants {
