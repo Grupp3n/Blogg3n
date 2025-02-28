@@ -89,19 +89,20 @@
             $conn = null;
         }
 
-        // if(isset($_POST['dropsTableButton'])) {   
-        //     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-        //     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        if(isset($_POST['dropsTableButton'])) {   
+            $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        //     // $query = "DROP TABLE Comments";
-        //      $query = "DROP TABLE Posts";            
+             $query = "DROP TABLE Comments";
+             $query2 = "DROP TABLE Posts";            
 
-        //     $conn->exec($query);
+            $conn->exec($query);
+            $conn->exec($query2);
             
-        //     echo "Tabellen har tagits bort Framgångsrikt <p style='color: red;'>✔</p><br>";
+            echo "Tabellerna har tagits bort Framgångsrikt <p style='color: red;'>✔</p><br>";
 
-        //     $conn = null;
-        // }
+            $conn = null;
+        }
 
 
     } catch (PDOException $e) {
@@ -131,7 +132,7 @@
                     <button name="createUserTableButton">Skapa Users table</button>
                     <button name="createPostsTableButton">Skapa Posts table</button>
                     <button name="createCommentsTableButton">Skapa Comments table</button>
-                    <!-- <button name="dropsTableButton">Drop Tables</button> -->
+                    <button name="dropsTableButton">Drop Tables</button>
                 </form>
             </div>
         </div>
