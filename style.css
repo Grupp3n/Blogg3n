@@ -88,12 +88,14 @@ button {
     height: 2rem;
     margin-bottom: 0.8rem;
     font-size: larger;
+    color: white;
 }
 
 .text_create_post {
-    font-size: larger;
+    font-size: 1.5rem;
     width: 80rem;
-    
+    background: #333;
+    color: white;
 }
 
 /* @media (max-width:) */

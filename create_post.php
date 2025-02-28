@@ -27,14 +27,14 @@ Session_start();
                 <input type="text" name="blogHeader" placeholder="HEADLINE" class="headline_create_post">
             </div>
 
-            <textarea name="blogText" class="text_create_post" rows="40" placeholder="Input blog shit here"></textarea>
+            <textarea name="blogText" class="text_create_post" rows="25" placeholder="Input blog shit here"></textarea>
 
         </form>
 
         <div class="div_create_post">
             <img src="ad.gif" alt="Sticky Ad" class="ad-image" style="width: 500px; height: 125px; margin-top: 3rem; text-align: center;">
         </div>
-        
+
     </main>
 </body>
 </html>
