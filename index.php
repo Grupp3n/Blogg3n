@@ -42,7 +42,8 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
         <?php endif; ?>
 
         <img src="img/transparent logo.png" alt="Nexlify" class="Logo">
-        <button onclick="window.location.href='login.php'">Log In</button>
+        <a href="#adPopup" class="ad-link">Log In</a>
+        <!-- <button onclick="window.location.href='login.php'">Log In</button> -->
     </header>
 
     <main class="index-main">
@@ -62,5 +63,12 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </aside>
 </main>
+<div id="adPopup" class="popup">
+    <div class="popup-content">
+        <img src="ad.gif" alt="Ad Popup" class="popup-ad-image">
+        <a href="login.php" class="popup-login-link">Proceed to Login</a>
+        <a href="#" class="popup-close-link">Close</a> 
+    </div>
+</div>
 </body>
 </html>
