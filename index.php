@@ -1,6 +1,11 @@
 <?php
 require 'db_connect.php';
 
+session_start();
+
+//Kommentera "true" om Post knappen ska visas, false om den ska döljas
+$_SESSION['INLOGGAD'] = true; 
+
 // Fetcha från posts för main content (Stora bilden)
 $sql_main = 'SELECT id, userID, textInput 
              FROM Posts
@@ -19,14 +24,6 @@ $stmt_thumbnails->execute();
 $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-
-<?php
-session_start();
-
-//Kommentera "true" om Post knappen ska visas, false om den ska döljas
-$_SESSION['INLOGGAD'] = true; 
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,10 +33,10 @@ $_SESSION['INLOGGAD'] = true;
     <title>Nexlify</title>
 </head>
 <body>
-<header>
-        <div class="sticky-ad">
-            <img src="ad.gif" alt="Sticky Ad" class="ad-image">
-        </div>
+    <div class="sticky-ad">
+        <img src="ad.gif" alt="Sticky Ad" class="ad-image">
+    </div>
+    <header>
 
         <?php if (isset($_SESSION['INLOGGAD']) && $_SESSION['INLOGGAD'] === true) : ?>
             <button onclick="window.location.href='create_post.php'">Gör ett inlägg</button>

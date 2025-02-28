@@ -115,7 +115,7 @@ button {
 
 .sticky-ad {
     position: fixed;
-    top: 29%;
+    top: 22%;
     right: 5%; 
     z-index: 1000; 
     width: 150px;
@@ -142,7 +142,7 @@ button {
 }
 
 .main-content h2 {
-    color: #000000; 
+    color: #ffffff; 
     margin-bottom: 1%;
 }
 
@@ -164,7 +164,7 @@ button {
 }
 
 .index-aside h2{
-    color: #000000; 
+    color: #ffffff; 
     margin-bottom: 1%; 
 }
 
@@ -173,7 +173,7 @@ button {
     height: 650%; 
     width: 60%;
     margin: 2%; 
-    color: #000; 
+    color: #000000; 
     display: flex;
     align-items: center;
     justify-content: center;
