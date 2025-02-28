@@ -1,3 +1,10 @@
+<?php
+session_start();
+
+//Kommentera "true" om Post knappen ska visas, false om den ska döljas
+$_SESSION['INLOGGAD'] = false; 
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,12 +14,15 @@
     <title>Nexlify</title>
 </head>
 <body>
-    <header>
-    <div class="sticky-ad">
-        <img src="ad.gif" alt="Sticky Ad" class="ad-image">
-    </div>
-        
-        <button onclick="window.location.href='create_post.php'">Gör ett inlägg</button>
+<header>
+        <div class="sticky-ad">
+            <img src="ad.gif" alt="Sticky Ad" class="ad-image">
+        </div>
+
+        <?php if (isset($_SESSION['INLOGGAD']) && $_SESSION['INLOGGAD'] === true) : ?>
+            <button onclick="window.location.href='create_post.php'">Gör ett inlägg</button>
+        <?php endif; ?>
+
         <img src="img/transparent logo.png" alt="Nexlify" class="Logo">
         <button onclick="window.location.href='login.php'">Log In</button>
     </header>
