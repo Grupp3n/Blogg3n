@@ -37,7 +37,6 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
         <img src="ad.gif" alt="Sticky Ad" class="ad-image">
     </div>
     <header>
-
         <?php if (isset($_SESSION['INLOGGAD']) && $_SESSION['INLOGGAD'] === true) : ?>
             <button onclick="window.location.href='create_post.php'">Gör ett inlägg</button>
         <?php endif; ?>
