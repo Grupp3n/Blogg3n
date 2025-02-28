@@ -41,7 +41,8 @@
     <header>    
         <!-- <button onclick="window.location.href='create_post.php'">Gör ett inlägg</button> -->
          <div></div>
-        <img src="img/transparent logo.png" alt="Nexlify" class="Logo">
+        
+        <a href="index.php"><img src="img/transparent logo.png" alt="Nexlify" class="Logo"></a>
         <button onclick="window.location.href='login.php'">Profile</button>
     </header>
 
