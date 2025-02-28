@@ -35,7 +35,7 @@
                         lastname NVARCHAR(50) NOT NULL,
                         email NVARCHAR(25) NOT NULL UNIQUE,
                         username NVARCHAR (25) NOT NULL UNIQUE,
-                        password NVARCHAR(50) NOT NULL 
+                        password NVARCHAR(250) NOT NULL 
             )";
 
             $conn->exec($query);
@@ -118,11 +118,13 @@
 
             $query = "DROP TABLE Comments";
             $query2 = "DROP TABLE Likes";            
-            $query3 = "DROP TABLE Posts";   
+            $query3 = "DROP TABLE Posts";  
+            $query4 = "DROP TABLE Users";               
 
             $conn->exec($query);
             $conn->exec($query2);
             $conn->exec($query3);
+            $conn->exec($query4);
             
             echo "<p style='color:white;'>Tabellerna har tagits bort Framgångsrikt</p> <p style='color: green;'>✔</p><br>";
 
