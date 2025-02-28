@@ -238,41 +238,32 @@ form button:hover {
 
 
 
+/* SLUT */
 
+/* HÄR SKRIVER Kevin SIN KOD */
+.Loginknapp {
+    background-color: #fff;
+    color: #000;
+    border: none;
+    padding: 15px 25px; 
+    cursor: pointer;
+    margin: 1%;
+    max-width: 400px;
+    max-height: 75px;
+    
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.PostKnapp {
+    background-color: #fff;
+    color: #000;
+    border: none;
+    padding: 15px 25px; 
+    cursor: pointer;
+    margin: 1%;
+    max-width: 400px;
+    max-height: 75px;
+    
+}
 
 
 /* SLUT */

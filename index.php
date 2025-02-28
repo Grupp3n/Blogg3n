@@ -20,11 +20,11 @@ $_SESSION['INLOGGAD'] = true;
         </div>
 
         <?php if (isset($_SESSION['INLOGGAD']) && $_SESSION['INLOGGAD'] === true) : ?>
-            <button onclick="window.location.href='create_post.php'">Gör ett inlägg</button>
+            <button class="PostKnapp" onclick="window.location.href='create_post.php'">Gör ett inlägg</button>
         <?php endif; ?>
 
         <img src="img/transparent logo.png" alt="Nexlify" class="Logo">
-        <button onclick="window.location.href='login.php'">Log In</button>
+        <button class="Loginknapp" onclick="window.location.href='login.php'">Log In</button>
     </header>
 
     <main>
