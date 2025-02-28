@@ -1,12 +1,11 @@
 <?php
 session_start();
 
-// Test-användare: Om inte inloggad, sätt en testanvändare (ta bort när login.php är på plats)
+// Test-användare:
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['user_id'] = 1;
 }
 
-// Om ingen giltig session: Skicka tillbaka till index.php (eller login.php)
 if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit;
