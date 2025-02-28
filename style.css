@@ -61,11 +61,46 @@ button {
 }
 
 /* HÄR SKRIVER CHRISTOFER SIN KOD */
+.div_create_post {
+    text-align: center;
+}
+
+.main_create_post {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.5rem;
+    padding: 1rem;
+}
+
+.main_create_post>img {
+    width: 500px;
+    height: 125px;
+    margin-top: 3rem;    
+}
+
+.form_create_post {
+    display: flex;
+    flex-direction: column;
+}
+
+.headline_create_post {
+    width: 31.3rem;
+    height: 2rem;
+    margin-bottom: 0.8rem;
+    font-size: larger;
+}
+
+.text_create_post {
+    font-size: larger;
+    width: 80rem;
+    
+}
+
+/* @media (max-width:) */
 
 
 
 /* SLUT */
-
 
 /* HÄR SKRIVER PHILLIP SIN KOD */
 
