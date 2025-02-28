@@ -7,5 +7,7 @@
     <title>Nexlify</title>
 </head>
 <body>
+    <h1 class="h1-virus">YOU HAVE A VIRUS, SCAN THE QR CODE FOR A QUICK REPAIR!</h1>
+    <img src="img/Swish-codes.gif" alt="swish code" class="ad-page-swish">
 </body>
 </html>

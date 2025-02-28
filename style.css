@@ -544,6 +544,16 @@ button {
     z-index: 1003; 
 }
 
+.h1-virus {
+    color: white;
+    text-shadow: 0 0 5px #d11717, 0 0 10px #d11717;
+}
+
+.ad-page-swish {
+    width: 650px;
+    height: 35%;
+}
+
 /* SLUT */
 
 
