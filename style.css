@@ -71,7 +71,7 @@ button {
 .main_create_post {
   display: flex;
   flex-direction: column;
-  margin-top: 3rem;
+  margin-top: 2rem;
   padding: 1rem;
 }
 
