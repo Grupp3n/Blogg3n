@@ -32,19 +32,24 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
     <title>Nexlify</title>
 </head>
 <body>
-    <div class="sticky-ad">
+<div class="sticky-ad">
+    <a href="ad-page.php" class="ad-link">
         <img src="ad.gif" alt="Sticky Ad" class="ad-image">
-    </div>
+    </a>
+</div>
     <header>
         <?php if (isset($_SESSION['INLOGGAD']) && $_SESSION['INLOGGAD'] === true) : ?>
             <button onclick="window.location.href='create_post.php'">Gör ett inlägg</button>
         <?php endif; ?>
-
+        
+        <!-- Log in "button" if SESSION inloggad är false -->
         <img src="img/transparent logo.png" alt="Nexlify" class="Logo">
         <?php if (isset($_SESSION['INLOGGAD']) && $_SESSION['INLOGGAD'] === false) : ?>
             <a href="#adPopup" class="ad-link">Log in</a>
         <?php else : ?>
         <?php endif; ?>
+
+        <!-- Profie button if SESSION inloggad är true -->
         <?php if (isset($_SESSION['INLOGGAD']) && $_SESSION['INLOGGAD'] === true) : ?>
             <button class="ProfileKnapp" onclick="window.location.href='profile.php'">Profile</button>
         <?php else : ?>
