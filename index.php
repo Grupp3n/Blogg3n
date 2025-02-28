@@ -3,7 +3,7 @@ require 'db_connect.php';
 
 session_start();
 
-//Kommentera "true" om Post knappen ska visas, false om den ska döljas
+//Kommentera "true" om Post knappen ska visas, false om den ska döljas/samma för om det ska stå login eller profile
 $_SESSION['INLOGGAD'] = true; 
 
 // Fetcha från posts för main content (Stora bilden)
@@ -23,7 +23,6 @@ $stmt_thumbnails = $pdo->prepare($sql_thumbnails);
 $stmt_thumbnails->execute();
 $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,11 +37,16 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
     </div>
     <header>
         <?php if (isset($_SESSION['INLOGGAD']) && $_SESSION['INLOGGAD'] === true) : ?>
-            <button class="PostKnapp" onclick="window.location.href='create_post.php'">Gör ett inlägg</button>
+            <button onclick="window.location.href='create_post.php'">Gör ett inlägg</button>
         <?php endif; ?>
 
         <img src="img/transparent logo.png" alt="Nexlify" class="Logo">
+        <a href="#adPopup" class="ad-link">Open Ad</a>
+        <?php if (isset($_SESSION['INLOGGAD']) && $_SESSION['INLOGGAD'] === true) : ?>
+            <button class="ProfileKnapp" onclick="window.location.href='profile.php'">Profile</button>
+        <?php else : ?>
         <button class="Loginknapp" onclick="window.location.href='login.php'">Log In</button>
+        <?php endif; ?>
     </header>
 
     <main class="index-main">
@@ -62,5 +66,11 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </aside>
 </main>
+<!-- <div id="adPopup" class="popup">
+    <div class="popup-content">
+        <img src="ad.gif" alt="Ad Popup" class="popup-ad-image">
+        <a href="#" class="popup-close-link">Close</a> 
+    </div> -->
+</div>
 </body>
 </html>

@@ -148,6 +148,7 @@ button {
 .main-content h2 {
     color: #ffffff; 
     margin-bottom: 1%;
+    text-shadow: 0 0 5px #7046cb, 0 0 10px #7046cb;
 }
 
 .post-preview {
@@ -170,6 +171,7 @@ button {
 .index-aside h2{
     color: #ffffff; 
     margin-bottom: 1%; 
+    text-shadow: 0 0 5px #7046cb, 0 0 10px #7046cb;
 }
 
 .post-thumbnails {
@@ -182,6 +184,18 @@ button {
     align-items: center;
     justify-content: center;
     cursor: pointer;
+}
+
+.ad-link {
+    background-color: #fff ;
+    color: #000 ;
+    text-decoration: none ;
+    padding: 2% 4% ;
+    cursor: pointer;
+    margin: 1% ;
+    display: inline-block ; 
+    border: none ;
+    z-index: 1001; 
 }
 
 /* SLUT */
