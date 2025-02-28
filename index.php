@@ -75,7 +75,9 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
 </main>
 <div id="adPopup" class="popup">
     <div class="popup-content">
-        <img src="ad.gif" alt="Ad Popup" class="popup-ad-image">
+    <a href="ad-page.php" class="ad-link">
+        <img src="ad.gif" alt="Sticky Ad" class="popup-ad-image">
+    </a>
         <a href="login.php" class="popup-login-link">Proceed to Login</a>
         <a href="#" class="popup-close-link">Close</a> 
     </div>
