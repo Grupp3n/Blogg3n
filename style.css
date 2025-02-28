@@ -122,3 +122,191 @@ button {
     border-radius: 5px; 
 }
 /* SLUT */
+
+
+
+
+/* HÄR SKRIVER Amer SIN KOD */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #121212; 
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.body-container {
+    display: flex;
+    width: 80%;
+    max-width: 1200px;
+    background: #1e1e1e;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+    flex-direction: column;
+    flex: 1;
+}
+
+.body-logo {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #c0bfbf;
+    padding: 20px;
+}
+
+.body-logo img {
+    max-width: 200px;
+    border-radius: 10px;
+}
+
+.body-form-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    background: #1e1e1e;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+    position: relative;
+    flex: 1;
+}
+
+.message-container {
+    margin-bottom: 20px;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeIn 0.8s forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+form input, form button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    font-size: 16px;
+}
+
+form input {
+    background: #333;
+    color: #fff;
+}
+
+form button {
+    background: #007BFF;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+form button:hover {
+    background: #0056b3;
+}
+
+.success, .error {
+    padding: 10px;
+    margin-top: 10px;
+    text-align: center;
+    border-radius: 5px;
+    max-width: 400px;
+    width: 100%;
+    animation: fadeIn 0.8s forwards;
+}
+
+.success {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.error {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.footer {
+    text-align: center;
+    padding: 10px;
+    width: 100%;
+    background: #252525;
+    color: #bbb;
+    font-size: 14px;
+    box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.6);
+    border-radius: 0 0 10px 10px;
+    margin-top: auto;
+}
+
+.footer p {
+    margin: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* SLUT */
+
