@@ -36,5 +36,9 @@ Session_start();
         </div>
 
     </main>
+
+    <div class="footer">        
+        <p>&copy; Alla rättigheter förbehållna. Grupp 3 </p>
+    </div>
 </body>
 </html>

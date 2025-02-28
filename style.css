@@ -65,17 +65,19 @@ button {
 
 /* HÄR SKRIVER CHRISTOFER SIN KOD */
 .div_create_post {
-    text-align: center;
+    display: flex;
+    justify-content: center;    
 }
 
 .main_create_post {
     display: flex;
     flex-direction: column;
-    margin-top: 0.5rem;
+    margin-top: 3rem;
     padding: 1rem;
 }
 
 .main_create_post>img {
+    display: flex;
     width: 500px;
     height: 125px;
     margin-top: 3rem;    
@@ -83,10 +85,11 @@ button {
 
 .form_create_post {
     display: flex;
-    flex-direction: column;
+    flex-direction: column;    
 }
 
 .headline_create_post {
+    display: flex;
     width: 31.3rem;
     height: 2rem;
     margin-bottom: 0.8rem;
@@ -95,6 +98,7 @@ button {
 }
 
 .text_create_post {
+    display: flex;
     font-size: 1.5rem;
     width: 80rem;
     background: #333;
@@ -259,11 +263,12 @@ form button:hover {
     padding: 10px;
     width: 100%;
     background: #252525;
-    color: #bbb;
+    color: #bbb;    
     font-size: 14px;
     box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.6);
     border-radius: 0 0 10px 10px;
     margin-top: auto;
+    
 }
 
 .footer p {
