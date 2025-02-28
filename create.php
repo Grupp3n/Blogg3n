@@ -16,7 +16,7 @@
 
             $conn->exec($query);
 
-            echo "Databasen $dbname skapades Framgångsrikt <p style='color: red;'>✔</p><br>";
+            echo "<p style='color:white;'>Databasen $dbname skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>";
 
             $conn = null;
         
@@ -40,7 +40,7 @@
 
             $conn->exec($query);
             
-            echo "Tabellen för Users skapades Framgångsrikt <p style='color: red;'>✔</p><br>";
+            echo "<p style='color:white;'>Tabellen för Users skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>";
 
             $conn = null;
         }
@@ -62,7 +62,7 @@
 
             $conn->exec($query);
             
-            echo "Tabellen för Posts skapades Framgångsrikt <p style='color: red;'>✔</p><br>";
+            echo "<p style='color:white;'>Tabellen för Posts skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>";
 
             $conn = null;
         }
@@ -85,7 +85,7 @@
 
             $conn->exec($query);
             
-            echo "Tabellen för Comments skapades Framgångsrikt <p style='color: red;'>✔</p><br>";
+            echo "<p style='color:white;'>Tabellen för Comments skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>";
 
             $conn = null;
         }
@@ -106,7 +106,7 @@
 
             $conn->exec($query);
             
-            echo "Tabellen för Likes skapades Framgångsrikt <p style='color: red;'>✔</p><br>";
+            echo "<p style='color:white;'>Tabellen för Likes skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>";
 
             $conn = null;
         }
@@ -121,14 +121,14 @@
             $conn->exec($query);
             $conn->exec($query2);
             
-            echo "Tabellerna har tagits bort Framgångsrikt <p style='color: red;'>✔</p><br>";
+            echo "<p style='color:white;'>Tabellerna har tagits bort Framgångsrikt</p> <p style='color: green;'>✔</p><br>";
 
             $conn = null;
         }
 
 
     } catch (PDOException $e) {
-        echo $e->getMessage();
+        echo "<p style='color:white;'>" . $e->getMessage() . "</p>";
     }
     
 ?>
