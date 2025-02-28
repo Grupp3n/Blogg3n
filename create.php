@@ -16,7 +16,7 @@
 
             $conn->exec($query);
 
-            echo "Databasen $dbname skapades Framgångsrikt <p style='color: red;'>✔</p><br>";
+            echo "<p style='color:white;'>Databasen $dbname skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>";
 
             $conn = null;
         
@@ -40,7 +40,7 @@
 
             $conn->exec($query);
             
-            echo "Tabellen för Users skapades Framgångsrikt <p style='color: red;'>✔</p><br>";
+            echo "<p style='color:white;'>Tabellen för Users skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>";
 
             $conn = null;
         }
@@ -55,13 +55,14 @@
                         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                         userID int UNSIGNED NOT NULL,
                         textInput NVARCHAR(250) NOT NULL,
+                        image MEDIUMBLOB,
                         timeCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         FOREIGN KEY (userID) REFERENCES Users(id) ON DELETE CASCADE
             )";
 
             $conn->exec($query);
             
-            echo "Tabellen för Posts skapades Framgångsrikt <p style='color: red;'>✔</p><br>";
+            echo "<p style='color:white;'>Tabellen för Posts skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>";
 
             $conn = null;
         }
@@ -84,7 +85,28 @@
 
             $conn->exec($query);
             
-            echo "Tabellen för Comments skapades Framgångsrikt <p style='color: red;'>✔</p><br>";
+            echo "<p style='color:white;'>Tabellen för Comments skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>";
+
+            $conn = null;
+        }
+
+        if(isset($_POST['createLikesTableButton'])) {           
+
+            $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            $query = "CREATE TABLE Likes (
+                        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                        userID int UNSIGNED NOT NULL,
+                        postID int UNSIGNED NOT NULL,
+                        count int UNSIGNED,
+                        FOREIGN KEY (userID) REFERENCES Users(id) ON DELETE CASCADE,
+                        FOREIGN KEY (postID) REFERENCES Posts(id) ON DELETE CASCADE
+            )";
+
+            $conn->exec($query);
+            
+            echo "<p style='color:white;'>Tabellen för Likes skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>";
 
             $conn = null;
         }
@@ -99,14 +121,14 @@
             $conn->exec($query);
             $conn->exec($query2);
             
-            echo "Tabellerna har tagits bort Framgångsrikt <p style='color: red;'>✔</p><br>";
+            echo "<p style='color:white;'>Tabellerna har tagits bort Framgångsrikt</p> <p style='color: green;'>✔</p><br>";
 
             $conn = null;
         }
 
 
     } catch (PDOException $e) {
-        echo $e->getMessage();
+        echo "<p style='color:white;'>" . $e->getMessage() . "</p>";
     }
     
 ?>
@@ -132,6 +154,7 @@
                     <button name="createUserTableButton">Skapa Users table</button>
                     <button name="createPostsTableButton">Skapa Posts table</button>
                     <button name="createCommentsTableButton">Skapa Comments table</button>
+                    <button name="createLikesTableButton">Skapa Likes table</button>
                     <button name="dropsTableButton">Drop Tables</button>
                 </form>
             </div>
