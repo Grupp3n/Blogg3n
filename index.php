@@ -4,7 +4,7 @@ require 'db_connect.php';
 session_start();
 
 //Kommentera "true" om Post knappen ska visas, false om den ska döljas/samma för om det ska stå login eller profile
-$_SESSION['INLOGGAD'] = false; 
+$_SESSION['INLOGGAD'] = TRUE; 
 
 // Fetcha från posts för main content (Stora bilden)
 $sql_main = 'SELECT id, userID, textInput 
