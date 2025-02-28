@@ -105,6 +105,10 @@ button {
     color: white;
 }
 
+.post_submit_button {
+    width: 5rem;
+}
+
 /* @media (max-width:) */
 
 
