@@ -369,6 +369,17 @@ form button {
     
 }
 
+.ProfileKnapp{
+    background-color: #fff;
+    color: #000;
+    border: none;
+    padding: 15px 25px; 
+    cursor: pointer;
+    margin: 1%;
+    max-width: 400px;
+    max-height: 75px;
+    
+}
 
 /* SLUT */
 
