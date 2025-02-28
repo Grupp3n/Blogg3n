@@ -55,6 +55,7 @@
                         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                         userID int UNSIGNED NOT NULL,
                         textInput NVARCHAR(250) NOT NULL,
+                        header NVARCHAR(20) NOT NULL,
                         image MEDIUMBLOB,
                         timeCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         FOREIGN KEY (userID) REFERENCES Users(id) ON DELETE CASCADE
@@ -115,11 +116,13 @@
             $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-             $query = "DROP TABLE Comments";
-             $query2 = "DROP TABLE Posts";            
+            $query = "DROP TABLE Comments";
+            $query2 = "DROP TABLE Likes";            
+            $query3 = "DROP TABLE Posts";   
 
             $conn->exec($query);
             $conn->exec($query2);
+            $conn->exec($query3);
             
             echo "<p style='color:white;'>Tabellerna har tagits bort Framgångsrikt</p> <p style='color: green;'>✔</p><br>";
 
