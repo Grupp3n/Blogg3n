@@ -547,6 +547,87 @@ button {
     height: 35%;
 }
 
+.virus-spam {
+    position: absolute; 
+    width: 150px;
+    height: auto; 
+    animation: randomMove 5s infinite ; 
+    z-index: 1001; 
+    pointer-events: none; 
+}
+
+@keyframes randomMove {
+    0% {
+      left: 50%;
+      bottom: 0%;
+    }
+    10% {
+      left: 50%;
+      bottom: 5%;
+      transform: rotate(0deg);
+    }
+    12% {
+      left: 50%;
+      bottom: 5%;
+      transform: rotate(-90deg);
+    }
+    18% {
+      transform: rotate(-90deg);
+    }
+    20% {
+      left: 5%;
+      bottom: 5%;
+      transform: rotate(-90deg);
+    }
+    22% {
+      transform: rotate(0);
+    }
+    32% {
+      transform: rotate(0);
+    }
+    38% {
+      left: 5%;
+      bottom: 87%;
+      transform: rotate(90deg);
+    }
+    50% {
+      left: 90%;
+      bottom: 87%;
+      transform: rotate(90deg);
+    }
+    55% {
+      left: 90%;
+      bottom: 87%;
+      transform: rotate(230deg);
+    }
+    72% {
+      left: 5%;
+      bottom: 5%;
+      transform: rotate(230deg);
+    }
+    78% {
+      left: 5%;
+      bottom: 5%;
+      transform: rotate(90deg);
+    }
+    85% {
+      left: 50%;
+      bottom: 5%;
+      transform: rotate(90deg);
+    }
+    90% {
+      left: 50%;
+      bottom: 5%;
+      transform: rotate(180deg);
+    }
+    100% {
+      left: 50%;
+      bottom: 0%;
+      transform: rotate(180deg);
+    }
+  }
+
+
 /* SLUT */
 
 
