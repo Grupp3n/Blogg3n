@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Registrering</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="register-body">
     <div class="body-container">
        
         <div class="body-logo">
