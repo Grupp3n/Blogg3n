@@ -399,8 +399,21 @@ button {
     width: 125%; 
     height: 135%; 
     object-fit:fill;
-    border: 2px solid #fff; 
     border-radius: 5px; 
+    background-color: transparent;
+    padding: 0;
+}
+
+.sticky-ad a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+.sticky-ad a:hover {
+    opacity: 0.8;
 }
 
 .index-main {
@@ -529,6 +542,16 @@ button {
     margin-top: 10px;
     display: inline-block; 
     z-index: 1003; 
+}
+
+.h1-virus {
+    color: white;
+    text-shadow: 0 0 5px #d11717, 0 0 10px #d11717;
+}
+
+.ad-page-swish {
+    width: 650px;
+    height: 35%;
 }
 
 /* SLUT */
