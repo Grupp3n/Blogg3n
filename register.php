@@ -85,7 +85,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="password" name="password" required>
                 <label>Bekräfta lösenord:</label>
                 <input type="password" name="confirm_password" required>
+                
+                <div class="register">
                 <button type="submit">Registrera</button>
+                </div>
+                
             </form>
             <a href="login.php">Redan medlem? Logga in här</a>
         </div>
