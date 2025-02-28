@@ -28,7 +28,7 @@ header img{
 body {    
     display: flex;
     flex-direction: column;
-    background-color: green;
+    background-color: #121212; 
     justify-content: center;
     align-items: center;
 }
@@ -64,18 +64,59 @@ button {
 }
 
 /* HÄR SKRIVER CHRISTOFER SIN KOD */
+.div_create_post {
+    display: flex;
+    justify-content: center;    
+}
+
+.main_create_post {
+    display: flex;
+    flex-direction: column;
+    margin-top: 3rem;
+    padding: 1rem;
+}
+
+.main_create_post>img {
+    display: flex;
+    width: 500px;
+    height: 125px;
+    margin-top: 3rem;    
+}
+
+.form_create_post {
+    display: flex;
+    flex-direction: column;    
+}
+
+.headline_create_post {
+    display: flex;
+    width: 31.3rem;
+    height: 2rem;
+    margin-bottom: 0.8rem;
+    font-size: larger;
+    color: white;
+}
+
+.text_create_post {
+    display: flex;
+    font-size: 1.5rem;
+    width: 80rem;
+    background: #333;
+    color: white;
+}
+
+/* @media (max-width:) */
 
 
 
 /* SLUT */
 
-
 /* HÄR SKRIVER PHILLIP SIN KOD */
 
 .sticky-ad {
     position: fixed;
-    top: 35%;
-    right: 3%; 
+    top: 22%;
+    right: 5%; 
     z-index: 1000; 
     width: 150px;
     height: 320px; 
@@ -83,12 +124,62 @@ button {
 }
 
 .ad-image {
-    width: 200%; 
+    width: 125%; 
     height: 135%; 
     object-fit:fill;
     border: 2px solid #fff; 
     border-radius: 5px; 
 }
+
+.index-main {
+    display: flex;
+    width: 100%;
+}
+
+.main-content {
+    width: 50%; 
+    padding: 2%;
+}
+
+.main-content h2 {
+    color: #ffffff; 
+    margin-bottom: 1%;
+}
+
+.post-preview {
+    background-color: #fff; 
+    height: 650%;
+    width: 80%; 
+    margin: 2%;
+    color: #000; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.index-aside{
+    width: 50%; 
+    padding: 2%;
+}
+
+.index-aside h2{
+    color: #ffffff; 
+    margin-bottom: 1%; 
+}
+
+.post-thumbnails {
+    background-color: #fff; 
+    height: 650%; 
+    width: 60%;
+    margin: 2%; 
+    color: #000000; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
 /* SLUT */
 
 
@@ -179,21 +270,19 @@ form input, form button {
     border-radius: 5px;
     outline: none;
     font-size: 16px;
-}
-
-form input {
+    background: #007BFF;
+    color: #fff;
+    transition: background 0.3s;
     background: #333;
     color: #fff;
 }
-
-form button {
-    background: #007BFF;
-    color: #fff;
-    cursor: pointer;
-    transition: background 0.3s;
+.register 
+{
+    text-align: center;
+   
 }
 
-form button:hover {
+form button {
     background: #0056b3;
 }
 
@@ -222,11 +311,12 @@ form button:hover {
     padding: 10px;
     width: 100%;
     background: #252525;
-    color: #bbb;
+    color: #bbb;    
     font-size: 14px;
     box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.6);
     border-radius: 0 0 10px 10px;
     margin-top: auto;
+    
 }
 
 .footer p {
