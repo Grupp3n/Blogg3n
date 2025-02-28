@@ -226,7 +226,11 @@ form input, form button {
     background: #333;
     color: #fff;
 }
-
+.register 
+{
+    text-align: center;
+   
+}
 
 form button {
     background: #0056b3;
