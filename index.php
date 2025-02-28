@@ -2,7 +2,7 @@
 session_start();
 
 //Kommentera "true" om Post knappen ska visas, false om den ska döljas
-$_SESSION['INLOGGAD'] = false; 
+$_SESSION['INLOGGAD'] = true; 
 ?>
 
 <!DOCTYPE html>
