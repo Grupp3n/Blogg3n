@@ -72,7 +72,7 @@ button {
 .sticky-ad {
     position: fixed;
     top: 35%;
-    right: 3%; 
+    right: 5%; 
     z-index: 1000; 
     width: 150px;
     height: 320px; 
@@ -80,10 +80,60 @@ button {
 }
 
 .ad-image {
-    width: 200%; 
+    width: 125%; 
     height: 135%; 
     object-fit:fill;
     border: 2px solid #fff; 
     border-radius: 5px; 
 }
+
+.index-main {
+    display: flex;
+    width: 100%;
+}
+
+.main-content {
+    width: 50%; 
+    padding: 2%;
+}
+
+.main-content h2 {
+    color: #000000; 
+    margin-bottom: 1%;
+}
+
+.post-preview {
+    background-color: #fff; 
+    height: 650%;
+    width: 80%; 
+    margin: 2%;
+    color: #000; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.index-aside{
+    width: 50%; 
+    padding: 2%;
+}
+
+.index-aside h2{
+    color: #000000; 
+    margin-bottom: 1%; 
+}
+
+.post-thumbnails {
+    background-color: #fff; 
+    height: 650%; 
+    width: 60%;
+    margin: 2%; 
+    color: #000; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
 /* SLUT */

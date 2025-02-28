@@ -1,3 +1,25 @@
+<?php
+require 'db_connect.php';
+
+// Fetcha från posts för main content (Stora bilden)
+$sql_main = 'SELECT id, userID, textInput 
+             FROM Posts
+             ORDER BY timeCreated DESC LIMIT 1';
+
+$stmt_main = $pdo->prepare($sql_main);
+$stmt_main->execute();
+$main_post = $stmt_main->fetch(PDO::FETCH_ASSOC);
+
+// Fetcha från posts de senaste 4 inläggen för Recent Headlines
+$sql_thumbnails = 'SELECT id, textInput
+                   FROM Posts
+                   ORDER BY timeCreated DESC LIMIT 4';
+$stmt_thumbnails = $pdo->prepare($sql_thumbnails);
+$stmt_thumbnails->execute();
+$thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,65 +29,32 @@
     <title>Nexlify</title>
 </head>
 <body>
-    <header>
     <div class="sticky-ad">
         <img src="ad.gif" alt="Sticky Ad" class="ad-image">
     </div>
-        
+    
+    <header>
         <button onclick="window.location.href='create_post.php'">Gör ett inlägg</button>
         <img src="img/transparent logo.png" alt="Nexlify" class="Logo">
         <button onclick="window.location.href='login.php'">Log In</button>
     </header>
 
-    <main>
-        <div class="main-content">
-            <?php
-                require 'db_connect.php';
-                $sql = 'SELECT id, userID, textInput FROM posts
-                        ORDER BY timeCreated DESC LIMIT 1';
-                $stmt = $pdo->prepare($sql);
-                $stmt->execute();
-                $post = $stmt->fetch(PDO::FETCH_ASSOC);
-
-                if ($post) {
-                    echo '<div class="post-preview" onclick="window.location.href=\'post.php?id=' . $post['id'] . '\'">';
-                    if ($post['image_path']) {
-                        echo '<img src="' . htmlspecialchars($post['image_path']) . '" alt="' . htmlspecialchars($post['title']) . '">';
-                    }
-                    echo '</div>';
-                    echo '<h1>' . htmlspecialchars($post['title']) . '</h1>';
-                    echo '<p>' . htmlspecialchars(substr($post['content'], 0, 200)) . '...</p>';
-                } else {
-                    echo '<div class="post-preview"';
-                    echo '<p>No posts posted</p>';
-                    echo '</div>';
-                }
-            ?>
+    <main class="index-main">
+    <div class="main-content">
+        <h2>Main Headline</h2>
+        <div class="post-preview">
+            <p>No posts posted</p>
         </div>
+    </div>
 
-        <aside>
-            <h2>Top Headlines</h2>
-            <div class="post-thumbnails">
-                <?php
-                $sql = "SELECT id, textInput AS title FROM Posts ORDER BY timeCreated DESC LIMIT 4";
-                $stmt = $pdo->prepare($sql);
-                $stmt->execute();
-                $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                if (count($posts) > 0) {
-                    foreach ($posts as $post) {
-                        echo '<div class="thumbnail" onclick="window.location.href=\'post.php?id=' . $post['id'] . '\'">';
-                        echo '</div>'; 
-                        echo '<p>' . htmlspecialchars(substr($post['title'], 0, 50)) . '...</p>';
-                    }
-                } else {
-                    echo '<div class="thumbnail">';
-                    echo '<p>No posts posted</p>';
-                    echo '</div>';
-                }
-                ?>
+    <aside class="index-aside">
+        <h2>Recent Headlines</h2>
+        <div class="post-thumbnails">
+            <div class="thumbnail">
+                <p>No posts posted</p>
             </div>
-        </aside>
-    </main>
+        </div>
+    </aside>
+</main>
 </body>
 </html>
