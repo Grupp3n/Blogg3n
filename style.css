@@ -177,21 +177,15 @@ form input, form button {
     border-radius: 5px;
     outline: none;
     font-size: 16px;
-}
-
-form input {
+    background: #007BFF;
+    color: #fff;
+    transition: background 0.3s;
     background: #333;
     color: #fff;
 }
 
-form button {
-    background: #007BFF;
-    color: #fff;
-    cursor: pointer;
-    transition: background 0.3s;
-}
 
-form button:hover {
+form button {
     background: #0056b3;
 }
 
