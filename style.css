@@ -125,26 +125,26 @@ button {
 
 #ant1 {
   left: 50%;
-  bottom: 0%;
+  bottom: 5%;
   animation: ant-1-animation 8s infinite;
 }
 
 #ant2 {
-  left: 0;
-  bottom: 0%;
+  left: 10%;
+  bottom: 10%;
   animation: ant-2-animation 9s infinite;
 }
 
 #ant3 {
   left: 95%;
-  bottom: 0%;
+  bottom: 10%;
   animation: ant-3-animation 12s infinite;
   animation-delay: 1s;
 }
 
 #ant4 {
-  left: 0;
-  bottom: 0%;
+  left: 10;
+  bottom: 10%;
   animation: ant-2-animation 12s infinite;
   animation-delay: 3s;
 }
@@ -153,7 +153,7 @@ button {
 @keyframes ant-1-animation {
   0% {
     left: 50%;
-    bottom: 0%;
+    bottom: 10%;
   }
   10% {
     left: 50%;
@@ -216,7 +216,7 @@ button {
   }
   100% {
     left: 50%;
-    bottom: 0%;
+    bottom: 5%;
     transform: rotate(180deg);
   }
 }
@@ -224,8 +224,8 @@ button {
 /* ANT 2 */
 @keyframes ant-2-animation {
   0% {
-    left: 0;
-    bottom: 0%;
+    left: 5;
+    bottom: 5%;
     transform: rotate(45deg);
   }
   15% {
@@ -289,8 +289,8 @@ button {
     transform: rotate(-140deg);
   }
   100% {
-    left: 0%;
-    bottom: 0%;
+    left: 5%;
+    bottom: 5%;
     transform: rotate(-140deg);
   }
 }
@@ -299,7 +299,7 @@ button {
 @keyframes ant-3-animation {
   0% {
     left: 95%;
-    bottom: 0%;
+    bottom: 5%;
     transform: rotate(-45deg);
   }
   15% {
@@ -313,33 +313,33 @@ button {
     transform: rotate(-90deg);
   }
   28% {
-    left: 0%;
-    bottom: 0%;
+    left: 5%;
+    bottom: 5%;
     transform: rotate(-90deg);
   }
   30% {
-    left: 0%;
+    left: 5%;
     bottom: 5%;
     transform: rotate(0deg);
   }
   45% {
-    left: 0%;
-    bottom: 100%;
+    left: 5%;
+    bottom: 95%;
     transform: rotate(0deg);
   }
   48% {
-    left: 0%;
-    bottom: 100%;
+    left: 5%;
+    bottom: 95%;
     transform: rotate(90deg);
   }
   58% {
     left: 95%;
-    bottom: 100%;
+    bottom: 95%;
     transform: rotate(90deg);
   }
   60% {
     left: 95%;
-    bottom: 100%;
+    bottom: 95%;
     transform: rotate(180deg);
   }
   75% {
@@ -349,17 +349,17 @@ button {
   }
   81% {
     left: 95%;
-    bottom: 0%;
+    bottom: 5%;
     transform: rotate(270deg);
   }
   88% {
     left: 50%;
-    bottom: 0%;
+    bottom: 5%;
     transform: rotate(270deg);
   }
   90% {
     left: 50%;
-    bottom: 0%;
+    bottom: 5%;
     transform: rotate(180deg);
   }
   92% {
@@ -369,7 +369,7 @@ button {
   }
   100% {
     left: 95%;
-    bottom: 0%;
+    bottom: 5%;
     transform: rotate(130deg);
   }
 }
