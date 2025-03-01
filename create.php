@@ -33,7 +33,7 @@
                         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                         firstname NVARCHAR(20) NOT NULL,
                         lastname NVARCHAR(50) NOT NULL,
-                        email NVARCHAR(25) NOT NULL UNIQUE,
+                        email NVARCHAR(40) NOT NULL UNIQUE,
                         username NVARCHAR (25) NOT NULL UNIQUE,
                         password NVARCHAR(250) NOT NULL 
             )";
