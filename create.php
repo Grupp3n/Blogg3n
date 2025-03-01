@@ -16,7 +16,7 @@
 
             $conn->exec($query);
 
-            echo "<p style='color:white;'>Databasen $dbname skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>";
+            echo htmlspecialchars("<p style='color:white;'>Databasen $dbname skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>");
 
             $conn = null;
         
@@ -31,16 +31,16 @@
 
             $query = "CREATE TABLE Users (
                         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                        firstname NVARCHAR(20) NOT NULL,
+                        firstname NVARCHAR(50) NOT NULL,
                         lastname NVARCHAR(50) NOT NULL,
-                        email NVARCHAR(40) NOT NULL UNIQUE,
-                        username NVARCHAR (25) NOT NULL UNIQUE,
+                        email NVARCHAR(50) NOT NULL UNIQUE,
+                        username NVARCHAR (50) NOT NULL UNIQUE,
                         password NVARCHAR(250) NOT NULL 
             )";
 
             $conn->exec($query);
             
-            echo "<p style='color:white;'>Tabellen för Users skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>";
+            echo htmlspecialchars("<p style='color:white;'>Tabellen för Users skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>");
 
             $conn = null;
         }
@@ -63,7 +63,7 @@
 
             $conn->exec($query);
             
-            echo "<p style='color:white;'>Tabellen för Posts skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>";
+            echo htmlspecialchars("<p style='color:white;'>Tabellen för Posts skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>");
 
             $conn = null;
         }
@@ -86,7 +86,7 @@
 
             $conn->exec($query);
             
-            echo "<p style='color:white;'>Tabellen för Comments skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>";
+            echo htmlspecialchars("<p style='color:white;'>Tabellen för Comments skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>");
 
             $conn = null;
         }
@@ -107,7 +107,7 @@
 
             $conn->exec($query);
             
-            echo "<p style='color:white;'>Tabellen för Likes skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>";
+            echo htmlspecialchars("<p style='color:white;'>Tabellen för Likes skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>");
 
             $conn = null;
         }
@@ -126,14 +126,14 @@
             $conn->exec($query3);
             $conn->exec($query4);
             
-            echo "<p style='color:white;'>Tabellerna har tagits bort Framgångsrikt</p> <p style='color: green;'>✔</p><br>";
+            echo htmlspecialchars("<p style='color:white;'>Tabellerna har tagits bort Framgångsrikt</p> <p style='color: green;'>✔</p><br>");
 
             $conn = null;
         }
 
 
     } catch (PDOException $e) {
-        echo "<p style='color:white;'>" . $e->getMessage() . "</p>";
+        echo htmlspecialchars("<p style='color:white;'>" . $e->getMessage() . "</p>");
     }
     
 ?>
