@@ -65,8 +65,10 @@ button {
 /* HÄR SKRIVER CHRISTOFER SIN KOD */
 .div_create_post {
   display: flex;
-  justify-content: center;    
+  justify-content: center;  
 }
+
+
 
 .main_create_post {
   display: flex;
@@ -147,6 +149,27 @@ button {
   bottom: 10%;
   animation: ant-2-animation 12s infinite;
   animation-delay: 3s;
+}
+
+.div_create_post2 { 
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: center;  
+  align-items: center;
+}
+
+.div_create_post_left {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.div_create_post_middle {
+  flex: 1;
+  display: flex;
+  justify-content: middle;  
+  margin-right: 6.1rem;
 }
 
 /* ANT-IMATIONS */
