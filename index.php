@@ -4,10 +4,10 @@ require 'db_connect.php';
 session_start();
 
 //Kommentera "true" om Post knappen ska visas, false om den ska döljas/samma för om det ska stå login eller profile
-$_SESSION['INLOGGAD'] = false; 
+$_SESSION['INLOGGAD'] = true; 
 
 // Fetcha från posts för main content (Stora bilden)
-$sql_main = 'SELECT id, userID, textInput 
+$sql_main = 'SELECT id, userID, textInput, header 
              FROM Posts
              ORDER BY timeCreated DESC LIMIT 1';
 
@@ -16,7 +16,7 @@ $stmt_main->execute();
 $main_post = $stmt_main->fetch(PDO::FETCH_ASSOC);
 
 // Fetcha från posts de senaste 4 inläggen för Recent Headlines
-$sql_thumbnails = 'SELECT id, textInput
+$sql_thumbnails = 'SELECT id, textInput, header
                    FROM Posts
                    ORDER BY timeCreated DESC LIMIT 4';
 $stmt_thumbnails = $pdo->prepare($sql_thumbnails);
@@ -32,11 +32,11 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
     <title>Nexlify</title>
 </head>
 <body>
-<div class="sticky-ad">
+<!-- <div class="sticky-ad">
     <a href="ad-page.php" class="ad-link">
         <img src="ad.gif" alt="Sticky Ad" class="ad-image">
     </a>
-</div>
+</div> -->
     <header>
         <?php if (isset($_SESSION['INLOGGAD']) && $_SESSION['INLOGGAD'] === true) : ?>
             <button onclick="window.location.href='create_post.php'">Gör ett inlägg</button>
@@ -59,22 +59,49 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
     </header>
 
     <main class="index-main">
-    <div class="main-content">
-        <h2>Main Headline</h2>
-        <div class="post-preview">
-            <p>No posts posted</p>
-        </div>
+        <div class="main-content">
+            <?php if ($main_post): ?>
+                <h2>Main Headline</h2>
+                <div class="post-preview">
+                    <h3><?= htmlspecialchars($main_post['header']); ?></h3>
+                    <p><?= htmlspecialchars($main_post['textInput']); ?></p>
+                </div>
+                <p>Posted by User ID: <?= htmlspecialchars($main_post['userID']);?></p>
+            <?php else: ?>
+                <h2>Main Headline</h2>
+                <div class="post-preview">
+                    <p>No posts posted</p>
+                </div>
+            <?php endif; ?>
     </div>
 
     <aside class="index-aside">
         <h2>Recent Headlines</h2>
         <div class="post-thumbnails">
-            <div class="thumbnail">
-                <p>No posts posted</p>
-            </div>
+            <?php if ($thumbnail_posts): ?>
+                <?php foreach ($thumbnail_posts as $post): ?>
+                    <div class="thumbnail">
+                        <h4><?= htmlspecialchars($post['header']); ?></h4>
+                        <p><?= htmlspecialchars($post['textInput']); ?></p>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="thumbnail">
+                    <p>No posts posted</p>
+                </div>
+            <?php endif; ?>
         </div>
     </aside>
 </main>
+
+<div class="div_create_post">
+            <img src="./img/Swish-codes.gif" style="width: 150px; margin-right: 1rem;">
+            <a href="ad-page.php">
+            <img src="ad.gif" alt="Sticky Ad" class="ad-image" style="width: 500px; height: 125px; margin-top: 1.5rem; margin-bottom: 1.5rem; text-align: center;">
+            </a>
+            <img src="./img/Swish-codes.gif" style="width: 150px; margin-left: 1rem;">
+        </div>
+
 <div id="adPopup" class="popup">
     <div class="popup-content">
     <a href="ad-page.php" class="ad-link">
