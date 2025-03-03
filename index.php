@@ -1,10 +1,28 @@
 <?php
+require 'db_connect.php';
+
 session_start();
 
-//Kommentera "true" om Post knappen ska visas, false om den ska döljas
+//Kommentera "true" om Post knappen ska visas, false om den ska döljas/samma för om det ska stå login eller profile
 $_SESSION['INLOGGAD'] = true; 
-?>
 
+// Fetcha från posts för main content (Stora bilden)
+$sql_main = 'SELECT id, userID, textInput, header 
+             FROM Posts
+             ORDER BY timeCreated DESC LIMIT 1';
+
+$stmt_main = $pdo->prepare($sql_main);
+$stmt_main->execute();
+$main_post = $stmt_main->fetch(PDO::FETCH_ASSOC);
+
+// Fetcha från posts de senaste 4 inläggen för Recent Headlines
+$sql_thumbnails = 'SELECT id, textInput, header
+                   FROM Posts
+                   ORDER BY timeCreated DESC LIMIT 4';
+$stmt_thumbnails = $pdo->prepare($sql_thumbnails);
+$stmt_thumbnails->execute();
+$thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,68 +32,84 @@ $_SESSION['INLOGGAD'] = true;
     <title>Nexlify</title>
 </head>
 <body>
-<header>
-        <div class="sticky-ad">
-            <img src="ad.gif" alt="Sticky Ad" class="ad-image">
-        </div>
-
+<!-- <div class="sticky-ad">
+    <a href="ad-page.php" class="ad-link">
+        <img src="ad.gif" alt="Sticky Ad" class="ad-image">
+    </a>
+</div> -->
+    <header>
         <?php if (isset($_SESSION['INLOGGAD']) && $_SESSION['INLOGGAD'] === true) : ?>
             <button onclick="window.location.href='create_post.php'">Gör ett inlägg</button>
+        <?php else: ?>
+                <div></div>
+        <?php endif; ?>
+        
+        <!-- Log in "button" if SESSION inloggad är false -->
+        <img src="img/transparent logo.png" alt="Nexlify" class="Logo">
+        <?php if (isset($_SESSION['INLOGGAD']) && $_SESSION['INLOGGAD'] === false) : ?>
+            <a href="#adPopup" class="Loginknapp">Log in</a>
+        <?php else : ?>
         <?php endif; ?>
 
-        <img src="img/transparent logo.png" alt="Nexlify" class="Logo">
-        <button onclick="window.location.href='login.php'">Log In</button>
+        <!-- Profie button if SESSION inloggad är true -->
+        <?php if (isset($_SESSION['INLOGGAD']) && $_SESSION['INLOGGAD'] === true) : ?>
+            <button class="ProfileKnapp" onclick="window.location.href='profile.php'">Profile</button>
+        <?php else : ?>
+        <?php endif; ?>
     </header>
 
-    <main>
+    <main class="index-main">
         <div class="main-content">
-            <?php
-                require 'db_connect.php';
-                $sql = 'SELECT id, userID, textInput FROM posts
-                        ORDER BY timeCreated DESC LIMIT 1';
-                $stmt = $pdo->prepare($sql);
-                $stmt->execute();
-                $post = $stmt->fetch(PDO::FETCH_ASSOC);
+            <?php if ($main_post): ?>
+                <h2>Main Headline</h2>
+                <div class="post-preview">
+                    <h3><?= htmlspecialchars($main_post['header']); ?></h3>
+                    <p><?= htmlspecialchars($main_post['textInput']); ?></p>
+                </div>
+                <p>Posted by User ID: <?= htmlspecialchars($main_post['userID']);?></p>
+            <?php else: ?>
+                <h2>Main Headline</h2>
+                <div class="post-preview">
+                    <p>No posts posted</p>
+                </div>
+            <?php endif; ?>
+    </div>
 
-                if ($post) {
-                    echo '<div class="post-preview" onclick="window.location.href=\'post.php?id=' . $post['id'] . '\'">';
-                    if ($post['image_path']) {
-                        echo '<img src="' . htmlspecialchars($post['image_path']) . '" alt="' . htmlspecialchars($post['title']) . '">';
-                    }
-                    echo '</div>';
-                    echo '<h1>' . htmlspecialchars($post['title']) . '</h1>';
-                    echo '<p>' . htmlspecialchars(substr($post['content'], 0, 200)) . '...</p>';
-                } else {
-                    echo '<div class="post-preview"';
-                    echo '<p>No posts posted</p>';
-                    echo '</div>';
-                }
-            ?>
+    <aside class="index-aside">
+        <h2>Recent Headlines</h2>
+        <div class="post-thumbnails">
+            <?php if ($thumbnail_posts): ?>
+                <?php foreach ($thumbnail_posts as $post): ?>
+                    <div class="thumbnail">
+                        <h4><?= htmlspecialchars($post['header']); ?></h4>
+                        <p><?= htmlspecialchars($post['textInput']); ?></p>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="thumbnail">
+                    <p>No posts posted</p>
+                </div>
+            <?php endif; ?>
+        </div>
+    </aside>
+</main>
+
+<div class="div_create_post">
+            <img src="./img/Swish-codes.gif" style="width: 150px; margin-right: 1rem;">
+            <a href="ad-page.php">
+            <img src="ad.gif" alt="Sticky Ad" class="ad-image" style="width: 500px; height: 125px; margin-top: 1.5rem; margin-bottom: 1.5rem; text-align: center;">
+            </a>
+            <img src="./img/Swish-codes.gif" style="width: 150px; margin-left: 1rem;">
         </div>
 
-        <aside>
-            <h2>Top Headlines</h2>
-            <div class="post-thumbnails">
-                <?php
-                $sql = "SELECT id, textInput AS title FROM Posts ORDER BY timeCreated DESC LIMIT 4";
-                $stmt = $pdo->prepare($sql);
-                $stmt->execute();
-                $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                if (count($posts) > 0) {
-                    foreach ($posts as $post) {
-                        echo '<div class="thumbnail" onclick="window.location.href=\'post.php?id=' . $post['id'] . '\'">';
-                        echo '</div>'; 
-                        echo '<p>' . htmlspecialchars(substr($post['title'], 0, 50)) . '...</p>';
-                    }
-                } else {
-                    echo '<div class="thumbnail">';
-                    echo '<p>No posts posted</p>';
-                    echo '</div>';
-                }
-                ?>
-            </div>
-        </aside>
-    </main>
+<div id="adPopup" class="popup">
+    <div class="popup-content">
+    <a href="ad-page.php" class="ad-link">
+        <img src="ad.gif" alt="Sticky Ad" class="popup-ad-image">
+    </a>
+        <a href="login.php" class="popup-login-link">Proceed to Login</a>
+        <a href="#" class="popup-close-link">Close</a> 
+    </div>
+</div>
 </body>
 </html>
