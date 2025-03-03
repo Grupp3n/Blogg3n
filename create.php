@@ -55,7 +55,7 @@
                         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                         userID int UNSIGNED NOT NULL,
                         textInput NVARCHAR(250) NOT NULL,
-                        header NVARCHAR(20) NOT NULL,
+                        header NVARCHAR(40) NOT NULL,
                         image MEDIUMBLOB,
                         timeCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         FOREIGN KEY (userID) REFERENCES Users(id) ON DELETE CASCADE
