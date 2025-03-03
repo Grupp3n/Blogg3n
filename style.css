@@ -870,21 +870,6 @@ form button {
 }
 
 .footer {
-<<<<<<< HEAD
-    text-align: center;
-    margin: 0;
-    padding: 10px;
-    width: 100%;
-    background: #252525;
-    color: #bbb;    
-    font-size: 14px;
-    box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.6);
-    border-radius: 0 0 10px 10px;
-    margin-top: auto;
-    
-}
-
-=======
   text-align: center;
   padding: 10px;
   width: 100%;
@@ -900,7 +885,6 @@ form button {
 .footer p {
   margin: 0;
 }
->>>>>>> 1eb7e9f7e45e89d6477ae1cbe66917f00a2422d2
 
 
 
