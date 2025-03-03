@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="body-container">
        
         <div class="body-logo">
-            <img src="img\transparent logo.png" alt="Logotyp">
+            <img src="./img\transparent logo.png" alt="Logotyp">
         </div>
 
        
