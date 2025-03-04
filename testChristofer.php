@@ -13,7 +13,7 @@ if (!isset($_SESSION['user_id'])) {
 
 require_once 'db_connect.php';
 
-// $receiver_id = $_POST['receiver'];
+
 $user_id = $_SESSION['user_id'];
 
 $message = '';
@@ -35,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_post'])) {
+    $receiver_id = $_POST['receiver'];
     $post_content = trim($_POST['post_content']);
     if (!empty($post_content)) {
         $stmt = $pdo->prepare("INSERT INTO chatt (text, senderID, receiverID, timeCreated) VALUES (:text, :senderID, :receiverID, NOW())");
@@ -75,6 +76,8 @@ $stmt->execute([
 
 $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+
+
 ?>
 
 
@@ -88,7 +91,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: grey;
         }
         header {
             background: #333;
@@ -116,7 +119,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
         .profile-info {
             text-align: center;
-            background: #fff;
+            background: darkgray;
             padding: 1.5rem;
             border-radius: 4px;
         }
@@ -128,7 +131,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             margin-bottom: 1rem;
         }
         .update-profile-form, .create-post-form {
-            background: #fff;
+            background: darkgray;
             padding: 1.5rem;
             margin-top: 1rem;
             border-radius: 4px;
@@ -154,7 +157,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             border-radius: 4px;
         }
         .posts {
-            background: #fff;
+            background: darkgray;
             margin-top: 1rem;
             padding: 1.5rem;
             border-radius: 4px;
@@ -163,14 +166,25 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             margin-top: 0;
         }
         .post {
-            background: #f9f9f9;
+            /* display: none; */
+            background: lightgray;
             margin-bottom: 1rem;
             padding: 1rem;
             border-radius: 4px;
-        }
+        }        
         .post p {
             margin: 0 0 0.5rem;
         }
+
+        /* Tar bort Pilen i details */
+       .no_arrow {
+        list-style: none;
+       }
+       .no_arrow_hidden {
+        list-style: none;
+        display: none;
+       }
+
         .notifications {
             width: 200px;
             margin-left: 2rem;
@@ -232,30 +246,48 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <!-- LISTA INLÄGG FRÅN DATABAS -->
             <div class="posts">
                 <h3>Senaste Chatt historiken</h3>
-                <?php if (!empty($posts)): ?>
 
+               
+                <?php if (!empty($posts)): ?>
+                    
                     <?php foreach ($posts as $post): ?>
 
-                        <div class="post">
-
-                            <?php if($post['senderID'] != $user_id): 
+                         <!-- DENNA CONTAINERN SKALL LÄGGAS I EN TILL CONTAINER 
+                     Så man specar upp det på användare och trycker man på den användaren så kommer bara den chatthistoriken upp -->
+                        <div>
+                            <details>
                                 
-                                $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
+                                <?php $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
                                 $stmt->execute([':id' => $post['senderID']]);
                                 $user2 = $stmt->fetch(PDO::FETCH_ASSOC); ?>
+        
+                                <?php if($user['username'] != $user2['username']): ?>
+                                    <summary class="no_arrow"><h3 style="color: Green;" tabindex="0" class="master"><?php echo nl2br(htmlspecialchars($user2['username'])); ?></h3></summary>  
+                                <?php else: ?>
+                                    <summary class="no_arrow_hidden"></summary>                                          
+                                <?php endif ?>
+                                <div class="post">
 
-                                <h3 style="color: red;"><?php echo nl2br(htmlspecialchars($user2['username'])); ?></h3>
-                                <p style="color: red;"><?php echo nl2br(htmlspecialchars($post['text'])); ?></p>
-                                <small style="color: red;">Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
+                                    <?php if($post['senderID'] != $user_id):                               
 
-                            <?php else: ?>
+                                        $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
+                                        $stmt->execute([':id' => $post['senderID']]);
+                                        $user2 = $stmt->fetch(PDO::FETCH_ASSOC); ?>
 
-                                <h3><?php echo nl2br(htmlspecialchars($user['username'])); ?></h3>
-                                <p><?php echo nl2br(htmlspecialchars($post['text'])); ?></p>
-                                <small>Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
+                                        <h3 style="color: red;"><?php echo nl2br(htmlspecialchars($user2['username'])); ?></h3>
+                                        <p style="color: red;"><?php echo nl2br(htmlspecialchars($post['text'])); ?></p>
+                                        <small style="color: red;">Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
 
-                            <?php endif ?>
+                                    <?php else: ?>
 
+                                        <h3><?php echo nl2br(htmlspecialchars($user['username'])); ?></h3>
+                                        <p><?php echo nl2br(htmlspecialchars($post['text'])); ?></p>
+                                        <small>Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
+
+                                    <?php endif ?>
+
+                                </div>
+                            </details>
                         </div>
 
                     <?php endforeach; ?>
