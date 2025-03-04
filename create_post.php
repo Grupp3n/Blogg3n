@@ -3,21 +3,41 @@
     require 'db_connect.php';
 
     if($_SERVER['REQUEST_METHOD'] == "POST") {
-        $blogHeader = $_POST['blogHeader'];
-        $blogText = $_POST['blogText'];
+        $blogHeader = htmlspecialchars($_POST['blogHeader']);
+        $blogText = htmlspecialchars($_POST['blogText']);
         $time = date_create();
         $getTime = date_format($time, "Y-m-d H:i:s");
 
         if(isset($_POST['post_submit_button'])) {
 
-            $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated) 
-                                            VALUES (:textInput, :header, :userID, :timeCreated)");
+            $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated, image_path) 
+                                            VALUES (:textInput, :header, :userID, :timeCreated, :image_path)");
 
             $number = 1;
+            $image_path = '';
+
+            if (isset($_FILES['image']) && $_FILES['image']['error' === UPLOAD_ERR_OK]) {
+                $image = $_FILES['image'];
+                $image_name = bin2hex(random_bytes(16)) . '.' . pathinfo($image['name'], PATHINFO_EXTENSION);
+                $image_tmp = $image['tmp_name'];
+                $upload_dir = 'images/';
+            }
+
+            if (!file_exists($upload_dir)) {
+                mkdir($upload_dir, 0777, true);
+            }
+
+            $image_path = $upload_dir . $image_name;
+            if (!move_uploaded_file($image_tmp, $image_path)) {
+                echo "<div class='error'>Failed to upload image</div>";
+                return;
+            }
+
             $stmt->bindParam(':textInput', $blogText);
             $stmt->bindParam(':header', $blogHeader);           
             $stmt->bindParam(':userID', $number);   // HÄMTAR SESSIONS USER ID, OCH SPARAR IN I DATABASEN
             $stmt->bindParam(':timeCreated', $getTime);
+            $stmt->bindParam(':image_path', $image_path);
 
             if ($stmt->execute()) {
                 echo "<div class='success'>Posten lyckades!</div>";
@@ -29,6 +49,7 @@
         }
 
         if(isset($_POST['image_adder'])) {
+            echo "<div class='success'>Image addition triggered.</div>";
             //Skall komma upp så man kan ladda upp en bild, alltså hämta bilden i sin map
             // Efter det så skall bilden läggas in i texten samt läggas till i texten / databasen
         }
@@ -53,9 +74,7 @@
     </header>
 
     <main class="main_create_post">
-
         <form method="POST" class="form_create_post">
-
             <div class="div_create_post">
                 <input type="text" name="blogHeader" placeholder="HEADLINE" class="headline_create_post" require>
             </div>
@@ -72,7 +91,10 @@
 
             <div class="div_create_post2">
                 <div class="div_create_post_left">
-                    <button name="image_adder" class="image_adder">Add image</button>
+                    <button type="button" class="image_adder" onclick="toggleImageInput()">Add image</button>
+                    <div id="imageInputContainer" style="display: none;">
+                        <input type="file" name="image" id="image" accept="image/*">
+                    </div>
                 </div>
                 <div class="div_create_post_middle">
                     <button name="post_submit_button" class="post_submit_button">Post</button>
@@ -91,5 +113,19 @@
     <div class="footer">        
         <p>&copy; Alla rättigheter förbehållna. Grupp 3 </p>
     </div>
+
+    <!-- Javascript som kollar om imageInputContainer har en display som är none.
+    
+    Om display === none är true så sätts den till 'block' vilket gör
+    så att display syns. 
+
+    Om display === none är false så sätts den till 'none' vilket gör
+    så att display inte syns -->
+    <script>
+        function toggleImageInput() {
+            const container = document.getElementById('imageInputContainer');
+            container.style.display = container.style.display === 'none' ? 'block' : 'none'; 
+        }
+    </script>
 </body>
 </html>
