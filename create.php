@@ -15,8 +15,15 @@
             $query = "CREATE DATABASE nexlify";
 
             $conn->exec($query);
-
-            echo htmlspecialchars("<p style='color:white;'>Databasen $dbname skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>");
+             
+            ?>
+            <p style='color:white;'>
+                <?php  echo "Databasen $dbname skapades Framgångsrikt" ?>
+            </p> <p style='color: green;'>
+                <?php  echo "✔" ?>
+            </p>
+                br>
+            <?php
 
             $conn = null;
         
@@ -39,8 +46,15 @@
             )";
 
             $conn->exec($query);
-            
-            echo htmlspecialchars("<p style='color:white;'>Tabellen för Users skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>");
+             
+            ?>
+            <p style='color:white;'>
+                <?php  echo "Tabellen för Users skapades Framgångsrikt" ?>
+            </p> <p style='color: green;'>
+                <?php  echo "✔" ?>
+            </p>
+                br>
+            <?php
 
             $conn = null;
         }
@@ -62,8 +76,15 @@
             )";
 
             $conn->exec($query);
-            
-            echo htmlspecialchars("<p style='color:white;'>Tabellen för Posts skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>");
+             
+            ?>
+            <p style='color:white;'>
+                <?php  echo "Tabellen för Posts skapades Framgångsrikt" ?>
+            </p> <p style='color: green;'>
+                <?php  echo "✔" ?>
+            </p>
+                br>
+            <?php
 
             $conn = null;
         }
@@ -84,9 +105,16 @@
                         FOREIGN KEY (postID) REFERENCES Posts(id) ON DELETE CASCADE
             )";
 
-            $conn->exec($query);
-            
-            echo htmlspecialchars("<p style='color:white;'>Tabellen för Comments skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>");
+            $conn->exec($query); 
+
+            ?>
+            <p style='color:white;'>
+                <?php  echo "Tabellen för Comments skapades Framgångsrikt" ?>
+            </p> <p style='color: green;'>
+                <?php  echo "✔" ?>
+            </p>
+                br>
+            <?php
 
             $conn = null;
         }
@@ -106,8 +134,42 @@
             )";
 
             $conn->exec($query);
+                         
+            ?>
+            <p style='color:white;'>
+                <?php  echo "Tabellen för Likes skapades Framgångsrikt" ?>
+            </p> <p style='color: green;'>
+                <?php  echo "✔" ?>
+            </p>
+                br>
+            <?php
+
+            $conn = null;
+        }      
+
+        if(isset($_POST['createChattTableButton'])) {           
+
+            $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            $query = "CREATE TABLE Chatt (
+                        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                        senderID int UNSIGNED NOT NULL,
+                        receiverID int UNSIGNED NOT NULL,                        
+                        FOREIGN KEY (senderID) REFERENCES Users(id) ON DELETE CASCADE,
+                        FOREIGN KEY (receiverID) REFERENCES Users(id) ON DELETE CASCADE
+            )";
+
+            $conn->exec($query);
             
-            echo htmlspecialchars("<p style='color:white;'>Tabellen för Likes skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>");
+            ?>
+            <p style='color:white;'>
+                <?php  echo "Tabellen för Chatt skapades Framgångsrikt" ?>
+            </p> <p style='color: green;'>
+                <?php  echo "✔" ?>
+            </p>
+                br>
+            <?php
 
             $conn = null;
         }
@@ -133,7 +195,11 @@
 
 
     } catch (PDOException $e) {
-        echo htmlspecialchars("<p style='color:white;'>" . $e->getMessage() . "</p>");
+        ?>
+            <p style='color:white;'>
+                <?php  echo $e->getMessage() ?>
+            </p> 
+            <?php
     }
     
 ?>
@@ -160,6 +226,7 @@
                     <button name="createPostsTableButton">Skapa Posts table</button>
                     <button name="createCommentsTableButton">Skapa Comments table</button>
                     <button name="createLikesTableButton">Skapa Likes table</button>
+                    <button name="createChattTableButton">Skapa Chatt table</button>
                     <button name="dropsTableButton">Drop Tables and Users</button>
                 </form>
             </div>
