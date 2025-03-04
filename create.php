@@ -160,7 +160,7 @@
                     <button name="createPostsTableButton">Skapa Posts table</button>
                     <button name="createCommentsTableButton">Skapa Comments table</button>
                     <button name="createLikesTableButton">Skapa Likes table</button>
-                    <button name="dropsTableButton">Drop Tables</button>
+                    <button name="dropsTableButton">Drop Tables and Users</button>
                 </form>
             </div>
         </div>
