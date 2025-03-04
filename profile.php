@@ -33,11 +33,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_post'])) {
+    $post_header  = trim($_POST['post_header']);
     $post_content = trim($_POST['post_content']);
-    if (!empty($post_content)) {
-        $stmt = $pdo->prepare("INSERT INTO posts (userID, textInput, timeCreated) VALUES (:userID, :textInput, NOW())");
+    
+    if (!empty($post_header) && !empty($post_content)) {
+        $stmt = $pdo->prepare("INSERT INTO posts (userID, header, textInput, timeCreated) VALUES (:userID, :header, :textInput, NOW())");
         if ($stmt->execute([
             ':userID'    => $user_id,
+            ':header'    => $post_header,
             ':textInput' => $post_content
         ])) {
             $message = "Inlägg publicerat!";
@@ -45,10 +48,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_post'])) {
             $message = "Fel vid publicering av inlägg.";
         }
     } else {
-        $message = "Inlägget får inte vara tomt.";
+        $message = "Både rubrik och innehåll måste fyllas i.";
     }
 }
-
 // Hämta aktuell användardata från databasen
 $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
 $stmt->execute([':id' => $user_id]);
@@ -106,10 +108,10 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             border-radius: 4px;
         }
         .profile-info img {
-            width: 120px;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 50%;
+            width: 450px;
+            height: 150px;
+            object-fit: scale-down;
+            /* border-radius: 25%; */
             margin-bottom: 1rem;
         }
         .update-profile-form, .create-post-form {
@@ -145,9 +147,10 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             border-radius: 4px;
         }
         .posts h3 {
-            margin-top: 0;
+            margin-top: 0;            
         }
         .post {
+            background-color: blueviolet;
             background: #f9f9f9;
             margin-bottom: 1rem;
             padding: 1rem;
@@ -181,16 +184,12 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <h1>Nexlify</h1>
     </header>
     <nav>
-        <a href="#">Start</a>
-        <a href="#">Start</a>
-        <a href="#">Start</a>
-        <a href="#">Start</a>
-        <!-- Fler länkar kan läggas till -->
+        <a href="index.php">Home</a>
     </nav>
     <div class="container">
         <div class="main-content">
             <div class="profile-info">
-                <img src="profile.jpg" alt="Profilbild">
+                <img src="img/transparent logo.png" alt="Profilbild">
                 <h2><?php echo htmlspecialchars($user['username']); ?></h2>
             </div>
             <?php if ($message): ?>
@@ -208,6 +207,8 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             <!-- SKAPA INLÄGG -->
             <form class="create-post-form" method="post" action="">
+                <label for="post_header">Rubrik:</label><br>
+                <input type="text" name="post_header" id="post_header" placeholder="Ange rubrik"><br>
                 <label for="post_content">Nytt inlägg:</label><br>
                 <textarea name="post_content" id="post_content" placeholder="Vad vill du dela idag?"></textarea><br>
                 <button type="submit" name="create_post">Publicera</button>
@@ -219,7 +220,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php if (!empty($posts)): ?>
                     <?php foreach ($posts as $post): ?>
                         <div class="post">
-                            <h2><?php echo nl2br(htmlspecialchars($post['header'])); ?></h2>
+                            <h3><?php echo nl2br(htmlspecialchars($post['header'])); ?></h3>
                             <p><?php echo nl2br(htmlspecialchars($post['textInput'])); ?></p>
                             <small>Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
                         </div>
