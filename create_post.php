@@ -6,6 +6,7 @@
         exit;
     } else {
         require 'db_connect.php';
+    }
 
     if($_SERVER['REQUEST_METHOD'] == "POST") {
         $blogHeader = htmlspecialchars($_POST['blogHeader']);
@@ -13,29 +14,31 @@
         $time = date_create();
         $getTime = date_format($time, "Y-m-d H:i:s");
 
-            if(isset($_POST['post_submit_button'])) {
-
-            $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated, image_path) 
-                                            VALUES (:textInput, :header, :userID, :timeCreated, :image_path)");
+            if (isset($_POST['post_submit_button'])) {
+                $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated, image_path) 
+                        VALUES (:textInput, :header, :userID, :timeCreated, :image_path)");
 
             $number = 1;
             $image_path = '';
 
-            if (isset($_FILES['image']) && $_FILES['image']['error' === UPLOAD_ERR_OK]) {
+            $upload_dir = 'images/';
+            $image_name = '';
+            $image_tmp = '';
+
+            if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) { 
                 $image = $_FILES['image'];
-                $image_name = bin2hex(random_bytes(16)) . '.' . pathinfo($image['name'], PATHINFO_EXTENSION);
-                $image_tmp = $image['tmp_name'];
-                $upload_dir = 'images/';
-            }
-
-            if (!file_exists($upload_dir)) {
-                mkdir($upload_dir, 0777, true);
-            }
-
-            $image_path = $upload_dir . $image_name;
-            if (!move_uploaded_file($image_tmp, $image_path)) {
-                echo "<div class='error'>Failed to upload image</div>";
-                return;
+                $image_name = bin2hex(random_bytes(16)) . '.' . pathinfo($image['name'], PATHINFO_EXTENSION); 
+                $image_tmp = $image['tmp_name']; 
+                
+                if (!file_exists($upload_dir)) {
+                    mkdir($upload_dir, 0777, true);
+                }
+                
+                $image_path = $upload_dir . $image_name;
+                if (!move_uploaded_file($image_tmp, $image_path)) {
+                    echo "<div class='error'>Failed to upload image</div>";
+                    return;
+                }
             }
 
             $stmt->bindParam(':textInput', $blogText);
