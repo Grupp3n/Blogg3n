@@ -1,6 +1,11 @@
 <?php
     Session_start();
-    require 'db_connect.php';
+
+    if(!$_SESSION['INLOGGAD']) {
+        header("location: login.php");
+        exit;
+    } else {
+        require 'db_connect.php';
 
     if($_SERVER['REQUEST_METHOD'] == "POST") {
         $blogHeader = htmlspecialchars($_POST['blogHeader']);
@@ -8,7 +13,7 @@
         $time = date_create();
         $getTime = date_format($time, "Y-m-d H:i:s");
 
-        if(isset($_POST['post_submit_button'])) {
+            if(isset($_POST['post_submit_button'])) {
 
             $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated, image_path) 
                                             VALUES (:textInput, :header, :userID, :timeCreated, :image_path)");
@@ -39,14 +44,14 @@
             $stmt->bindParam(':timeCreated', $getTime);
             $stmt->bindParam(':image_path', $image_path);
 
-            if ($stmt->execute()) {
-                echo "<div class='success'>Posten lyckades!</div>";
-            } 
-            else 
-            {
-                echo "<div class='error'>Något gick fel!</div>";
+                if ($stmt->execute()) {
+                    echo "<div class='success'>Posten lyckades!</div>";
+                } 
+                else 
+                {
+                    echo "<div class='error'>Något gick fel!</div>";
+                }
             }
-        }
 
         if(isset($_POST['image_adder'])) {
             echo "<div class='success'>Image addition triggered.</div>";
@@ -70,7 +75,9 @@
          <div></div>
         
         <a href="index.php"><img src="img/transparent logo.png" alt="Nexlify" class="Logo"></a>
-        <button onclick="window.location.href='login.php'">Profile</button>
+        
+        <button onclick="window.location.href='profile.php'">Profile</button>
+        
     </header>
 
     <main class="main_create_post">

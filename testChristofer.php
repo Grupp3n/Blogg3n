@@ -13,7 +13,9 @@ if (!isset($_SESSION['user_id'])) {
 
 require_once 'db_connect.php';
 
+// $receiver_id = $_POST['receiver'];
 $user_id = $_SESSION['user_id'];
+
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
@@ -35,10 +37,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_post'])) {
     $post_content = trim($_POST['post_content']);
     if (!empty($post_content)) {
-        $stmt = $pdo->prepare("INSERT INTO posts (userID, textInput, timeCreated) VALUES (:userID, :textInput, NOW())");
+        $stmt = $pdo->prepare("INSERT INTO chatt (text, senderID, receiverID, timeCreated) VALUES (:text, :senderID, :receiverID, NOW())");
         if ($stmt->execute([
-            ':userID'    => $user_id,
-            ':textInput' => $post_content
+            ':senderID'    => $user_id,
+            ':receiverID'    => $receiver_id,
+            ':text' => $post_content
         ])) {
             $message = "Inlägg publicerat!";
         } else {
@@ -60,10 +63,22 @@ if (!$user) {
 }
 
 // Hämta inlägg från DB för den inloggade användaren
-$stmt = $pdo->prepare("SELECT header, textInput, timeCreated FROM posts WHERE userID = :userID ORDER BY timeCreated DESC");
-$stmt->execute([':userID' => $user_id]);
+$stmt = $pdo->prepare("SELECT text, senderID, receiverID, timeCreated
+                                FROM chatt 
+                                WHERE senderID = :senderID OR receiverID = :receiverID
+                                ORDER BY timeCreated DESC");
+
+$stmt->execute([
+    ':senderID' => $user_id,
+    ':receiverID' => $user_id
+]);
+
 $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
+
+
+
 <!DOCTYPE html>
 <html lang="sv">
 <head>
@@ -208,25 +223,49 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             <!-- SKAPA INLÄGG -->
             <form class="create-post-form" method="post" action="">
-                <label for="post_content">Nytt inlägg:</label><br>
+                <input type="text" name="receiver" placeholder="Vem vill du skicka till?">
+                <label for="post_content">Ny chatt:</label><br>
                 <textarea name="post_content" id="post_content" placeholder="Vad vill du dela idag?"></textarea><br>
                 <button type="submit" name="create_post">Publicera</button>
             </form>
             
             <!-- LISTA INLÄGG FRÅN DATABAS -->
             <div class="posts">
-                <h3>Senaste inlägg</h3>
+                <h3>Senaste Chatt historiken</h3>
                 <?php if (!empty($posts)): ?>
+
                     <?php foreach ($posts as $post): ?>
+
                         <div class="post">
-                            <h2><?php echo nl2br(htmlspecialchars($post['header'])); ?></h2>
-                            <p><?php echo nl2br(htmlspecialchars($post['textInput'])); ?></p>
-                            <small>Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
+
+                            <?php if($post['senderID'] != $user_id): 
+                                
+                                $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
+                                $stmt->execute([':id' => $post['senderID']]);
+                                $user2 = $stmt->fetch(PDO::FETCH_ASSOC); ?>
+
+                                <h3 style="color: red;"><?php echo nl2br(htmlspecialchars($user2['username'])); ?></h3>
+                                <p style="color: red;"><?php echo nl2br(htmlspecialchars($post['text'])); ?></p>
+                                <small style="color: red;">Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
+
+                            <?php else: ?>
+
+                                <h3><?php echo nl2br(htmlspecialchars($user['username'])); ?></h3>
+                                <p><?php echo nl2br(htmlspecialchars($post['text'])); ?></p>
+                                <small>Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
+
+                            <?php endif ?>
+
                         </div>
+
                     <?php endforeach; ?>
+
                 <?php else: ?>
-                    <p>Inga inlägg ännu.</p>
+
+                    <p>Ingen chatthistorik ännu</p>
+
                 <?php endif; ?>
+
             </div>
         </div>
         <div class="notifications">

@@ -15,8 +15,15 @@
             $query = "CREATE DATABASE nexlify";
 
             $conn->exec($query);
-
-            echo htmlspecialchars("<p style='color:white;'>Databasen $dbname skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>");
+             
+            ?>
+            <p style='color:white;'>
+                <?php  echo "Databasen $dbname skapades Framgångsrikt" ?>
+            </p> <p style='color: green;'>
+                <?php  echo "✔" ?>
+            </p>
+                br>
+            <?php
 
             $conn = null;
         
@@ -39,8 +46,15 @@
             )";
 
             $conn->exec($query);
-            
-            echo htmlspecialchars("<p style='color:white;'>Tabellen för Users skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>");
+             
+            ?>
+            <p style='color:white;'>
+                <?php  echo "Tabellen för Users skapades Framgångsrikt" ?>
+            </p> <p style='color: green;'>
+                <?php  echo "✔" ?>
+            </p>
+                br>
+            <?php
 
             $conn = null;
         }
@@ -58,12 +72,21 @@
                         header NVARCHAR(40) NOT NULL,
                         image MEDIUMBLOB,
                         timeCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        timeUpdated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        timeUpdatedComments TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         FOREIGN KEY (userID) REFERENCES Users(id) ON DELETE CASCADE
             )";
 
             $conn->exec($query);
-            
-            echo htmlspecialchars("<p style='color:white;'>Tabellen för Posts skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>");
+             
+            ?>
+            <p style='color:white;'>
+                <?php  echo "Tabellen för Posts skapades Framgångsrikt" ?>
+            </p> <p style='color: green;'>
+                <?php  echo "✔" ?>
+            </p>
+                br>
+            <?php
 
             $conn = null;
         }
@@ -80,13 +103,21 @@
                         postID int UNSIGNED NOT NULL,
                         textInput NVARCHAR(250) NOT NULL,
                         timeCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        timeUpdated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         FOREIGN KEY (userID) REFERENCES Users(id) ON DELETE CASCADE,
                         FOREIGN KEY (postID) REFERENCES Posts(id) ON DELETE CASCADE
             )";
 
-            $conn->exec($query);
-            
-            echo htmlspecialchars("<p style='color:white;'>Tabellen för Comments skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>");
+            $conn->exec($query); 
+
+            ?>
+            <p style='color:white;'>
+                <?php  echo "Tabellen för Comments skapades Framgångsrikt" ?>
+            </p> <p style='color: green;'>
+                <?php  echo "✔" ?>
+            </p>
+                br>
+            <?php
 
             $conn = null;
         }
@@ -106,8 +137,44 @@
             )";
 
             $conn->exec($query);
+                         
+            ?>
+            <p style='color:white;'>
+                <?php  echo "Tabellen för Likes skapades Framgångsrikt" ?>
+            </p> <p style='color: green;'>
+                <?php  echo "✔" ?>
+            </p>
+                br>
+            <?php
+
+            $conn = null;
+        }      
+
+        if(isset($_POST['createChattTableButton'])) {           
+
+            $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            $query = "CREATE TABLE Chatt (
+                        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                        senderID int UNSIGNED NOT NULL,
+                        receiverID int UNSIGNED NOT NULL,
+                        text nvarchar(250) NOT NULL, 
+                        timeCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                       
+                        FOREIGN KEY (senderID) REFERENCES Users(id) ON DELETE CASCADE,
+                        FOREIGN KEY (receiverID) REFERENCES Users(id) ON DELETE CASCADE
+            )";
+
+            $conn->exec($query);
             
-            echo htmlspecialchars("<p style='color:white;'>Tabellen för Likes skapades Framgångsrikt</p> <p style='color: green;'>✔</p><br>");
+            ?>
+            <p style='color:white;'>
+                <?php  echo "Tabellen för Chatt skapades Framgångsrikt" ?>
+            </p> <p style='color: green;'>
+                <?php  echo "✔" ?>
+            </p>
+                br>
+            <?php
 
             $conn = null;
         }
@@ -119,21 +186,34 @@
             $query = "DROP TABLE Comments";
             $query2 = "DROP TABLE Likes";            
             $query3 = "DROP TABLE Posts";  
-            $query4 = "DROP TABLE Users";               
+            $query4 = "DROP TABLE Chatt";  
+            $query5 = "DROP TABLE Users";               
 
             $conn->exec($query);
             $conn->exec($query2);
             $conn->exec($query3);
             $conn->exec($query4);
-            
-            echo htmlspecialchars("<p style='color:white;'>Tabellerna har tagits bort Framgångsrikt</p> <p style='color: green;'>✔</p><br>");
+            $conn->exec($query5);
+           
+            ?>
+            <p style='color:white;'>
+                <?php  echo "Tabellerna har tagits bort Framgångsrikt" ?>
+            </p> <p style='color: green;'>
+                <?php  echo "✔" ?>
+            </p>
+                br>
+            <?php
 
             $conn = null;
         }
 
 
     } catch (PDOException $e) {
-        echo htmlspecialchars("<p style='color:white;'>" . $e->getMessage() . "</p>");
+        ?>
+            <p style='color:white;'>
+                <?php  echo $e->getMessage() ?>
+            </p> 
+            <?php
     }
     
 ?>
@@ -160,7 +240,8 @@
                     <button name="createPostsTableButton">Skapa Posts table</button>
                     <button name="createCommentsTableButton">Skapa Comments table</button>
                     <button name="createLikesTableButton">Skapa Likes table</button>
-                    <button name="dropsTableButton">Drop Tables</button>
+                    <button name="createChattTableButton">Skapa Chatt table</button>
+                    <button name="dropsTableButton">Drop Tables and Users</button>
                 </form>
             </div>
         </div>
