@@ -81,7 +81,7 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
                 <?php foreach ($thumbnail_posts as $post): ?>
                     <div class="thumbnail">
                         <?php if ($post['image_path']): ?>
-                            <img src="<?php echo htmlspecialchars($main_post['image_path']); ?>" alt="<?php echo htmlspecialchars($post['header']); ?>" style="max-width: 100%; height: auto;">
+                            <img src="<?php echo htmlspecialchars($post['image_path']); ?>" alt="<?php echo htmlspecialchars($post['header']); ?>" style="max-width: 100%; height: auto;">
                         <?php endif; ?>
                         <h4><?php echo htmlspecialchars($post['header']); ?></h4>
                         <p><?php echo htmlspecialchars(substr($post['textInput'], 0, 50)) . '...'; ?></p>

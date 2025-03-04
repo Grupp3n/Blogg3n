@@ -21,7 +21,7 @@
             $number = 1;
             $image_path = '';
 
-            $upload_dir = 'images/';
+            $upload_dir = 'img/';
             $image_name = '';
             $image_tmp = '';
 
