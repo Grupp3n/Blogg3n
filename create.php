@@ -72,6 +72,8 @@
                         header NVARCHAR(40) NOT NULL,
                         image MEDIUMBLOB,
                         timeCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        timeUpdated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        timeUpdatedComments TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         FOREIGN KEY (userID) REFERENCES Users(id) ON DELETE CASCADE
             )";
 
@@ -101,6 +103,7 @@
                         postID int UNSIGNED NOT NULL,
                         textInput NVARCHAR(250) NOT NULL,
                         timeCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        timeUpdated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         FOREIGN KEY (userID) REFERENCES Users(id) ON DELETE CASCADE,
                         FOREIGN KEY (postID) REFERENCES Posts(id) ON DELETE CASCADE
             )";
@@ -155,7 +158,9 @@
             $query = "CREATE TABLE Chatt (
                         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                         senderID int UNSIGNED NOT NULL,
-                        receiverID int UNSIGNED NOT NULL,                        
+                        receiverID int UNSIGNED NOT NULL,
+                        text nvarchar(250) NOT NULL, 
+                        timeCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                       
                         FOREIGN KEY (senderID) REFERENCES Users(id) ON DELETE CASCADE,
                         FOREIGN KEY (receiverID) REFERENCES Users(id) ON DELETE CASCADE
             )";
@@ -181,14 +186,23 @@
             $query = "DROP TABLE Comments";
             $query2 = "DROP TABLE Likes";            
             $query3 = "DROP TABLE Posts";  
-            $query4 = "DROP TABLE Users";               
+            $query4 = "DROP TABLE Chatt";  
+            $query5 = "DROP TABLE Users";               
 
             $conn->exec($query);
             $conn->exec($query2);
             $conn->exec($query3);
             $conn->exec($query4);
-            
-            echo htmlspecialchars("<p style='color:white;'>Tabellerna har tagits bort Framgångsrikt</p> <p style='color: green;'>✔</p><br>");
+            $conn->exec($query5);
+           
+            ?>
+            <p style='color:white;'>
+                <?php  echo "Tabellerna har tagits bort Framgångsrikt" ?>
+            </p> <p style='color: green;'>
+                <?php  echo "✔" ?>
+            </p>
+                br>
+            <?php
 
             $conn = null;
         }
