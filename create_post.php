@@ -49,7 +49,11 @@
          <div></div>
         
         <a href="index.php"><img src="img/transparent logo.png" alt="Nexlify" class="Logo"></a>
-        <button onclick="window.location.href='login.php'">Profile</button>
+        <?php if($_SESSION['INLOGGAD']): ?>
+            <button onclick="window.location.href='profile.php'">Profile</button>
+        <?php else: ?>
+            <button onclick="window.location.href='login.php'">Profile</button>
+        <?php endif ?>
     </header>
 
     <main class="main_create_post">

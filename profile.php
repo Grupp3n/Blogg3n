@@ -60,7 +60,7 @@ if (!$user) {
 }
 
 // Hämta inlägg från DB för den inloggade användaren
-$stmt = $pdo->prepare("SELECT textInput, timeCreated FROM posts WHERE userID = :userID ORDER BY timeCreated DESC");
+$stmt = $pdo->prepare("SELECT header, textInput, timeCreated FROM posts WHERE userID = :userID ORDER BY timeCreated DESC");
 $stmt->execute([':userID' => $user_id]);
 $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -219,6 +219,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php if (!empty($posts)): ?>
                     <?php foreach ($posts as $post): ?>
                         <div class="post">
+                            <h2><?php echo nl2br(htmlspecialchars($post['header'])); ?></h2>
                             <p><?php echo nl2br(htmlspecialchars($post['textInput'])); ?></p>
                             <small>Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
                         </div>
