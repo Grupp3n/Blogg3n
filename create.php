@@ -72,6 +72,8 @@
                         header NVARCHAR(40) NOT NULL,
                         image MEDIUMBLOB,
                         timeCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        timeUpdated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        timeUpdatedComments TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         FOREIGN KEY (userID) REFERENCES Users(id) ON DELETE CASCADE
             )";
 
@@ -101,6 +103,7 @@
                         postID int UNSIGNED NOT NULL,
                         textInput NVARCHAR(250) NOT NULL,
                         timeCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        timeUpdated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         FOREIGN KEY (userID) REFERENCES Users(id) ON DELETE CASCADE,
                         FOREIGN KEY (postID) REFERENCES Posts(id) ON DELETE CASCADE
             )";

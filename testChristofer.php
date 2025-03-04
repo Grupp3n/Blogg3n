@@ -238,14 +238,22 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                         <div class="post">
 
-                           <?php if($post['senderID'] != $user_id): ?>
-                                <h3 style="color: red;"><?php echo nl2br(htmlspecialchars($post['senderID'])); ?></h3>
+                            <?php if($post['senderID'] != $user_id): 
+                                
+                                $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
+                                $stmt->execute([':id' => $post['senderID']]);
+                                $user2 = $stmt->fetch(PDO::FETCH_ASSOC); ?>
+
+                                <h3 style="color: red;"><?php echo nl2br(htmlspecialchars($user2['username'])); ?></h3>
                                 <p style="color: red;"><?php echo nl2br(htmlspecialchars($post['text'])); ?></p>
                                 <small style="color: red;">Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
+
                             <?php else: ?>
-                                <h3><?php echo nl2br(htmlspecialchars($post['senderID'])); ?></h3>
+
+                                <h3><?php echo nl2br(htmlspecialchars($user['username'])); ?></h3>
                                 <p><?php echo nl2br(htmlspecialchars($post['text'])); ?></p>
                                 <small>Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
+
                             <?php endif ?>
 
                         </div>
