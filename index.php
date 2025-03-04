@@ -4,7 +4,7 @@ require 'db_connect.php';
 session_start();
 
 //Kommentera "true" om Post knappen ska visas, false om den ska döljas/samma för om det ska stå login eller profile
-$_SESSION['INLOGGAD'] = true; 
+$INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
 
 // Fetcha från posts för main content (Stora bilden)
 $sql_main = 'SELECT id, userID, textInput, header 
@@ -37,26 +37,22 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
         <img src="ad.gif" alt="Sticky Ad" class="ad-image">
     </a>
 </div> -->
-    <header>
-        <?php if (isset($_SESSION['INLOGGAD']) && $_SESSION['INLOGGAD'] === true) : ?>
-            <button onclick="window.location.href='create_post.php'">Gör ett inlägg</button>
-        <?php else: ?>
-                <div></div>
-        <?php endif; ?>
-        
-        <!-- Log in "button" if SESSION inloggad är false -->
-        <img src="img/transparent logo.png" alt="Nexlify" class="Logo">
-        <?php if (isset($_SESSION['INLOGGAD']) && $_SESSION['INLOGGAD'] === false) : ?>
-            <a href="#adPopup" class="Loginknapp">Log in</a>
-        <?php else : ?>
-        <?php endif; ?>
+<header>
+    <!-- Visar create post om man är inloggad -->
+    <?php if ($INLOGGAD) : ?>
+        <button onclick="window.location.href='create_post.php'">Gör ett inlägg</button>
+    <?php endif; ?>
 
-        <!-- Profie button if SESSION inloggad är true -->
-        <?php if (isset($_SESSION['INLOGGAD']) && $_SESSION['INLOGGAD'] === true) : ?>
-            <button class="ProfileKnapp" onclick="window.location.href='profile.php'">Profile</button>
-        <?php else : ?>
-        <?php endif; ?>
-    </header>
+    <img src="img/transparent logo.png" alt="Nexlify" class="Logo">
+
+    <!-- visar Login knapp om man inte är inloggad -->
+    <?php if (!$INLOGGAD) : ?>
+        <a href="login.php" class="Loginknapp">Log in</a>
+    <?php else : ?>
+        <!-- visar profile knapp om man är inloggad -->
+        <button class="ProfileKnapp" onclick="window.location.href='profile.php'">Profile</button>
+    <?php endif; ?>
+</header>
 
     <main class="index-main">
         <div class="main-content">
