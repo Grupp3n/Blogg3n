@@ -7,7 +7,7 @@ session_start();
 $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
 
 // Fetcha från posts för main content (Stora bilden)
-$sql_main = 'SELECT id, userID, textInput, header 
+$sql_main = 'SELECT id, userID, textInput, header, image_path 
              FROM Posts
              ORDER BY timeCreated DESC LIMIT 1';
 
@@ -16,7 +16,7 @@ $stmt_main->execute();
 $main_post = $stmt_main->fetch(PDO::FETCH_ASSOC);
 
 // Fetcha från posts de senaste 4 inläggen för Recent Headlines
-$sql_thumbnails = 'SELECT id, textInput, header
+$sql_thumbnails = 'SELECT id, textInput, header, image_path
                    FROM Posts
                    ORDER BY timeCreated DESC LIMIT 4';
 $stmt_thumbnails = $pdo->prepare($sql_thumbnails);
@@ -54,21 +54,24 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
     <?php endif; ?>
 </header>
 
-    <main class="index-main">
-        <div class="main-content">
-            <?php if ($main_post): ?>
-                <h2>Main Headline</h2>
-                <div class="post-preview">
-                    <h3><?= htmlspecialchars($main_post['header']); ?></h3>
-                    <p><?= htmlspecialchars($main_post['textInput']); ?></p>
-                </div>
-                <p>Posted by User ID: <?= htmlspecialchars($main_post['userID']);?></p>
-            <?php else: ?>
-                <h2>Main Headline</h2>
-                <div class="post-preview">
-                    <p>No posts posted</p>
-                </div>
-            <?php endif; ?>
+<main class="index-main">
+    <div class="main-content">
+        <?php if ($main_post): ?>
+            <h2>Main Headline</h2>
+            <div class="post-preview">
+                <?php if ($main_post['image_path']): ?>
+                    <img src="<?php echo htmlspecialchars($main_post['image_path']); ?>" alt="<?php echo htmlspecialchars($main_post['header']); ?>" style="max-width: 100%; height: auto;">
+                <?php endif; ?>
+                <h3><?php echo htmlspecialchars($main_post['header']); ?></h3>
+                <p><?php echo htmlspecialchars($main_post['textInput']); ?></p>
+            </div>
+            <p>Posted by User ID: <?php echo htmlspecialchars($main_post['userID']); ?></p>
+        <?php else: ?>
+            <h2>Main Headline</h2>
+            <div class="post-preview">
+                <p>No posts posted</p>
+            </div>
+        <?php endif; ?>
     </div>
 
     <aside class="index-aside">
@@ -77,8 +80,11 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
             <?php if ($thumbnail_posts): ?>
                 <?php foreach ($thumbnail_posts as $post): ?>
                     <div class="thumbnail">
-                        <h4><?= htmlspecialchars($post['header']); ?></h4>
-                        <p><?= htmlspecialchars($post['textInput']); ?></p>
+                        <?php if ($post['image_path']): ?>
+                            <img src="<?php echo htmlspecialchars($main_post['image_path']); ?>" alt="<?php echo htmlspecialchars($post['header']); ?>" style="max-width: 100%; height: auto;">
+                        <?php endif; ?>
+                        <h4><?php echo htmlspecialchars($post['header']); ?></h4>
+                        <p><?php echo htmlspecialchars(substr($post['textInput'], 0, 50)) . '...'; ?></p>
                     </div>
                 <?php endforeach; ?>
             <?php else: ?>
