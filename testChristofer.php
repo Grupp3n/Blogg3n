@@ -76,8 +76,9 @@ $stmt->execute([
 
 $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$userchatt = [];
 
+
+$userchatt = [];
 
 // Här fixar jag så jag har alla userIDs som har chattat och tagit bort den usern som är inloggad.
 foreach($posts as $post) {
@@ -262,63 +263,67 @@ foreach($posts as $post) {
                
                 <?php if (!empty($posts)): ?>
                     
-                   
+                    <?php foreach ($userchatt as $userID): ?>
+
                      <!-- Lägga en array i denna forloopen som sparar inloggade användaren och sedan kollar igenom chatt historiken med den den har chattat med-->
-                    <?php foreach ($posts as $post): ?>
+                        <?php foreach ($posts as $post): ?>
 
-                        <!-- DENNA CONTAINERN SKALL LÄGGAS I EN TILL CONTAINER 
-                        Så man specar upp det på användare och trycker man på den användaren så kommer bara den chatthistoriken upp -->
-                        <div>
-                            <details>
-                                
-                                    <!-- Denna koden är till för att hämta annan användare än den inloggade. -->
-                                <?php $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
-                                $stmt->execute([':id' => $post['senderID']]);
-                                $user2 = $stmt->fetch(PDO::FETCH_ASSOC); ?>
-        
-                                <?php if($user['username'] != $user2['username']): ?>
-                                    <summary class="no_arrow"><h3 style="color: Green;" tabindex="0" class="master"><?php echo nl2br(htmlspecialchars($user2['username'])); ?></h3></summary>  
-                                <?php else: ?>
-                                    <summary class="no_arrow_hidden"></summary>                                          
-                                <?php endif ?>
-                                <!-- Denna koden gör så att texten för inloggade användaren inte visas.
-                                Den skall visas men under fliker för den användaren chatten är för.
-                                Denna skriver även ut samma person om personen skrivit flera gånger. Skaffa en foreach utanför denna som bara tar användarna?
-                                Eller skall den foreach loopen bara gå igenom för att spara olika chatt historiker?
-                                Eller ska jag skapa en till tabell för den-->
-                               
-                               
-                                <div class="post">
-
-                                    <?php if($post['senderID'] != $user_id):                               
-
-                                        $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
+                            <?php if($post['senderID'] == $userID): ?>
+                                <!-- DENNA CONTAINERN SKALL LÄGGAS I EN TILL CONTAINER 
+                                Så man specar upp det på användare och trycker man på den användaren så kommer bara den chatthistoriken upp -->
+                                <div>
+                                    <details>
+                                        
+                                            <!-- Denna koden är till för att hämta annan användare än den inloggade. -->
+                                        <?php $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
                                         $stmt->execute([':id' => $post['senderID']]);
                                         $user2 = $stmt->fetch(PDO::FETCH_ASSOC); ?>
+                
+                                        <?php if($user['username'] != $user2['username']): ?>
+                                            <summary class="no_arrow"><h3 style="color: Green;" tabindex="0" class="master"><?php echo nl2br(htmlspecialchars($user2['username'])); ?></h3></summary>  
+                                        <?php else: ?>
+                                            <summary class="no_arrow_hidden"></summary>                                          
+                                        <?php endif ?>
+                                        <!-- Denna koden gör så att texten för inloggade användaren inte visas.
+                                        Den skall visas men under fliker för den användaren chatten är för.
+                                        Denna skriver även ut samma person om personen skrivit flera gånger. Skaffa en foreach utanför denna som bara tar användarna?
+                                        Eller skall den foreach loopen bara gå igenom för att spara olika chatt historiker?
+                                        Eller ska jag skapa en till tabell för den-->
+                                    
+                                    
+                                        <div class="post">
 
-                                        <h3 style="color: red;"><?php echo nl2br(htmlspecialchars($user2['username'])); ?></h3>
-                                        <p style="color: red;"><?php echo nl2br(htmlspecialchars($post['text'])); ?></p>
-                                        <small style="color: red;">Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
+                                            <?php if($post['senderID'] != $user_id):                               
 
-                                    <?php else: ?>
-                                        
+                                                $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
+                                                $stmt->execute([':id' => $post['senderID']]);
+                                                $user2 = $stmt->fetch(PDO::FETCH_ASSOC); ?>
 
-                                            <h3><?php echo nl2br(htmlspecialchars($chatt['username'])); ?></h3>
-                                            <p><?php echo nl2br(htmlspecialchars($chatt['text'])); ?></p>
-                                            <small>Postat: <?php echo htmlspecialchars($chatt['timeCreated']); ?></small>
+                                                <h3 style="color: red;"><?php echo nl2br(htmlspecialchars($user2['username'])); ?></h3>
+                                                <p style="color: red;"><?php echo nl2br(htmlspecialchars($post['text'])); ?></p>
+                                                <small style="color: red;">Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
 
-                                           
-                                    <?php endif ?>
+                                            <?php else: ?>
+                                                
+
+                                                    <h3><?php echo nl2br(htmlspecialchars($chatt['username'])); ?></h3>
+                                                    <p><?php echo nl2br(htmlspecialchars($chatt['text'])); ?></p>
+                                                    <small>Postat: <?php echo htmlspecialchars($chatt['timeCreated']); ?></small>
+
+                                                
+                                            <?php endif ?>
+
+                                        </div>
+
+                                    </details>
 
                                 </div>
 
-                            </details>
+                            <?php endif ?>
 
-                        </div>
+                        <?php endforeach; ?>
 
                     <?php endforeach; ?>
-
-                    
 
                 <?php else: ?>
 
