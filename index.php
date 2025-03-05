@@ -3,7 +3,7 @@ require 'db_connect.php';
 
 session_start();
 
-//Kommentera "true" om Post knappen ska visas, false om den ska döljas/samma för om det ska stå login eller profile
+//Kollar så användare är inloggad
 $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
 
 // Fetcha från posts för main content (Stora bilden)
