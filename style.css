@@ -12,10 +12,13 @@ header {
   align-items: center;
   padding: 10px 20px;
   max-height: 75px;
+  min-height: 75px;
+  position: relative;
   
 }
 
 header img{    
+  justify-content: center;
   max-width: 150px;
   height: auto;
   flex-grow: 1;
@@ -969,6 +972,19 @@ form button {
     max-height: 75px;
     
 }
+
+.logo-con{
+  position: absolute;
+  left: 50%;
+
+}
+
+.logo-con img{
+  max-width: 150px;
+  height: auto;
+
+}
+
 
 /* SLUT */
 

@@ -3,39 +3,43 @@ require 'db_connect.php';
 
 session_start();
 
-//Kommentera "true" om Post knappen ska visas, false om den ska döljas/samma för om det ska stå login eller profile
+//Kollar så användare är inloggad
 $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
 
 // Fetcha från posts för main content (Stora bilden)
-$sql_main = 'SELECT id, userID, textInput, header, image_path 
-            FROM Posts
-            ORDER BY timeCreated DESC LIMIT 1';
+            $sql_main = 'SELECT p.id, p.userID, p.textInput, p.header, p.image_path, u.username
+            FROM Posts p
+            LEFT JOIN Users u ON p.userID = u.id
+            ORDER BY p.timeCreated DESC LIMIT 1';
 
 $stmt_main = $pdo->prepare($sql_main);
 $stmt_main->execute();
 $main_post = $stmt_main->fetch(PDO::FETCH_ASSOC);
 
 // Fetcha från posts de senaste 4 inläggen för Recent Headlines
-$sql_thumbnails = 'SELECT id, textInput, header, image_path
-                FROM Posts
-                ORDER BY timeCreated DESC LIMIT 4';
+                $sql_thumbnails = 'SELECT p.id, p.textInput, p.header, p.image_path, u.username
+                   FROM Posts p
+                   LEFT JOIN Users u ON p.userID = u.id
+                   ORDER BY p.timeCreated DESC LIMIT 4';
+
 $stmt_thumbnails = $pdo->prepare($sql_thumbnails);
 $stmt_thumbnails->execute();
 $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="style.css">
-<title>Nexlify</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Nexlify</title>
 </head>
 <body>
 <!-- <div class="sticky-ad">
-<a href="ad-page.php" class="ad-link">
-    <img src="ad.gif" alt="Sticky Ad" class="ad-image">
-</a>
+    <a href="ad-page.php" class="ad-link">
+        <img src="ad.gif" alt="Sticky Ad" class="ad-image">
+    </a>
 </div> -->
 <header>
     <div class="dropdown">
@@ -53,8 +57,11 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
     <?php if ($INLOGGAD) : ?>
         <button onclick="window.location.href='create_post.php'">Gör ett inlägg</button>
     <?php endif; ?>
-
-    <img src="img/transparent logo.png" alt="Nexlify" class="Logo">
+        
+    <div class="logo-con">
+        <img src="img/transparent logo.png" alt="Nexlify">
+    </div>
+   
 </header>
 
 <main class="index-main">
@@ -62,10 +69,15 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
         <?php if ($main_post): ?>
             <h2>Main Headline</h2>
             <div class="post-preview">
+                <?php if ($main_post['image_path']): ?>
+                    <img src="<?php echo htmlspecialchars($main_post['image_path']); ?>
+                    " alt="<?php echo htmlspecialchars($main_post['header']); ?>
+                    " style="max-width: 100%; height: auto;">
+                <?php endif; ?>
                 <h3><?= htmlspecialchars($main_post['header']); ?></h3>
                 <p><?= htmlspecialchars($main_post['textInput']); ?></p>
             </div>
-            <p>Posted by User ID: <?= htmlspecialchars($main_post['userID']); ?></p>
+            <p>Posted by: <?= htmlspecialchars($main_post['username']); ?></p>
         <?php else: ?>
             <h2>Main Headline</h2>
             <div class="post-preview">
@@ -80,6 +92,11 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
             <?php if ($thumbnail_posts): ?>
                 <?php foreach ($thumbnail_posts as $post): ?>
                     <div class="thumbnail">
+                        <?php if ($post['image_path']): ?>
+                            <img src="<?php echo htmlspecialchars($post['image_path']); ?>
+                            " alt="<?php echo htmlspecialchars($post['header']); ?>
+                            " style="max-width: 100%; height: auto;">
+                        <?php endif; ?>
                         <h4><?= htmlspecialchars($post['header']); ?></h4>
                         <p><?= htmlspecialchars($post['textInput']); ?></p>
                     </div>
