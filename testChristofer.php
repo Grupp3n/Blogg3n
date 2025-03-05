@@ -35,7 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_post'])) {
-    $receiver_id = $_POST['receiver'];
+    
+    $receiver_id = $_POST['receiver'];      //denna raden skall bytas mot användarnamn och inte ID
+    
     $post_content = trim($_POST['post_content']);
     if (!empty($post_content)) {
         $stmt = $pdo->prepare("INSERT INTO chatt (text, senderID, receiverID, timeCreated) VALUES (:text, :senderID, :receiverID, NOW())");
@@ -179,7 +181,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         /* Tar bort Pilen i details */
        .no_arrow {
         list-style: none;
-       }
+       }       
        .no_arrow_hidden {
         list-style: none;
         display: none;
@@ -266,8 +268,10 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <?php else: ?>
                                     <summary class="no_arrow_hidden"></summary>                                          
                                 <?php endif ?>
+
                                 <div class="post">
 
+                                                                                <!-- Får inte till det riktigt med kommunicationen här. Blir fel "post" skick -->
                                     <?php if($post['senderID'] != $user_id):                               
 
                                         $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
@@ -277,6 +281,11 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <h3 style="color: red;"><?php echo nl2br(htmlspecialchars($user2['username'])); ?></h3>
                                         <p style="color: red;"><?php echo nl2br(htmlspecialchars($post['text'])); ?></p>
                                         <small style="color: red;">Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
+                                        
+                                        <h3><br><?php echo nl2br(htmlspecialchars($user['username'])); ?></h3>
+                                        <p><?php echo nl2br(htmlspecialchars($post['text'])); ?></p>
+                                        <small>Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
+                                        
 
                                     <?php else: ?>
 
