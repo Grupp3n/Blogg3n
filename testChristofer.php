@@ -35,7 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_post'])) {
-    $receiver_id = $_POST['receiver'];
+    
+    $receiver_id = $_POST['receiver'];      //denna raden skall bytas mot användarnamn och inte ID
+    
     $post_content = trim($_POST['post_content']);
     if (!empty($post_content)) {
         $stmt = $pdo->prepare("INSERT INTO chatt (text, senderID, receiverID, timeCreated) VALUES (:text, :senderID, :receiverID, NOW())");
@@ -195,7 +197,7 @@ foreach($posts as $post) {
         /* Tar bort Pilen i details */
        .no_arrow {
         list-style: none;
-       }
+       }       
        .no_arrow_hidden {
         list-style: none;
         display: none;
@@ -268,40 +270,31 @@ foreach($posts as $post) {
                      <!-- Lägga en array i denna forloopen som sparar inloggade användaren och sedan kollar igenom chatt historiken med den den har chattat med-->
                         <?php foreach ($posts as $post): ?>
 
-                            <?php if($post['senderID'] == $userID): ?>
-                                <!-- DENNA CONTAINERN SKALL LÄGGAS I EN TILL CONTAINER 
-                                Så man specar upp det på användare och trycker man på den användaren så kommer bara den chatthistoriken upp -->
-                                <div>
-                                    <details>
-                                        
-                                            <!-- Denna koden är till för att hämta annan användare än den inloggade. -->
-                                        <?php $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
-                                        $stmt->execute([':id' => $post['senderID']]);
-                                        $user2 = $stmt->fetch(PDO::FETCH_ASSOC); ?>
-                
-                                        <?php if($user['username'] != $user2['username']): ?>
-                                            <summary class="no_arrow"><h3 style="color: Green;" tabindex="0" class="master"><?php echo nl2br(htmlspecialchars($user2['username'])); ?></h3></summary>  
-                                        <?php else: ?>
-                                            <summary class="no_arrow_hidden"></summary>                                          
-                                        <?php endif ?>
-                                        <!-- Denna koden gör så att texten för inloggade användaren inte visas.
-                                        Den skall visas men under fliker för den användaren chatten är för.
-                                        Denna skriver även ut samma person om personen skrivit flera gånger. Skaffa en foreach utanför denna som bara tar användarna?
-                                        Eller skall den foreach loopen bara gå igenom för att spara olika chatt historiker?
-                                        Eller ska jag skapa en till tabell för den-->
-                                    
-                                    
-                                        <div class="post">
+                         <!-- DENNA CONTAINERN SKALL LÄGGAS I EN TILL CONTAINER 
+                     Så man specar upp det på användare och trycker man på den användaren så kommer bara den chatthistoriken upp -->
+                        <div>
+                            <details>
+                                
+                                <?php $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
+                                $stmt->execute([':id' => $post['senderID']]);
+                                $user2 = $stmt->fetch(PDO::FETCH_ASSOC); ?>
+        
+                                <?php if($user['username'] != $user2['username']): ?>
+                                    <summary class="no_arrow"><h3 style="color: Green;" tabindex="0" class="master"><?php echo nl2br(htmlspecialchars($user2['username'])); ?></h3></summary>  
+                                <?php else: ?>
+                                    <summary class="no_arrow_hidden"></summary>                                          
+                                <?php endif ?>
+                                <div class="post">
 
-                                            <?php if($post['senderID'] != $user_id):                               
+                                    <?php if($post['senderID'] != $user_id):                               
 
                                                 $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
                                                 $stmt->execute([':id' => $post['senderID']]);
                                                 $user2 = $stmt->fetch(PDO::FETCH_ASSOC); ?>
 
-                                                <h3 style="color: red;"><?php echo nl2br(htmlspecialchars($user2['username'])); ?></h3>
-                                                <p style="color: red;"><?php echo nl2br(htmlspecialchars($post['text'])); ?></p>
-                                                <small style="color: red;">Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
+                                        <h3 style="color: red;"><?php echo nl2br(htmlspecialchars($user2['username'])); ?></h3>
+                                        <p style="color: red;"><?php echo nl2br(htmlspecialchars($post['text'])); ?></p>
+                                        <small style="color: red;">Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
 
                                             <?php else: ?>
                                                 
