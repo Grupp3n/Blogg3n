@@ -270,8 +270,9 @@ foreach($posts as $post) {
                      <!-- Lägga en array i denna forloopen som sparar inloggade användaren och sedan kollar igenom chatt historiken med den den har chattat med-->
                         <?php foreach ($posts as $post): ?>
 
-                         <!-- DENNA CONTAINERN SKALL LÄGGAS I EN TILL CONTAINER 
-                     Så man specar upp det på användare och trycker man på den användaren så kommer bara den chatthistoriken upp -->
+                            <?php if($userID == $post['senderID']): ?>
+                            <!-- DENNA CONTAINERN SKALL LÄGGAS I EN TILL CONTAINER 
+                            Så man specar upp det på användare och trycker man på den användaren så kommer bara den chatthistoriken upp -->
                         <div>
                             <details>
                                 
