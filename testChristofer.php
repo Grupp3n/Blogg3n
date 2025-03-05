@@ -36,7 +36,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_post'])) {
     
-    $receiver_id = $_POST['receiver'];      //denna raden skall bytas mot användarnamn och inte ID
+    // Hämtar alla users för att veta vilket ID man skall skicka meddelande till
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE firstname = :firstname");
+    $stmt->execute([':firstname' => $_POST['receiver']]);
+    $userName = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $receiver_id = $userName['id'];      //denna raden skall bytas mot användarnamn och inte ID
     
     $post_content = trim($_POST['post_content']);
     if (!empty($post_content)) {
@@ -64,6 +69,8 @@ if (!$user) {
     header("Location: index.php");
     exit;
 }
+
+
 
 // Hämta inlägg från DB för den inloggade användaren
 $stmt = $pdo->prepare("SELECT text, senderID, receiverID, timeCreated
@@ -271,41 +278,41 @@ foreach($posts as $post) {
                         <?php foreach ($posts as $post): ?>
 
                             <?php if($userID == $post['senderID']): ?>
-                            <!-- DENNA CONTAINERN SKALL LÄGGAS I EN TILL CONTAINER 
-                            Så man specar upp det på användare och trycker man på den användaren så kommer bara den chatthistoriken upp -->
-                        <div>
-                            <details>
-                                
-                                <?php $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
-                                $stmt->execute([':id' => $post['senderID']]);
-                                $user2 = $stmt->fetch(PDO::FETCH_ASSOC); ?>
-        
-                                <?php if($user['username'] != $user2['username']): ?>
-                                    <summary class="no_arrow"><h3 style="color: Green;" tabindex="0" class="master"><?php echo nl2br(htmlspecialchars($user2['username'])); ?></h3></summary>  
-                                <?php else: ?>
-                                    <summary class="no_arrow_hidden"></summary>                                          
-                                <?php endif ?>
-                                <div class="post">
+                                <!-- DENNA CONTAINERN SKALL LÄGGAS I EN TILL CONTAINER 
+                                Så man specar upp det på användare och trycker man på den användaren så kommer bara den chatthistoriken upp -->
+                                <div>
+                                    <details>
+                                    
+                                        <?php $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
+                                        $stmt->execute([':id' => $post['senderID']]);
+                                        $user2 = $stmt->fetch(PDO::FETCH_ASSOC); ?>
+                
+                                        <?php if($user['username'] != $user2['username']): ?>
+                                            <summary class="no_arrow"><h3 style="color: Green;" tabindex="0" class="master"><?php echo nl2br(htmlspecialchars($user2['username'])); ?></h3></summary>  
+                                        <?php else: ?>
+                                            <summary class="no_arrow_hidden"></summary>                                          
+                                        <?php endif ?>
+                                        <div class="post">
 
-                                    <?php if($post['senderID'] != $user_id):                               
+                                            <?php if($post['senderID'] != $user_id):                               
 
-                                                $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
-                                                $stmt->execute([':id' => $post['senderID']]);
-                                                $user2 = $stmt->fetch(PDO::FETCH_ASSOC); ?>
+                                                    $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
+                                                    $stmt->execute([':id' => $post['senderID']]);
+                                                    $user2 = $stmt->fetch(PDO::FETCH_ASSOC); ?>
 
-                                        <h3 style="color: red;"><?php echo nl2br(htmlspecialchars($user2['username'])); ?></h3>
-                                        <p style="color: red;"><?php echo nl2br(htmlspecialchars($post['text'])); ?></p>
-                                        <small style="color: red;">Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
+                                            <h3 style="color: red;"><?php echo nl2br(htmlspecialchars($user2['username'])); ?></h3>
+                                            <p style="color: red;"><?php echo nl2br(htmlspecialchars($post['text'])); ?></p>
+                                            <small style="color: red;">Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
 
-                                            <?php else: ?>
-                                                
+                                                <?php else: ?>
+                                                    
 
-                                                    <h3><?php echo nl2br(htmlspecialchars($chatt['username'])); ?></h3>
-                                                    <p><?php echo nl2br(htmlspecialchars($chatt['text'])); ?></p>
-                                                    <small>Postat: <?php echo htmlspecialchars($chatt['timeCreated']); ?></small>
+                                                        <h3><?php echo nl2br(htmlspecialchars($chatt['username'])); ?></h3>
+                                                        <p><?php echo nl2br(htmlspecialchars($chatt['text'])); ?></p>
+                                                        <small>Postat: <?php echo htmlspecialchars($chatt['timeCreated']); ?></small>
 
-                                                
-                                            <?php endif ?>
+                                                    
+                                                <?php endif ?>
 
                                         </div>
 
