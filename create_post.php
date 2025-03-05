@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!$_SESSION['INLOGGAD']) {
+if ($_SESSION['user_id']) {
 header("location: login.php");
 exit;
 } else {
