@@ -66,15 +66,15 @@
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             $query = "CREATE TABLE Posts (
-                        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                        userID int UNSIGNED NOT NULL,
-                        textInput NVARCHAR(250) NOT NULL,
-                        header NVARCHAR(40) NOT NULL,
-                        image MEDIUMBLOB,
-                        timeCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                        timeUpdated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                        timeUpdatedComments TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                        FOREIGN KEY (userID) REFERENCES Users(id) ON DELETE CASCADE
+                id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                userID INT UNSIGNED NOT NULL,
+                textInput NVARCHAR(250) NOT NULL,
+                header NVARCHAR(40) NOT NULL,
+                image_path VARCHAR(255) NOT NULL,
+                timeCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                timeUpdated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                timeUpdatedComments TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (userID) REFERENCES Users(id) ON DELETE CASCADE
             )";
 
             $conn->exec($query);
