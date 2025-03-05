@@ -73,8 +73,8 @@ if (isset($_POST['post_submit_button'])) {
 
     if ($stmt->execute()) {
         echo "<div class='success'>Posten lyckades!</div>";
-        header("Location: index.php");
-        exit;
+        // header("Location: index.php");
+        // exit;
     } else {
         echo "<div class='error'>Något gick fel med databasen: " . $stmt->errorInfo()[2] . "</div>";
     }
