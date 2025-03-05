@@ -3,7 +3,6 @@ require 'db_connect.php';
 
 session_start();
 
-//Kommentera "true" om Post knappen ska visas, false om den ska döljas/samma för om det ska stå login eller profile
 $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
 
 // Fetcha från posts för main content (Stora bilden)
@@ -23,19 +22,20 @@ $stmt_thumbnails = $pdo->prepare($sql_thumbnails);
 $stmt_thumbnails->execute();
 $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="style.css">
-<title>Nexlify</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Nexlify</title>
 </head>
 <body>
 <!-- <div class="sticky-ad">
-<a href="ad-page.php" class="ad-link">
-    <img src="ad.gif" alt="Sticky Ad" class="ad-image">
-</a>
+    <a href="ad-page.php" class="ad-link">
+        <img src="ad.gif" alt="Sticky Ad" class="ad-image">
+    </a>
 </div> -->
 <header>
     <div class="dropdown">
@@ -62,6 +62,11 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
         <?php if ($main_post): ?>
             <h2>Main Headline</h2>
             <div class="post-preview">
+                <?php if ($main_post['image_path']): ?>
+                    <img src="<?php echo htmlspecialchars($main_post['image_path']); ?>
+                    " alt="<?php echo htmlspecialchars($main_post['header']); ?>
+                    " style="max-width: 100%; height: auto;">
+                <?php endif; ?>
                 <h3><?= htmlspecialchars($main_post['header']); ?></h3>
                 <p><?= htmlspecialchars($main_post['textInput']); ?></p>
             </div>
@@ -80,6 +85,11 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
             <?php if ($thumbnail_posts): ?>
                 <?php foreach ($thumbnail_posts as $post): ?>
                     <div class="thumbnail">
+                        <?php if ($post['image_path']): ?>
+                            <img src="<?php echo htmlspecialchars($post['image_path']); ?>
+                            " alt="<?php echo htmlspecialchars($post['header']); ?>
+                            " style="max-width: 100%; height: auto;">
+                        <?php endif; ?>
                         <h4><?= htmlspecialchars($post['header']); ?></h4>
                         <p><?= htmlspecialchars($post['textInput']); ?></p>
                     </div>
