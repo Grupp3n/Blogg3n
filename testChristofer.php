@@ -76,6 +76,21 @@ $stmt->execute([
 
 $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+$userchatt = [];
+
+
+// Här fixar jag så jag har alla userIDs som har chattat och tagit bort den usern som är inloggad.
+foreach($posts as $post) {
+
+    $sender = $post['senderID'];
+
+    if($user_id != $sender) {
+        if(!in_array($sender, $userchatt)) {
+            $userchatt[] = $sender;
+        }
+    }
+}
+
 
 
 ?>
@@ -210,10 +225,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <h1>Nexlify</h1>
     </header>
     <nav>
-        <a href="#">Start</a>
-        <a href="#">Start</a>
-        <a href="#">Start</a>
-        <a href="#">Start</a>
+      
         <!-- Fler länkar kan läggas till -->
     </nav>
     <div class="container">
@@ -250,13 +262,16 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                
                 <?php if (!empty($posts)): ?>
                     
+                   
+                     <!-- Lägga en array i denna forloopen som sparar inloggade användaren och sedan kollar igenom chatt historiken med den den har chattat med-->
                     <?php foreach ($posts as $post): ?>
 
-                         <!-- DENNA CONTAINERN SKALL LÄGGAS I EN TILL CONTAINER 
-                     Så man specar upp det på användare och trycker man på den användaren så kommer bara den chatthistoriken upp -->
+                        <!-- DENNA CONTAINERN SKALL LÄGGAS I EN TILL CONTAINER 
+                        Så man specar upp det på användare och trycker man på den användaren så kommer bara den chatthistoriken upp -->
                         <div>
                             <details>
                                 
+                                    <!-- Denna koden är till för att hämta annan användare än den inloggade. -->
                                 <?php $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
                                 $stmt->execute([':id' => $post['senderID']]);
                                 $user2 = $stmt->fetch(PDO::FETCH_ASSOC); ?>
@@ -266,6 +281,13 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <?php else: ?>
                                     <summary class="no_arrow_hidden"></summary>                                          
                                 <?php endif ?>
+                                <!-- Denna koden gör så att texten för inloggade användaren inte visas.
+                                Den skall visas men under fliker för den användaren chatten är för.
+                                Denna skriver även ut samma person om personen skrivit flera gånger. Skaffa en foreach utanför denna som bara tar användarna?
+                                Eller skall den foreach loopen bara gå igenom för att spara olika chatt historiker?
+                                Eller ska jag skapa en till tabell för den-->
+                               
+                               
                                 <div class="post">
 
                                     <?php if($post['senderID'] != $user_id):                               
@@ -279,18 +301,24 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <small style="color: red;">Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
 
                                     <?php else: ?>
+                                        
 
-                                        <h3><?php echo nl2br(htmlspecialchars($user['username'])); ?></h3>
-                                        <p><?php echo nl2br(htmlspecialchars($post['text'])); ?></p>
-                                        <small>Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
+                                            <h3><?php echo nl2br(htmlspecialchars($chatt['username'])); ?></h3>
+                                            <p><?php echo nl2br(htmlspecialchars($chatt['text'])); ?></p>
+                                            <small>Postat: <?php echo htmlspecialchars($chatt['timeCreated']); ?></small>
 
+                                           
                                     <?php endif ?>
 
                                 </div>
+
                             </details>
+
                         </div>
 
                     <?php endforeach; ?>
+
+                    
 
                 <?php else: ?>
 
