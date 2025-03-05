@@ -7,7 +7,7 @@ session_start();
 $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
 
 // Fetcha från posts för main content (Stora bilden)
-$sql_main = 'SELECT id, userID, textInput, header 
+$sql_main = 'SELECT id, userID, textInput, header, image_path 
              FROM Posts
              ORDER BY timeCreated DESC LIMIT 1';
 
@@ -16,7 +16,7 @@ $stmt_main->execute();
 $main_post = $stmt_main->fetch(PDO::FETCH_ASSOC);
 
 // Fetcha från posts de senaste 4 inläggen för Recent Headlines
-$sql_thumbnails = 'SELECT id, textInput, header
+$sql_thumbnails = 'SELECT id, textInput, header, image_path
                    FROM Posts
                    ORDER BY timeCreated DESC LIMIT 4';
 $stmt_thumbnails = $pdo->prepare($sql_thumbnails);
