@@ -73,7 +73,7 @@ if (!$user) {
 
 
 // Hämta inlägg från DB för den inloggade användaren
-$stmt = $pdo->prepare("SELECT text, senderID, receiverID, timeCreated
+$stmt = $pdo->prepare("SELECT text, senderID, receiverID, text, timeCreated
                                 FROM chatt 
                                 WHERE senderID = :senderID OR receiverID = :receiverID
                                 ORDER BY timeCreated DESC");
@@ -101,7 +101,13 @@ foreach($posts as $post) {
     }
 }
 
+print_r($userchatt);
 
+foreach($posts as $post) {
+
+}
+
+// Bygga en till foreach-loop där man går igenom varje användare och sparar texten?
 
 ?>
 
@@ -272,7 +278,7 @@ foreach($posts as $post) {
                
                 <?php if (!empty($posts)): ?>
                     
-                    <?php foreach ($userchatt as $userID): ?>
+                    <?php foreach ($userchatt as $index => $userID): ?>
 
                      <!-- Lägga en array i denna forloopen som sparar inloggade användaren och sedan kollar igenom chatt historiken med den den har chattat med-->
                         <?php foreach ($posts as $post): ?>
@@ -280,6 +286,7 @@ foreach($posts as $post) {
                             <?php if($userID == $post['senderID']): ?>
                                 <!-- DENNA CONTAINERN SKALL LÄGGAS I EN TILL CONTAINER 
                                 Så man specar upp det på användare och trycker man på den användaren så kommer bara den chatthistoriken upp -->
+
                                 <div>
                                     <details>
                                     
@@ -287,11 +294,9 @@ foreach($posts as $post) {
                                         $stmt->execute([':id' => $post['senderID']]);
                                         $user2 = $stmt->fetch(PDO::FETCH_ASSOC); ?>
                 
-                                        <?php if($user['username'] != $user2['username']): ?>
+                                       
                                             <summary class="no_arrow"><h3 style="color: Green;" tabindex="0" class="master"><?php echo nl2br(htmlspecialchars($user2['username'])); ?></h3></summary>  
-                                        <?php else: ?>
-                                            <summary class="no_arrow_hidden"></summary>                                          
-                                        <?php endif ?>
+                                       
                                         <div class="post">
 
                                             <?php if($post['senderID'] != $user_id):                               
