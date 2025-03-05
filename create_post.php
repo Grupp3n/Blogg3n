@@ -1,36 +1,42 @@
 <?php
     Session_start();
-    require 'db_connect.php';
 
-    if($_SERVER['REQUEST_METHOD'] == "POST") {
-        $blogHeader = $_POST['blogHeader'];
-        $blogText = $_POST['blogText'];
-        $time = date_create();
-        $getTime = date_format($time, "Y-m-d H:i:s");
+    if(!$_SESSION['INLOGGAD']) {
+        header("location: login.php");
+        exit;
+    } else {
+        require 'db_connect.php';
 
-        if(isset($_POST['post_submit_button'])) {
+        if($_SERVER['REQUEST_METHOD'] == "POST") {
+            $blogHeader = $_POST['blogHeader'];
+            $blogText = $_POST['blogText'];
+            $time = date_create();
+            $getTime = date_format($time, "Y-m-d H:i:s");
 
-            $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated) 
-                                            VALUES (:textInput, :header, :userID, :timeCreated)");
+            if(isset($_POST['post_submit_button'])) {
 
-            $number = 1;
-            $stmt->bindParam(':textInput', $blogText);
-            $stmt->bindParam(':header', $blogHeader);           
-            $stmt->bindParam(':userID', $number);   // HÄMTAR SESSIONS USER ID, OCH SPARAR IN I DATABASEN
-            $stmt->bindParam(':timeCreated', $getTime);
+                $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated) 
+                                                VALUES (:textInput, :header, :userID, :timeCreated)");
 
-            if ($stmt->execute()) {
-                echo "<div class='success'>Posten lyckades!</div>";
-            } 
-            else 
-            {
-                echo "<div class='error'>Något gick fel!</div>";
+                $number = 1;
+                $stmt->bindParam(':textInput', $blogText);
+                $stmt->bindParam(':header', $blogHeader);           
+                $stmt->bindParam(':userID', $number);   // HÄMTAR SESSIONS USER ID, OCH SPARAR IN I DATABASEN
+                $stmt->bindParam(':timeCreated', $getTime);
+
+                if ($stmt->execute()) {
+                    echo "<div class='success'>Posten lyckades!</div>";
+                } 
+                else 
+                {
+                    echo "<div class='error'>Något gick fel!</div>";
+                }
             }
-        }
 
-        if(isset($_POST['image_adder'])) {
-            //Skall komma upp så man kan ladda upp en bild, alltså hämta bilden i sin map
-            // Efter det så skall bilden läggas in i texten samt läggas till i texten / databasen
+            if(isset($_POST['image_adder'])) {
+                //Skall komma upp så man kan ladda upp en bild, alltså hämta bilden i sin map
+                // Efter det så skall bilden läggas in i texten samt läggas till i texten / databasen
+            }
         }
     }
 ?> 
@@ -49,7 +55,9 @@
          <div></div>
         
         <a href="index.php"><img src="img/transparent logo.png" alt="Nexlify" class="Logo"></a>
-        <button onclick="window.location.href='login.php'">Profile</button>
+        
+        <button onclick="window.location.href='profile.php'">Profile</button>
+        
     </header>
 
     <main class="main_create_post">

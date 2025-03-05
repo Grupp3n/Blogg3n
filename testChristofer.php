@@ -13,7 +13,9 @@ if (!isset($_SESSION['user_id'])) {
 
 require_once 'db_connect.php';
 
+
 $user_id = $_SESSION['user_id'];
+
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
@@ -33,24 +35,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_post'])) {
-    $post_header  = trim($_POST['post_header']);
-    $post_content = trim($_POST['post_content']);
     
-    if (!empty($post_header) && !empty($post_content)) {
-        $stmt = $pdo->prepare("INSERT INTO posts (userID, header, textInput, timeCreated) VALUES (:userID, :header, :textInput, NOW())");
+    $receiver_id = $_POST['receiver'];      //denna raden skall bytas mot användarnamn och inte ID
+    
+    $post_content = trim($_POST['post_content']);
+    if (!empty($post_content)) {
+        $stmt = $pdo->prepare("INSERT INTO chatt (text, senderID, receiverID, timeCreated) VALUES (:text, :senderID, :receiverID, NOW())");
         if ($stmt->execute([
-            ':userID'    => $user_id,
-            ':header'    => $post_header,
-            ':textInput' => $post_content
+            ':senderID'    => $user_id,
+            ':receiverID'    => $receiver_id,
+            ':text' => $post_content
         ])) {
             $message = "Inlägg publicerat!";
         } else {
             $message = "Fel vid publicering av inlägg.";
         }
     } else {
-        $message = "Både rubrik och innehåll måste fyllas i.";
+        $message = "Inlägget får inte vara tomt.";
     }
 }
+
 // Hämta aktuell användardata från databasen
 $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
 $stmt->execute([':id' => $user_id]);
@@ -62,10 +66,24 @@ if (!$user) {
 }
 
 // Hämta inlägg från DB för den inloggade användaren
-$stmt = $pdo->prepare("SELECT header, textInput, timeCreated FROM posts WHERE userID = :userID ORDER BY timeCreated DESC");
-$stmt->execute([':userID' => $user_id]);
+$stmt = $pdo->prepare("SELECT text, senderID, receiverID, timeCreated
+                                FROM chatt 
+                                WHERE senderID = :senderID OR receiverID = :receiverID
+                                ORDER BY timeCreated DESC");
+
+$stmt->execute([
+    ':senderID' => $user_id,
+    ':receiverID' => $user_id
+]);
+
 $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+
 ?>
+
+
+
 <!DOCTYPE html>
 <html lang="sv">
 <head>
@@ -75,7 +93,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: grey;
         }
         header {
             background: #333;
@@ -103,19 +121,19 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
         .profile-info {
             text-align: center;
-            background: #fff;
+            background: darkgray;
             padding: 1.5rem;
             border-radius: 4px;
         }
         .profile-info img {
-            width: 450px;
-            height: 150px;
-            object-fit: scale-down;
-            /* border-radius: 25%; */
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
             margin-bottom: 1rem;
         }
         .update-profile-form, .create-post-form {
-            background: #fff;
+            background: darkgray;
             padding: 1.5rem;
             margin-top: 1rem;
             border-radius: 4px;
@@ -141,24 +159,34 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             border-radius: 4px;
         }
         .posts {
-            background: #fff;
+            background: darkgray;
             margin-top: 1rem;
             padding: 1.5rem;
             border-radius: 4px;
         }
         .posts h3 {
-            margin-top: 0;            
+            margin-top: 0;
         }
         .post {
-            background-color: blueviolet;
-            background: #f9f9f9;
+            /* display: none; */
+            background: lightgray;
             margin-bottom: 1rem;
             padding: 1rem;
             border-radius: 4px;
-        }
+        }        
         .post p {
             margin: 0 0 0.5rem;
         }
+
+        /* Tar bort Pilen i details */
+       .no_arrow {
+        list-style: none;
+       }       
+       .no_arrow_hidden {
+        list-style: none;
+        display: none;
+       }
+
         .notifications {
             width: 200px;
             margin-left: 2rem;
@@ -184,12 +212,16 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <h1>Nexlify</h1>
     </header>
     <nav>
-        <a href="index.php">Home</a>
+        <a href="#">Start</a>
+        <a href="#">Start</a>
+        <a href="#">Start</a>
+        <a href="#">Start</a>
+        <!-- Fler länkar kan läggas till -->
     </nav>
     <div class="container">
         <div class="main-content">
             <div class="profile-info">
-                <img src="img/transparent logo.png" alt="Profilbild">
+                <img src="profile.jpg" alt="Profilbild">
                 <h2><?php echo htmlspecialchars($user['username']); ?></h2>
             </div>
             <?php if ($message): ?>
@@ -207,27 +239,74 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             <!-- SKAPA INLÄGG -->
             <form class="create-post-form" method="post" action="">
-                <label for="post_header">Rubrik:</label><br>
-                <input type="text" name="post_header" id="post_header" placeholder="Ange rubrik"><br>
-                <label for="post_content">Nytt inlägg:</label><br>
+                <input type="text" name="receiver" placeholder="Vem vill du skicka till?">
+                <label for="post_content">Ny chatt:</label><br>
                 <textarea name="post_content" id="post_content" placeholder="Vad vill du dela idag?"></textarea><br>
                 <button type="submit" name="create_post">Publicera</button>
             </form>
             
             <!-- LISTA INLÄGG FRÅN DATABAS -->
             <div class="posts">
-                <h3>Senaste inlägg</h3>
+                <h3>Senaste Chatt historiken</h3>
+
+               
                 <?php if (!empty($posts)): ?>
+                    
                     <?php foreach ($posts as $post): ?>
-                        <div class="post">
-                            <h3><?php echo nl2br(htmlspecialchars($post['header'])); ?></h3>
-                            <p><?php echo nl2br(htmlspecialchars($post['textInput'])); ?></p>
-                            <small>Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
+
+                         <!-- DENNA CONTAINERN SKALL LÄGGAS I EN TILL CONTAINER 
+                     Så man specar upp det på användare och trycker man på den användaren så kommer bara den chatthistoriken upp -->
+                        <div>
+                            <details>
+                                
+                                <?php $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
+                                $stmt->execute([':id' => $post['senderID']]);
+                                $user2 = $stmt->fetch(PDO::FETCH_ASSOC); ?>
+        
+                                <?php if($user['username'] != $user2['username']): ?>
+                                    <summary class="no_arrow"><h3 style="color: Green;" tabindex="0" class="master"><?php echo nl2br(htmlspecialchars($user2['username'])); ?></h3></summary>  
+                                <?php else: ?>
+                                    <summary class="no_arrow_hidden"></summary>                                          
+                                <?php endif ?>
+
+                                <div class="post">
+
+                                                                                <!-- Får inte till det riktigt med kommunicationen här. Blir fel "post" skick -->
+                                    <?php if($post['senderID'] != $user_id):                               
+
+                                        $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
+                                        $stmt->execute([':id' => $post['senderID']]);
+                                        $user2 = $stmt->fetch(PDO::FETCH_ASSOC); ?>
+
+                                        <h3 style="color: red;"><?php echo nl2br(htmlspecialchars($user2['username'])); ?></h3>
+                                        <p style="color: red;"><?php echo nl2br(htmlspecialchars($post['text'])); ?></p>
+                                        <small style="color: red;">Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
+                                        
+                                        <h3><br><?php echo nl2br(htmlspecialchars($user['username'])); ?></h3>
+                                        <p><?php echo nl2br(htmlspecialchars($post['text'])); ?></p>
+                                        <small>Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
+                                        
+
+                                    <?php else: ?>
+
+                                        <h3><?php echo nl2br(htmlspecialchars($user['username'])); ?></h3>
+                                        <p><?php echo nl2br(htmlspecialchars($post['text'])); ?></p>
+                                        <small>Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
+
+                                    <?php endif ?>
+
+                                </div>
+                            </details>
                         </div>
+
                     <?php endforeach; ?>
+
                 <?php else: ?>
-                    <p>Inga inlägg ännu.</p>
+
+                    <p>Ingen chatthistorik ännu</p>
+
                 <?php endif; ?>
+
             </div>
         </div>
         <div class="notifications">
