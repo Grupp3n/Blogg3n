@@ -1,73 +1,134 @@
 <?php
-    Session_start();
+session_start();
 
-    if(!$_SESSION['INLOGGAD']) {
-        header("location: login.php");
+if (!$_SESSION['INLOGGAD']) {
+header("location: login.php");
+exit;
+} else {
+require 'db_connect.php';
+}
+
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
+$blogHeader = htmlspecialchars($_POST['blogHeader']);
+$blogText = htmlspecialchars($_POST['blogText']);
+$time = date_create();
+$getTime = date_format($time, "Y-m-d H:i:s");
+
+if (isset($_POST['post_submit_button'])) {
+    $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated, image_path) 
+            VALUES (:textInput, :header, :userID, :timeCreated, :image_path)");
+
+    $userID = $_SESSION['user_id'];
+    $image_path = '';
+    $upload_dir = 'img/';
+
+    // Kollar om img directory finns, om den inte finns så skapas den.
+    if (!file_exists($upload_dir)) {
+        mkdir($upload_dir, 0777, true);
+    }
+
+        if ($_FILES['image']['error'] === UPLOAD_ERR_OK) { 
+            $image = $_FILES['image'];
+
+            // $image_name          Skapar ett unikt namn för bilden
+            // random_bytes(16)     Genererar 16 random characters
+            // bin2hex              Omförvandlar dom 16 characters till en sträng av siffror och bokstäver
+            // pathinfo_extension   Kollar på orginal bildets namn och tar det sista delen av filen t.ex: JPG, PNG. 
+            $image_name = bin2hex(random_bytes(16)) . '.' . pathinfo($image['name'], PATHINFO_EXTENSION); 
+
+            // $image_tmp           PHP storar bilden i en tmp mapp under fil uppladdningens process. Denna variabeln är
+            //                      sökvägen till tmp mappen. Denna behövs för att flytta bilden från tmp till vår directory,
+            //                      i detta fall img/                                    
+            $image_tmp = $image['tmp_name']; 
+
+            // $image_path          Detta skapar en path till slutdestinationen för vart bilden ska landa.
+            //                      i detta fall så blir det img/- - bildens sträng - -
+            $image_path = $upload_dir . $image_name;
+            
+
+            // move_uploaded_file   Detta gör så att man flyttar sin uppladdade fil från temp mappen till vår slutdestination ($image_path)
+            if (move_uploaded_file($image_tmp, $image_path)) {
+                echo "<p>Debug - Image uploaded successfully to: " . $image_path . "</p>";
+
+                // Detta ger tillgång till vem som har permission att justera och läsa denna filen.
+                // 0644 betyder att alla kan läsa filen men bara Owner kan justera den.
+                chmod($image_path, 0644);
+            } else {
+                echo "<div class='error'>Failed to upload image. Error code: " . $_FILES['image']['error'] . "</div>";
+                echo "<p>Debug - PHP Error: " . error_get_last()['message'] ?? 'No PHP error' . "</p>";
+                $image_path = ''; // image path blir '' om det inte funkar.
+            }
+        } else {
+            echo "<div class='error'>File upload error: " . getUploadErrorMessage($_FILES['image']['error']) . "</div>";
+        }
+    } else {
+        echo "<p>Debug - No file uploaded</p>";
+    }
+
+    $stmt->bindParam(':textInput', $blogText);
+    $stmt->bindParam(':header', $blogHeader);           
+    $stmt->bindParam(':userID', $userID);
+    $stmt->bindParam(':timeCreated', $getTime);
+    $stmt->bindParam(':image_path', $image_path);
+
+    if ($stmt->execute()) {
+        echo "<div class='success'>Posten lyckades!</div>";
+        header("Location: index.php");
         exit;
     } else {
-        require 'db_connect.php';
-
-        if($_SERVER['REQUEST_METHOD'] == "POST") {
-            $blogHeader = $_POST['blogHeader'];
-            $blogText = $_POST['blogText'];
-            $time = date_create();
-            $getTime = date_format($time, "Y-m-d H:i:s");
-
-            if(isset($_POST['post_submit_button'])) {
-
-                $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated) 
-                                                VALUES (:textInput, :header, :userID, :timeCreated)");
-
-                $number = 1;
-                $stmt->bindParam(':textInput', $blogText);
-                $stmt->bindParam(':header', $blogHeader);           
-                $stmt->bindParam(':userID', $number);   // HÄMTAR SESSIONS USER ID, OCH SPARAR IN I DATABASEN
-                $stmt->bindParam(':timeCreated', $getTime);
-
-                if ($stmt->execute()) {
-                    echo "<div class='success'>Posten lyckades!</div>";
-                } 
-                else 
-                {
-                    echo "<div class='error'>Något gick fel!</div>";
-                }
-            }
-
-            if(isset($_POST['image_adder'])) {
-                //Skall komma upp så man kan ladda upp en bild, alltså hämta bilden i sin map
-                // Efter det så skall bilden läggas in i texten samt läggas till i texten / databasen
-            }
-        }
+        echo "<div class='error'>Något gick fel med databasen: " . $stmt->errorInfo()[2] . "</div>";
     }
-?> 
+}
+
+// Debugg kod
+function getUploadErrorMessage($errorCode) {
+switch ($errorCode) {
+    case UPLOAD_ERR_INI_SIZE:
+        return "The uploaded file exceeds the upload_max_filesize directive in php.ini.";
+    case UPLOAD_ERR_FORM_SIZE:
+        return "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.";
+    case UPLOAD_ERR_PARTIAL:
+        return "The uploaded file was only partially uploaded.";
+    case UPLOAD_ERR_NO_FILE:
+        return "No file was uploaded.";
+    case UPLOAD_ERR_NO_TMP_DIR:
+        return "Missing a temporary folder.";
+    case UPLOAD_ERR_CANT_WRITE:
+        return "Failed to write file to disk.";
+    case UPLOAD_ERR_EXTENSION:
+        return "A PHP extension stopped the file upload.";
+    default:
+        return "Unknown upload error.";
+}
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Document</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+<title>Document</title>
 </head>
+
 <body class="body_create_post">
     <header>    
-        <!-- <button onclick="window.location.href='create_post.php'">Gör ett inlägg</button> -->
-         <div></div>
-        
         <a href="index.php"><img src="img/transparent logo.png" alt="Nexlify" class="Logo"></a>
-        
         <button onclick="window.location.href='profile.php'">Profile</button>
-        
     </header>
-
+    
     <main class="main_create_post">
 
-        <form method="POST" class="form_create_post">
+        <!-- Form börjar här -->
+        <form method="POST" enctype="multipart/form-data" class="form_create_post">
 
+            <!-- Blog Header -->
             <div class="div_create_post">
                 <input type="text" name="blogHeader" placeholder="HEADLINE" class="headline_create_post" require>
             </div>
-
+            
+            <!-- Blog Text -->
             <div class="wrapper">
                 <div class="cube">
                     <textarea name="blogText" class="text_create_post" rows="20" placeholder="Input blog shit here" require></textarea>                    
@@ -78,26 +139,31 @@
                 </div>
             </div>
 
+            <!-- Add Image -->
             <div class="div_create_post2">
-                <div class="div_create_post_left">
-                    <button name="image_adder" class="image_adder">Add image</button>
-                </div>
-                <div class="div_create_post_middle">
-                    <button name="post_submit_button" class="post_submit_button">Post</button>
-                </div>           
+            <div class="div_create_post_left">
+                <input type="file" name="image" id="image" accept="image/*">
             </div>
-        </form>
-        
-        <div class="div_create_post">
-            <img src="./img/Swish-codes.gif" style="width: 150px; margin-right: 1rem;">
-            <img src="ad.gif" alt="Sticky Ad" class="ad-image" style="width: 500px; height: 125px; margin-top: 1.5rem; margin-bottom: 1.5rem; text-align: center;">
-            <img src="./img/Swish-codes.gif" style="width: 150px; margin-left: 1rem;">
+
+            <!-- Submit Post Button -->
+            <div class="div_create_post_middle">
+                <button type="submit" name="post_submit_button" class="post_submit_button">Post</button>
+            </div>           
         </div>
-
-    </main>
-
-    <div class="footer">        
-        <p>&copy; Alla rättigheter förbehållna. Grupp 3 </p>
+    </form>
+    
+    <!-- Ad -->
+    <div class="div_create_post">
+        <img src="./img/Swish-codes.gif" style="width: 150px; margin-right: 1rem;">
+        <img src="ad.gif" alt="Sticky Ad" class="ad-image" style="width: 500px; height: 125px; margin-top: 1.5rem; margin-bottom: 1.5rem; text-align: center;">
+        <img src="./img/Swish-codes.gif" style="width: 150px; margin-left: 1rem;">
     </div>
+    
+</main>
+
+<div class="footer">        
+    <p>&copy; Alla rättigheter förbehållna. Grupp 3 </p>
+</div>
+
 </body>
 </html>
