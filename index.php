@@ -7,18 +7,21 @@ session_start();
 $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
 
 // Fetcha från posts för main content (Stora bilden)
-$sql_main = 'SELECT id, userID, textInput, header, image_path 
-            FROM Posts
-            ORDER BY timeCreated DESC LIMIT 1';
+            $sql_main = 'SELECT p.id, p.userID, p.textInput, p.header, p.image_path, u.username
+            FROM Posts p
+            LEFT JOIN Users u ON p.userID = u.id
+            ORDER BY p.timeCreated DESC LIMIT 1';
 
 $stmt_main = $pdo->prepare($sql_main);
 $stmt_main->execute();
 $main_post = $stmt_main->fetch(PDO::FETCH_ASSOC);
 
 // Fetcha från posts de senaste 4 inläggen för Recent Headlines
-$sql_thumbnails = 'SELECT id, textInput, header, image_path
-                FROM Posts
-                ORDER BY timeCreated DESC LIMIT 4';
+                $sql_thumbnails = 'SELECT p.id, p.textInput, p.header, p.image_path, u.username
+                   FROM Posts p
+                   LEFT JOIN Users u ON p.userID = u.id
+                   ORDER BY p.timeCreated DESC LIMIT 4';
+
 $stmt_thumbnails = $pdo->prepare($sql_thumbnails);
 $stmt_thumbnails->execute();
 $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
@@ -74,7 +77,7 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
                 <h3><?= htmlspecialchars($main_post['header']); ?></h3>
                 <p><?= htmlspecialchars($main_post['textInput']); ?></p>
             </div>
-            <p>Posted by User ID: <?= htmlspecialchars($main_post['userID']); ?></p>
+            <p>Posted by: <?= htmlspecialchars($main_post['username']); ?></p>
         <?php else: ?>
             <h2>Main Headline</h2>
             <div class="post-preview">
