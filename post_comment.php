@@ -9,7 +9,9 @@ $sql_comments = 'SELECT id, userID, postID, textInput
                 ORDER BY timeCreated DESC';
 $sql_comments = $pdo->prepare($sql_comments);
 $sql_comments->execute();
-$comments_sql = $sql_comments->fetch(PDO::FETCH_ASSOC);
+$comments_sql = $sql_comments->fetchAll(PDO::FETCH_ASSOC);
+
+
 
 
 
