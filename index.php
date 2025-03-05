@@ -53,8 +53,11 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
     <?php if ($INLOGGAD) : ?>
         <button onclick="window.location.href='create_post.php'">Gör ett inlägg</button>
     <?php endif; ?>
-
-    <img src="img/transparent logo.png" alt="Nexlify" class="Logo">
+        
+    <div class="logo-con">
+        <img src="img/transparent logo.png" alt="Nexlify">
+    </div>
+   
 </header>
 
 <main class="index-main">
