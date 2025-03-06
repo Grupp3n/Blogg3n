@@ -69,14 +69,16 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
         <?php if ($main_post): ?>
             <h2>Main Headline</h2>
             <div class="post-preview">
-                <?php if ($main_post['image_path']): ?>
-                    <img src="<?php echo htmlspecialchars($main_post['image_path']); ?>
-                    " alt="<?php echo htmlspecialchars($main_post['header']); ?>
-                    " style="max-width: 100%; height: auto;">
-                <?php endif; ?>
-                <h3><?= htmlspecialchars($main_post['header']); ?></h3>
-                <p><?= htmlspecialchars($main_post['textInput']); ?></p>
-            </div>
+            <a href="post.php?id=<?= $main_post['id']; ?>" style="text-decoration: none; color: inherit;">
+        <?php if ($main_post['image_path']): ?>
+            <img src="<?= htmlspecialchars($main_post['image_path']); ?>" 
+                 alt="<?= htmlspecialchars($main_post['header']); ?>" 
+                 style="max-width: 100%; height: auto;">
+        <?php endif; ?>
+        <h3><?= htmlspecialchars($main_post['header']); ?></h3>
+        <p><?= htmlspecialchars($main_post['textInput']); ?></p>
+        </a>
+</div>
             <p>Posted by: <?= htmlspecialchars($main_post['username']); ?></p>
         <?php else: ?>
             <h2>Main Headline</h2>
@@ -90,16 +92,20 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
         <h2>Recent Headlines</h2>
         <div class="post-thumbnails">
             <?php if ($thumbnail_posts): ?>
-                <?php foreach ($thumbnail_posts as $post): ?>
-                    <div class="thumbnail">
-                        <?php if ($post['image_path']): ?>
-                            <img src="<?php echo htmlspecialchars($post['image_path']); ?>
-                            " alt="<?php echo htmlspecialchars($post['header']); ?>
-                            " style="max-width: 100%; height: auto;">
-                        <?php endif; ?>
+            <?php foreach ($thumbnail_posts as $post): ?>
+            <a href="post.php?id=<?= $post['id']; ?>" style="text-decoration: none; color: inherit;">
+                <div class="thumbnail">
+                    <?php if ($post['image_path']): ?>
+                        <img src="<?= htmlspecialchars($post['image_path']); ?>" 
+                             alt="<?= htmlspecialchars($post['header']); ?>" 
+                             style="max-width: 100%; height: auto;">
+                    <?php endif; ?>
+                    <div class="text-container">
                         <h4><?= htmlspecialchars($post['header']); ?></h4>
                         <p><?= htmlspecialchars($post['textInput']); ?></p>
                     </div>
+                </div>
+            </a>
                 <?php endforeach; ?>
             <?php else: ?>
                 <div class="thumbnail">
