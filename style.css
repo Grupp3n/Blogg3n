@@ -114,6 +114,14 @@ button {
   width: 5rem;
 }
 
+.no_arrow {
+  list-style: none;
+ }       
+ .no_arrow_hidden {
+  list-style: none;
+  display: none;
+ }
+
 /* @media (max-width:) */
   
 .cube {

@@ -34,7 +34,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_post'])) {
+
+
+
+
+
+
+
+    // KOD BÖRJAR HÄR FÖR CHATT
+
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_post2'])) {
     
     // Hämtar alla users för att veta vilket ID man skall skicka meddelande till
     $stmt = $pdo->prepare("SELECT * FROM users WHERE firstname = :firstname");
@@ -43,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_post'])) {
 
     $receiver_id = $userName['id'];      //denna raden skall bytas mot användarnamn och inte ID
     
-    $post_content = trim($_POST['post_content']);
+    $post_content = trim($_POST['post_content2']);
     if (!empty($post_content)) {
         $stmt = $pdo->prepare("INSERT INTO chatt (text, senderID, receiverID, timeCreated) VALUES (:text, :senderID, :receiverID, NOW())");
         if ($stmt->execute([
@@ -83,13 +94,13 @@ $stmt->execute([
     ':receiverID' => $user_id
 ]);
 
-$posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$posts2 = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
 
 $userchatt = [];
 // Här fixar jag så jag har alla userIDs som har chattat och tagit bort den usern som är inloggad.
-foreach($posts as $post) {
+foreach($posts2 as $post) {
 
     $sender = $post['senderID'];
 
@@ -100,39 +111,7 @@ foreach($posts as $post) {
     
 }
 
-// SEN BYGGA EN NY QUERRY FÖR JUST DEN ANVÄNDAREN
-// Hämta inlägg från DB för den inloggade användaren
-$stmt = $pdo->prepare("SELECT text, senderID, receiverID, text, timeCreated
-                                FROM chatt 
-                                WHERE senderID = :senderID AND receiverID = :receiverID
-                                ORDER BY timeCreated DESC");
-
-$stmt->execute([
-    ':senderID' => $user_id,
-    ':receiverID' => $user_id // <-- DENNA SKALL TA ANVÄNDAREN IFRÅN SIG SJÄLV IFRÅN FOREACH LOOPEN ÖVER!!
-]);
-
-$posts2 = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-
-
-foreach($userchatt as $chatt) {
-    $stmt = $pdo->prepare("SELECT text, senderID, receiverID, text, timeCreated
-    FROM chatt 
-    WHERE senderID = :senderID AND receiverID = :receiverID
-    ORDER BY timeCreated DESC");
-
-    $stmt->execute([
-    ':senderID' => $user_id,
-    ':receiverID' => $chatt   // <-- DENNA SKALL TA ANVÄNDAREN IFRÅN SIG SJÄLV IFRÅN FOREACH LOOPEN ÖVER!!
-    ]);
-    $posts4 = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-}
-//print_r($posts);
-
-// Bygga en till foreach-loop där man går igenom varje användare och sparar texten?
-
+  // KOD SLUTAR HÄR FÖR CHATT
 ?>
 
 
@@ -291,15 +270,7 @@ foreach($userchatt as $chatt) {
 
 
 
-
-
-
-
-
-
-
-
-
+            <!-- KOD BÖRJAR HÄR FÖR CHATT  -->
 
 
 
@@ -308,8 +279,8 @@ foreach($userchatt as $chatt) {
             <form class="create-post-form" method="post" action="">
                 <input type="text" name="receiver" placeholder="Vem vill du skicka till?">
                 <label for="post_content">Ny chatt:</label><br>
-                <textarea name="post_content" id="post_content" placeholder="Vad vill du dela idag?"></textarea><br>
-                <button type="submit" name="create_post">Publicera</button>
+                <textarea name="post_content2" id="post_content" placeholder="Text here!"></textarea><br>
+                <button type="submit" name="create_post2">Publicera</button>
             </form>
             
             <!-- LISTA INLÄGG FRÅN DATABAS -->
@@ -317,7 +288,7 @@ foreach($userchatt as $chatt) {
                 <h3>Senaste Chatt historiken</h3>
 
                
-                <?php if (!empty($posts)): ?>
+                <?php if (!empty($posts2)): ?>
                     
                             <!-- Denna är till för att fixa ut användarnamnen -->
                     <?php foreach ($userchatt as $userID): ?>
@@ -388,7 +359,7 @@ foreach($userchatt as $chatt) {
 
 
 
-
+            <!-- KOD SLUTAR HÄR FÖR CHATT  -->
 
 
 
