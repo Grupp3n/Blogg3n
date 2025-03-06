@@ -45,26 +45,26 @@ $comments = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);
     </header>
 
     <main>
-    <h1><?php echo htmlspecialchars($post['header']); ?></h1>
-<p>Posted by: <?php echo htmlspecialchars($post['username']); ?></p>
+    <h1 style="color: white;"><?php echo htmlspecialchars($post['header']); ?></h1>
+<p style="color: white;">Posted by: <?php echo htmlspecialchars($post['username']); ?></p>
 <?php if ($post['image_path']): ?>
     <img src="<?php echo htmlspecialchars($post['image_path']); ?>" alt="<?php echo htmlspecialchars($post['header']); ?>" style="max-width: 100%; height: auto;">
 <?php endif; ?>
-<p><?php echo htmlspecialchars($post['textInput']); ?></p>
+<p style="color: white;"><?php echo htmlspecialchars($post['textInput']); ?></p>
 
 <hr>
 
-<h2>Comments</h2>
+<h2 style="color: white;">Comments</h2>
 <?php if ($comments): ?>
     <?php foreach ($comments as $comment): ?>
         <div class="comment">
-            <p><strong><?php echo htmlspecialchars($comment['username']); ?></strong>:</p>
-            <p><?php echo nl2br(htmlspecialchars($comment['textInput'])); ?></p>
-            <p><small><?php echo $comment['timeCreated']; ?></small></p>
+            <p style="color: white;"><strong><?php echo htmlspecialchars($comment['username']); ?></strong>:</p>
+            <p style="color: white;"><?php echo nl2br(htmlspecialchars($comment['textInput'])); ?></p>
+            <p style="color: white;"><small><?php echo $comment['timeCreated']; ?></small></p>
         </div>
     <?php endforeach; ?>
 <?php else: ?>
-    <p>No comments yet. Be the first to comment!</p>
+    <p style="color: white;">No comments yet. Be the first to comment!</p>
 <?php endif; ?>
 
 <hr>
