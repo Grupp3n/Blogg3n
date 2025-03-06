@@ -100,8 +100,10 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
                              alt="<?= htmlspecialchars($post['header']); ?>" 
                              style="max-width: 100%; height: auto;">
                     <?php endif; ?>
-                    <h4><?= htmlspecialchars($post['header']); ?></h4>
-                    <p><?= htmlspecialchars($post['textInput']); ?></p>
+                    <div class="text-container">
+                        <h4><?= htmlspecialchars($post['header']); ?></h4>
+                        <p><?= htmlspecialchars($post['textInput']); ?></p>
+                    </div>
                 </div>
             </a>
                 <?php endforeach; ?>
