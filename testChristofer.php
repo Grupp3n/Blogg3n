@@ -88,24 +88,48 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
 $userchatt = [];
-
 // Här fixar jag så jag har alla userIDs som har chattat och tagit bort den usern som är inloggad.
 foreach($posts as $post) {
 
     $sender = $post['senderID'];
 
-    if($user_id != $sender) {
+    
         if(!in_array($sender, $userchatt)) {
             $userchatt[] = $sender;
         }
-    }
+    
 }
 
-print_r($userchatt);
+// SEN BYGGA EN NY QUERRY FÖR JUST DEN ANVÄNDAREN
+// Hämta inlägg från DB för den inloggade användaren
+$stmt = $pdo->prepare("SELECT text, senderID, receiverID, text, timeCreated
+                                FROM chatt 
+                                WHERE senderID = :senderID AND receiverID = :receiverID
+                                ORDER BY timeCreated DESC");
 
-foreach($posts as $post) {
+$stmt->execute([
+    ':senderID' => $user_id,
+    ':receiverID' => $user_id // <-- DENNA SKALL TA ANVÄNDAREN IFRÅN SIG SJÄLV IFRÅN FOREACH LOOPEN ÖVER!!
+]);
+
+$posts2 = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+
+foreach($userchatt as $chatt) {
+    $stmt = $pdo->prepare("SELECT text, senderID, receiverID, text, timeCreated
+    FROM chatt 
+    WHERE senderID = :senderID AND receiverID = :receiverID
+    ORDER BY timeCreated DESC");
+
+    $stmt->execute([
+    ':senderID' => $user_id,
+    ':receiverID' => $chatt   // <-- DENNA SKALL TA ANVÄNDAREN IFRÅN SIG SJÄLV IFRÅN FOREACH LOOPEN ÖVER!!
+    ]);
+    $posts4 = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 }
+//print_r($posts);
 
 // Bygga en till foreach-loop där man går igenom varje användare och sparar texten?
 
@@ -263,6 +287,23 @@ foreach($posts as $post) {
                 <button type="submit" name="update_profile">Uppdatera profil</button>
             </form>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             <!-- SKAPA INLÄGG -->
             <form class="create-post-form" method="post" action="">
                 <input type="text" name="receiver" placeholder="Vem vill du skicka till?">
@@ -278,56 +319,60 @@ foreach($posts as $post) {
                
                 <?php if (!empty($posts)): ?>
                     
-                    <?php foreach ($userchatt as $index => $userID): ?>
+                            <!-- Denna är till för att fixa ut användarnamnen -->
+                    <?php foreach ($userchatt as $userID): ?>
+                        <div>   
+                            <!-- Kontroll så att man skapar chattar utifrån andra användare än den som är inloggad -->
+                            <?php                                 
+                                $stmt2 = $pdo->prepare("SELECT * FROM users WHERE id = :id");
+                                
+                                $stmt2->execute([':id' => $userID]);
+                                $userName = $stmt2->fetch(PDO::FETCH_ASSOC);
+                                
+                                
+                                // All kommunication IN emot användaren hämtas här.
+                                 $stmt = $pdo->prepare("SELECT text, senderID, receiverID, text, timeCreated
+                                FROM chatt 
+                                WHERE (senderID = :senderID AND receiverID = :receiverID)
+                                OR (senderID = :receiverID AND receiverID = :senderID)
+                                ORDER BY timeCreated ASC");
+                            
+                                $stmt->execute([
+                                ':senderID' => $userID,
+                                ':receiverID' => $user_id   // <-- DENNA SKALL TA ANVÄNDAREN IFRÅN SIG SJÄLV IFRÅN FOREACH LOOPEN ÖVER!!
+                                ]);
+                                $chattMessages  = $stmt->fetchAll(PDO::FETCH_ASSOC);  
 
-                     <!-- Lägga en array i denna forloopen som sparar inloggade användaren och sedan kollar igenom chatt historiken med den den har chattat med-->
-                        <?php foreach ($posts as $post): ?>
+                            ?>
 
-                            <?php if($userID == $post['senderID']): ?>
-                                <!-- DENNA CONTAINERN SKALL LÄGGAS I EN TILL CONTAINER 
-                                Så man specar upp det på användare och trycker man på den användaren så kommer bara den chatthistoriken upp -->
-
-                                <div>
-                                    <details>
+                            <?php if($userID != $user_id): ?>  
+                                <details>
                                     
-                                        <?php $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
-                                        $stmt->execute([':id' => $post['senderID']]);
-                                        $user2 = $stmt->fetch(PDO::FETCH_ASSOC); ?>
-                
+                                    <summary class="no_arrow"><h3 style="color: Green;" tabindex="0" class="master"><?php echo nl2br(htmlspecialchars($userName['username'])); ?></h3></summary>
+                                                                            
+                                    <div class="post">
+                                    
+                                        <?php foreach($chattMessages  as $chatt): ?>
+                                            <?php if($chatt['senderID'] == $user_id): ?>
+
+                                                <h3 style="color: black; justify-self: end;"><?php echo nl2br(htmlspecialchars($user['username'])); ?></h3>
+                                                <p style="color: black; margin-top: -1rem; justify-self: end;"><?php echo nl2br(htmlspecialchars($chatt['text'])); ?></p>
+                                                <p style="color: black; justify-self: end;"><small>Postat: <?php echo htmlspecialchars($chatt['timeCreated']); ?></small></p>
+
+                                            <?php else: ?>
+
+                                                <h3 style="color: red;"><?php echo nl2br(htmlspecialchars($userName['username'])); ?></h3>
+                                                <p style="color: red; margin-top: -1rem;"><?php echo nl2br(htmlspecialchars($chatt['text'])); ?></p>
+                                                <small style="color: red;">Postat: <?php echo htmlspecialchars($chatt['timeCreated']); ?></small> 
+                                                
+                                            <?php endif ?>   
+                                        <?php endforeach ?>                                        
                                        
-                                            <summary class="no_arrow"><h3 style="color: Green;" tabindex="0" class="master"><?php echo nl2br(htmlspecialchars($user2['username'])); ?></h3></summary>  
-                                       
-                                        <div class="post">
-
-                                            <?php if($post['senderID'] != $user_id):                               
-
-                                                    $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
-                                                    $stmt->execute([':id' => $post['senderID']]);
-                                                    $user2 = $stmt->fetch(PDO::FETCH_ASSOC); ?>
-
-                                            <h3 style="color: red;"><?php echo nl2br(htmlspecialchars($user2['username'])); ?></h3>
-                                            <p style="color: red;"><?php echo nl2br(htmlspecialchars($post['text'])); ?></p>
-                                            <small style="color: red;">Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
-
-                                                <?php else: ?>
-                                                    
-
-                                                        <h3><?php echo nl2br(htmlspecialchars($chatt['username'])); ?></h3>
-                                                        <p><?php echo nl2br(htmlspecialchars($chatt['text'])); ?></p>
-                                                        <small>Postat: <?php echo htmlspecialchars($chatt['timeCreated']); ?></small>
-
-                                                    
-                                                <?php endif ?>
-
-                                        </div>
-
-                                    </details>
-
-                                </div>
-
-                            <?php endif ?>
-
-                        <?php endforeach; ?>
+                                    </div>
+                                    
+                                </details>
+                            <?php endif ?> 
+                        </div>       
 
                     <?php endforeach; ?>
 
@@ -338,6 +383,31 @@ foreach($posts as $post) {
                 <?php endif; ?>
 
             </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         </div>
         <div class="notifications">
             <h4>Notifieringar</h4>
