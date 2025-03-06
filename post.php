@@ -1,5 +1,84 @@
 <?php
 session_start();
-require 'db_connect.php'
+require 'db_connect.php';
+
+
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    die("The requested post doesnt exist.");
+}
+
+$post_id = $_GET['id'];
+
+//hämtar vald post genom postID
+$sql_post = 'SELECT p.id, p.userID, p.textInput, p.header, p.image_path, u.username
+             FROM Posts p
+             LEFT JOIN Users u ON p.userID = u.id
+             WHERE p.id = :post_id';
+$stmt_post = $pdo->prepare($sql_post);
+$stmt_post->execute(['post_id' => $post_id]);
+$post = $stmt_post->fetch(PDO::FETCH_ASSOC);
+
+
+//Hämtar kommentarerna för valt inlägg
+$sql_comments = 'SELECT c.textInput, c.timeCreated, u.username 
+                 FROM Comments c
+                 LEFT JOIN Users u ON c.userID = u.id
+                 WHERE c.postID = :post_id
+                 ORDER BY c.timeCreated DESC';
+$stmt_comments = $pdo->prepare($sql_comments);
+$stmt_comments->execute(['post_id' => $post_id]);
+$comments = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kommentar</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <a href="index.php">index</a>
+    </header>
+
+    <main>
+    <h1><?php echo htmlspecialchars($post['header']); ?></h1>
+<p>Posted by: <?php echo htmlspecialchars($post['username']); ?></p>
+<?php if ($post['image_path']): ?>
+    <img src="<?php echo htmlspecialchars($post['image_path']); ?>" alt="<?php echo htmlspecialchars($post['header']); ?>" style="max-width: 100%; height: auto;">
+<?php endif; ?>
+<p><?php echo htmlspecialchars($post['textInput']); ?></p>
+
+<hr>
+
+<h2>Comments</h2>
+<?php if ($comments): ?>
+    <?php foreach ($comments as $comment): ?>
+        <div class="comment">
+            <p><strong><?php echo htmlspecialchars($comment['username']); ?></strong>:</p>
+            <p><?php echo nl2br(htmlspecialchars($comment['textInput'])); ?></p>
+            <p><small><?php echo $comment['timeCreated']; ?></small></p>
+        </div>
+    <?php endforeach; ?>
+<?php else: ?>
+    <p>No comments yet. Be the first to comment!</p>
+<?php endif; ?>
+
+<hr>
+
+<!-- Kommentar formen för submit -->
+<?php if (isset($_SESSION['user_id'])): ?>
+    <form action="post_comment.php" method="post">
+        <input type="hidden" name="post_id" value="<?php echo $post_id; ?>">
+        <textarea name="comment" placeholder="Write a comment!" required></textarea>
+        <button type="submit">Post Comment</button>
+    </form>
+<?php else: ?>
+    <p><a href="login.php">Log in</a> to comment.</p>
+<?php endif; ?>
+    </main>
+</body>
+</html>
