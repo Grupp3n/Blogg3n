@@ -109,7 +109,19 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
             <?php foreach ($thumbnail_posts as $post): ?>
             <a href="post.php?id=<?= $post['id']; ?>" style="text-decoration: none; color: inherit;">
                 <div class="thumbnail">
-                    <?php if ($post['imagePath']): ?>
+                <?php 
+                            //hämtar vald 'BILD' genom postID
+                    $pictureID = $main_post['imagePath'];
+
+                    $sql_post = 'SELECT p.id, p.userID, p.textInput, p.header, p.image, u.username
+                                FROM Posts p
+                                LEFT JOIN Users u ON p.userID = u.id
+                                WHERE p.id = :post_id';
+                    $stmt_post = $pdo->prepare($sql_post);
+                    $stmt_post->execute(['post_id' => $post['imagePath']]);
+                    $post2 = $stmt_post->fetch(PDO::FETCH_ASSOC); 
+                ?>
+                    <?php if ($post['imagePath']): ?>                        
                         <img src="data:image/*;base64, <?php echo $post2['image'] ?>" 
                         alt="<?php echo htmlspecialchars($post['header']); ?>" 
                         style="max-width: 100%; height: auto;">
