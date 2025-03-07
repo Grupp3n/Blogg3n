@@ -18,6 +18,30 @@ $stmt_post = $pdo->prepare($sql_post);
 $stmt_post->execute(['post_id' => $post_id]);
 $post = $stmt_post->fetch(PDO::FETCH_ASSOC);
 
+//Phillips kod POST UPDATE
+if (!$post) {
+    die("Post not found.");
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id']) && $_SESSION['user_id'] == $post['userID']) {
+    $new_header = trim($_POST['header']);
+    $new_text = trim($_POST['textInput']);
+
+    if (!empty($new_header) && !empty($new_text)) {
+        $update_sql = 'UPDATE Posts SET header = :header, textInput = :textInput WHERE id = :post_id';
+        $stmt_update = $pdo->prepare($update_sql);
+        $stmt_update->execute([
+            'header' => $new_header,
+            'textInput' => $new_text,
+            'post_id' => $post_id
+        ]);
+        header("Location: post.php?id=" . $post_id);
+        exit();
+    } else {
+        $error_message = "Both fields must be filled.";
+    }
+}
+
 
 //hämtar vald 'BILD' genom postID
 $pictureID = $post['imagePath'];
@@ -90,6 +114,25 @@ $comments = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);
 <?php else: ?>
     <p><a href="login.php">Log in</a> to comment.</p>
 <?php endif; ?>
-    </main>
+
+<hr>
+
+<!-- Post Update form -->
+<?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $post['userID']): ?>
+    <h2 style="color: white;">Edit Post</h2>
+    <?php if (!empty($error_message)): ?>
+        <p style="color: red;"><?php echo $error_message; ?></p>
+    <?php endif; ?>
+    <form action="post.php?id=<?php echo $post_id; ?>" method="post">
+        <label style="color: white;">Header:</label><br>
+        <input type="text" name="header" value="<?php echo htmlspecialchars($post['header']); ?>" required><br>
+
+        <label style="color: white;">Text:</label><br>
+        <textarea name="textInput" required><?php echo htmlspecialchars($post['textInput']); ?></textarea><br>
+
+        <button type="submit">Update Post</button>
+    </form>
+<?php endif; ?>
+</main>
 </body>
 </html>
