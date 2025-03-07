@@ -119,19 +119,34 @@ $comments = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);
 
 <!-- Post Update form -->
 <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $post['userID']): ?>
-    <h2 style="color: white;">Edit Post</h2>
-    <?php if (!empty($error_message)): ?>
-        <p style="color: red;"><?php echo $error_message; ?></p>
-    <?php endif; ?>
-    <form action="post.php?id=<?php echo $post_id; ?>" method="post">
-        <label style="color: white;">Header:</label><br>
-        <input type="text" name="header" value="<?php echo htmlspecialchars($post['header']); ?>" required><br>
+    <button id="toggleEditForm">Edit Post</button>
 
-        <label style="color: white;">Text:</label><br>
-        <textarea name="textInput" required><?php echo htmlspecialchars($post['textInput']); ?></textarea><br>
+    <div id="editForm" style="display: none;">
+        <h2 style="color: white;">Edit Post</h2>
+        <?php if (!empty($error_message)): ?>
+            <p style="color: red;"><?php echo $error_message; ?></p>
+        <?php endif; ?>
+        <form action="post.php?id=<?php echo $post_id; ?>" method="post">
+            <label style="color: white;">Header:</label><br>
+            <input type="text" name="header" value="<?php echo htmlspecialchars($post['header']); ?>" required><br>
+    
+            <label style="color: white;">Text:</label><br>
+            <textarea name="textInput" required><?php echo htmlspecialchars($post['textInput']); ?></textarea><br>
+    
+            <button type="submit">Update Post</button>
+        </form>
+    </div>
 
-        <button type="submit">Update Post</button>
-    </form>
+    <script>
+        document.getElementById("toggleEditForm").addEventListener("click", function () {
+            var form = document.getElementById("editForm");
+            if (form.style.display === "none") {
+                form.style.display = "block";
+            } else {
+                form.style.display = "none";
+            }
+        })
+    </script>
 <?php endif; ?>
 </main>
 </body>
