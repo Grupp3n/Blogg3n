@@ -7,7 +7,7 @@ session_start();
 $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
 
 // Fetcha från posts för main content (Stora bilden)
-            $sql_main = 'SELECT p.id, p.userID, p.textInput, p.header, p.image_path, u.username
+            $sql_main = 'SELECT p.id, p.userID, p.textInput, p.header, p.imagePath, u.username
             FROM Posts p
             LEFT JOIN Users u ON p.userID = u.id
             ORDER BY p.timeCreated DESC LIMIT 1';
@@ -17,7 +17,7 @@ $stmt_main->execute();
 $main_post = $stmt_main->fetch(PDO::FETCH_ASSOC);
 
 // Fetcha från posts de senaste 4 inläggen för Recent Headlines
-                $sql_thumbnails = 'SELECT p.id, p.textInput, p.header, p.image_path, u.username
+                $sql_thumbnails = 'SELECT p.id, p.textInput, p.header, p.imagePath, u.username
                    FROM Posts p
                    LEFT JOIN Users u ON p.userID = u.id
                    ORDER BY p.timeCreated DESC LIMIT 4';
@@ -70,8 +70,8 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
             <h2>Main Headline</h2>
             <div class="post-preview">
             <a href="post.php?id=<?= $main_post['id']; ?>" style="text-decoration: none; color: inherit;">
-        <?php if ($main_post['image_path']): ?>
-            <img src="<?= htmlspecialchars($main_post['image_path']); ?>" 
+        <?php if ($main_post['imagePath']): ?>
+            <img src="<?= htmlspecialchars($main_post['imagePath']); ?>" 
                  alt="<?= htmlspecialchars($main_post['header']); ?>" 
                  style="max-width: 100%; height: auto;">
         <?php endif; ?>

@@ -10,7 +10,7 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 $post_id = $_GET['id'];
 
 //hämtar vald post genom postID
-$sql_post = 'SELECT p.id, p.userID, p.textInput, p.header, p.image_path, u.username
+$sql_post = 'SELECT p.id, p.userID, p.textInput, p.header, p.imagePath, u.username
              FROM Posts p
              LEFT JOIN Users u ON p.userID = u.id
              WHERE p.id = :post_id';
@@ -18,6 +18,17 @@ $stmt_post = $pdo->prepare($sql_post);
 $stmt_post->execute(['post_id' => $post_id]);
 $post = $stmt_post->fetch(PDO::FETCH_ASSOC);
 
+
+//hämtar vald 'BILD' genom postID
+$pictureID = $post['imagePath'];
+
+$sql_post = 'SELECT p.id, p.userID, p.textInput, p.header, p.image, u.username
+             FROM Posts p
+             LEFT JOIN Users u ON p.userID = u.id
+             WHERE p.id = :post_id';
+$stmt_post = $pdo->prepare($sql_post);
+$stmt_post->execute(['post_id' => $pictureID]);
+$post2 = $stmt_post->fetch(PDO::FETCH_ASSOC);
 
 //Hämtar kommentarerna för valt inlägg
 $sql_comments = 'SELECT c.textInput, c.timeCreated, u.username 
@@ -47,8 +58,9 @@ $comments = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);
     <main>
     <h1 style="color: white;"><?php echo htmlspecialchars($post['header']); ?></h1>
 <p style="color: white;">Posted by: <?php echo htmlspecialchars($post['username']); ?></p>
-<?php if ($post['image_path']): ?>
-    <img src="<?php echo htmlspecialchars($post['image_path']); ?>" alt="<?php echo htmlspecialchars($post['header']); ?>" style="max-width: 100%; height: auto;">
+<?php if ($post['imagePath']): ?>
+    
+    <img src="data:image/*;base64, <?php echo $post2['image'] ?>" alt="<?php echo htmlspecialchars($post['header']); ?>" style="max-width: 100%; height: auto;">
 <?php endif; ?>
 <p style="color: white;"><?php echo htmlspecialchars($post['textInput']); ?></p>
 
