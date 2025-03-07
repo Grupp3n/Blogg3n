@@ -65,7 +65,10 @@ $comments = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);
 
 <hr>
 
-<h2 style="color: white;">Comments</h2>
+<div class="commentsAndLike">
+    <h2 style="color: white;">Comments</h2>
+    <a href="" name="likeButton"><img src="./img/ThumbsUp.png" alt=""></a>
+</div>
 <?php if ($comments): ?>
     <?php foreach ($comments as $comment): ?>
         <div class="comment">

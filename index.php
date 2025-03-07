@@ -6,39 +6,41 @@ session_start();
 //Kollar så användare är inloggad
 $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
 
-// Fetcha från posts för main content (Stora bilden)
-$sql_main = 'SELECT p.id, p.userID, p.textInput, p.header, p.imagePath, u.username
-             FROM Posts p
-             LEFT JOIN Users u ON p.userID = u.id
-             ORDER BY p.timeCreated DESC LIMIT 1';
 
-$stmt_main = $pdo->prepare($sql_main);
-$stmt_main->execute();
-$main_post = $stmt_main->fetch(PDO::FETCH_ASSOC);
+    // Fetcha från posts för main content (Stora bilden)
+    $sql_main = 'SELECT p.id, p.userID, p.textInput, p.header, p.imagePath, u.username
+                FROM Posts p
+                LEFT JOIN Users u ON p.userID = u.id
+                ORDER BY p.timeCreated DESC LIMIT 1';
 
-
-//hämtar vald 'BILD' genom postID
-$pictureID = $main_post['imagePath'];
-
-$sql_post = 'SELECT p.id, p.userID, p.textInput, p.header, p.image, u.username
-             FROM Posts p
-             LEFT JOIN Users u ON p.userID = u.id
-             WHERE p.id = :post_id';
-$stmt_post = $pdo->prepare($sql_post);
-$stmt_post->execute(['post_id' => $pictureID]);
-$post2 = $stmt_post->fetch(PDO::FETCH_ASSOC);
+    $stmt_main = $pdo->prepare($sql_main);
+    $stmt_main->execute();
+    $main_post = $stmt_main->fetch(PDO::FETCH_ASSOC);
 
 
-// Fetcha från posts de senaste 4 inläggen för Recent Headlines
-$sql_thumbnails = 'SELECT p.id, p.textInput, p.header, p.imagePath, u.username
-                   FROM Posts p
-                   LEFT JOIN Users u ON p.userID = u.id
-                   WHERE p.imagePath IS NOT NULL
-                   ORDER BY p.timeCreated DESC LIMIT 4';
+    //hämtar vald 'BILD' genom postID
+    $pictureID = $main_post['imagePath'];
 
-$stmt_thumbnails = $pdo->prepare($sql_thumbnails);
-$stmt_thumbnails->execute();
-$thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
+    $sql_post = 'SELECT p.id, p.userID, p.textInput, p.header, p.image, u.username
+                FROM Posts p
+                LEFT JOIN Users u ON p.userID = u.id
+                WHERE p.id = :post_id';
+    $stmt_post = $pdo->prepare($sql_post);
+    $stmt_post->execute(['post_id' => $pictureID]);
+    $post2 = $stmt_post->fetch(PDO::FETCH_ASSOC);
+
+
+    // Fetcha från posts de senaste 4 inläggen för Recent Headlines
+    $sql_thumbnails = 'SELECT p.id, p.textInput, p.header, p.imagePath, u.username
+                    FROM Posts p
+                    LEFT JOIN Users u ON p.userID = u.id
+                    WHERE p.imagePath IS NOT NULL
+                    ORDER BY p.timeCreated DESC LIMIT 4';
+
+    $stmt_thumbnails = $pdo->prepare($sql_thumbnails);
+    $stmt_thumbnails->execute();
+    $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
