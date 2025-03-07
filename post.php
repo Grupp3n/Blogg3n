@@ -58,8 +58,7 @@ $comments = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);
     <main>
     <h1 style="color: white;"><?php echo htmlspecialchars($post['header']); ?></h1>
 <p style="color: white;">Posted by: <?php echo htmlspecialchars($post['username']); ?></p>
-<?php if ($post['imagePath']): ?>
-    
+<?php if ($post['imagePath']): ?>    
     <img src="data:image/*;base64, <?php echo $post2['image'] ?>" alt="<?php echo htmlspecialchars($post['header']); ?>" style="max-width: 100%; height: auto;">
 <?php endif; ?>
 <p style="color: white;"><?php echo htmlspecialchars($post['textInput']); ?></p>

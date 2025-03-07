@@ -7,14 +7,27 @@ session_start();
 $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
 
 // Fetcha från posts för main content (Stora bilden)
-            $sql_main = 'SELECT p.id, p.userID, p.textInput, p.header, p.imagePath, u.username
-            FROM Posts p
-            LEFT JOIN Users u ON p.userID = u.id
-            ORDER BY p.timeCreated DESC LIMIT 1';
+$sql_main = 'SELECT p.id, p.userID, p.textInput, p.header, p.imagePath, u.username
+             FROM Posts p
+             LEFT JOIN Users u ON p.userID = u.id
+             ORDER BY p.timeCreated DESC LIMIT 1';
 
 $stmt_main = $pdo->prepare($sql_main);
 $stmt_main->execute();
 $main_post = $stmt_main->fetch(PDO::FETCH_ASSOC);
+
+
+//hämtar vald 'BILD' genom postID
+$pictureID = $main_post['imagePath'];
+
+$sql_post = 'SELECT p.id, p.userID, p.textInput, p.header, p.image, u.username
+             FROM Posts p
+             LEFT JOIN Users u ON p.userID = u.id
+             WHERE p.id = :post_id';
+$stmt_post = $pdo->prepare($sql_post);
+$stmt_post->execute(['post_id' => $pictureID]);
+$post2 = $stmt_post->fetch(PDO::FETCH_ASSOC);
+
 
 // Fetcha från posts de senaste 4 inläggen för Recent Headlines
                 $sql_thumbnails = 'SELECT p.id, p.textInput, p.header, p.imagePath, u.username
@@ -71,9 +84,9 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
             <div class="post-preview">
             <a href="post.php?id=<?= $main_post['id']; ?>" style="text-decoration: none; color: inherit;">
         <?php if ($main_post['imagePath']): ?>
-            <img src="<?= htmlspecialchars($main_post['imagePath']); ?>" 
-                 alt="<?= htmlspecialchars($main_post['header']); ?>" 
-                 style="max-width: 100%; height: auto;">
+             <img src="data:image/*;base64, <?php echo $post2['image'] ?>" 
+             alt="<?php echo htmlspecialchars($post['header']); ?>" 
+             style="max-width: 100%; height: auto;">
         <?php endif; ?>
         <h3><?= htmlspecialchars($main_post['header']); ?></h3>
         <p><?= htmlspecialchars($main_post['textInput']); ?></p>
@@ -95,10 +108,10 @@ $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
             <?php foreach ($thumbnail_posts as $post): ?>
             <a href="post.php?id=<?= $post['id']; ?>" style="text-decoration: none; color: inherit;">
                 <div class="thumbnail">
-                    <?php if ($post['image_path']): ?>
-                        <img src="<?= htmlspecialchars($post['image_path']); ?>" 
-                             alt="<?= htmlspecialchars($post['header']); ?>" 
-                             style="max-width: 100%; height: auto;">
+                    <?php if ($post['imagePath']): ?>
+                        <img src="data:image/*;base64, <?php echo $post2['image'] ?>" 
+                        alt="<?php echo htmlspecialchars($post['header']); ?>" 
+                        style="max-width: 100%; height: auto;">
                     <?php endif; ?>
                     <div class="text-container">
                         <h4><?= htmlspecialchars($post['header']); ?></h4>
