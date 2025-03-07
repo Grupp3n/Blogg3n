@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         if($stmt->execute()) {
             echo "<p style='color: white;'>Bild uppladdad!</p>";
         } else {
-            echo "<p style='color: red;'>Fel vid uppladdning</p>"
+            echo "<p style='color: red;'>Fel vid uppladdning</p>";
         }
     } catch (PDOException $e) {
         echo "Fel: " . $e->getMessage();
@@ -41,11 +41,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     }
     
     $id = 1; // Antag att vi vill visa bilden med id 1
-    $stmt = $pdo->prepare("SELECT type, data FROM images WHERE id = ?");
-    $stmt->bindParam("i", $id);
+    $stmt = $pdo->prepare("SELECT type, data FROM images WHERE id = :id");
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
-    $stmt->bind_result($imageType, $imageData);
-    $stmt->fetch();   
+    
+      
 
     header("Content-Type: " . $imageType);
     echo $imageData;
