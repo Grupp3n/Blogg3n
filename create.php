@@ -70,7 +70,7 @@
                 userID INT UNSIGNED NOT NULL,
                 textInput NVARCHAR(250) NOT NULL,
                 header NVARCHAR(40) NOT NULL,
-                imagePath VARCHAR(255) NOT NULL,
+                imagePath VARCHAR(255),
                 image LONGTEXT,
                 timeCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 timeUpdated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

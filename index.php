@@ -30,9 +30,10 @@ $post2 = $stmt_post->fetch(PDO::FETCH_ASSOC);
 
 
 // Fetcha från posts de senaste 4 inläggen för Recent Headlines
-                $sql_thumbnails = 'SELECT p.id, p.textInput, p.header, p.imagePath, u.username
+$sql_thumbnails = 'SELECT p.id, p.textInput, p.header, p.imagePath, u.username
                    FROM Posts p
                    LEFT JOIN Users u ON p.userID = u.id
+                   WHERE p.imagePath IS NOT NULL
                    ORDER BY p.timeCreated DESC LIMIT 4';
 
 $stmt_thumbnails = $pdo->prepare($sql_thumbnails);

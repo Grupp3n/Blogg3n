@@ -29,5 +29,4 @@ try {
     echo "<p style='color: red;'>Fel: " . $e->getMessage() . "</p";
 }
 
-
 ?>

@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             
             $base64Image = base64_encode($imageData);
             
-            $query = "INSERT INTO posts (image, userID) VALUES (:image, :userID)";
+            $query = "INSERT INTO posts (imagePath, image, userID) VALUES (imagePath = NULL, :image, :userID)";
             $stmt = $pdo->prepare($query);
             $stmt->bindParam(":image", $base64Image, PDO::PARAM_STR);            
             $stmt->bindValue(":userID", $userID, PDO::PARAM_INT);
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $userID = $_SESSION['user_id'];        
    
         $stmt->bindParam(':textInput', $blogText);
-        $stmt->bindParam(':header', $blogHeader);           
+        $stmt->bindParam(':header', $blogHeader);
         $stmt->bindParam(':userID', $userID);
         $stmt->bindParam(':timeCreated', $getTime);
         $stmt->bindParam(':imagePath', $_SESSION['pictureID']);
