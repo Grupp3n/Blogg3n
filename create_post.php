@@ -9,97 +9,68 @@ require 'db_connect.php';
 }
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-$blogHeader = htmlspecialchars($_POST['blogHeader']);
-$blogText = htmlspecialchars($_POST['blogText']);
-$time = date_create();
-$getTime = date_format($time, "Y-m-d H:i:s");
+    $blogHeader = htmlspecialchars($_POST['blogHeader']);
+    $blogText = htmlspecialchars($_POST['blogText']);
+    $time = date_create();
+    $getTime = date_format($time, "Y-m-d H:i:s");
 
-if (isset($_POST['post_submit_button'])) {
-    $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated, image_path) 
-            VALUES (:textInput, :header, :userID, :timeCreated, :image_path)");
 
-    $userID = $_SESSION['user_id'];
-    $image_path = '';
-    $upload_dir = 'img/';
+    if(isset($_POST['upload'])) {
+        try {
+        $userID = $_SESSION['user_id'];
+        
+        $imageData = file_get_contents($_FILES['image']['tmp_name']);
+        $imageType = $_FILES['image']['type'];
+        $code = $_POST['blogText'];
 
-    // Kollar om img directory finns, om den inte finns så skapas den.
-    if (!file_exists($upload_dir)) {
-        mkdir($upload_dir, 0777, true);
-    }
+        $query = "INSERT INTO posts (file, image_type, userID) VALUES (:file, :image_type, :userID)";
+        $stmt = $pdo->prepare($query);
+        $stmt->bindParam(":file", $imageData, PDO::PARAM_LOB);
+        $stmt->bindParam(":image_type", $imageType, PDO::PARAM_STR);
+        $stmt->bindValue(":userID", $userID, PDO::PARAM_INT);
 
-        if ($_FILES['image']['error'] === UPLOAD_ERR_OK) { 
-            $image = $_FILES['image'];
-
-            // $image_name          Skapar ett unikt namn för bilden
-            // random_bytes(16)     Genererar 16 random characters
-            // bin2hex              Omförvandlar dom 16 characters till en sträng av siffror och bokstäver
-            // pathinfo_extension   Kollar på orginal bildets namn och tar det sista delen av filen t.ex: JPG, PNG. 
-            $image_name = bin2hex(random_bytes(16)) . '.' . pathinfo($image['name'], PATHINFO_EXTENSION); 
-
-            // $image_tmp           PHP storar bilden i en tmp mapp under fil uppladdningens process. Denna variabeln är
-            //                      sökvägen till tmp mappen. Denna behövs för att flytta bilden från tmp till vår directory,
-            //                      i detta fall img/                                    
-            $image_tmp = $image['tmp_name']; 
-
-            // $image_path          Detta skapar en path till slutdestinationen för vart bilden ska landa.
-            //                      i detta fall så blir det img/- - bildens sträng - -
-            $image_path = $upload_dir . $image_name;
-            
-
-            // move_uploaded_file   Detta gör så att man flyttar sin uppladdade fil från temp mappen till vår slutdestination ($image_path)
-            if (move_uploaded_file($image_tmp, $image_path)) {
-                echo "<p>Debug - Image uploaded successfully to: " . $image_path . "</p>";
-
-                // Detta ger tillgång till vem som har permission att justera och läsa denna filen.
-                // 0644 betyder att alla kan läsa filen men bara Owner kan justera den.
-                chmod($image_path, 0644);
-            } else {
-                echo "<div class='error'>Failed to upload image. Error code: " . $_FILES['image']['error'] . "</div>";
-                echo "<p>Debug - PHP Error: " . error_get_last()['message'] ?? 'No PHP error' . "</p>";
-                $image_path = ''; // image path blir '' om det inte funkar.
-            }
+        if($stmt->execute()) {
+            echo "<p style='color: white;'>Bild uppladdad!</p>";
         } else {
-            echo "<div class='error'>File upload error: " . getUploadErrorMessage($_FILES['image']['error']) . "</div>";
+            echo "<p style='color: red;'>Fel vid uppladdning</p>"
         }
-    } else {
-        echo "<p>Debug - No file uploaded</p>";
+    } catch (PDOException $e) {
+        echo "Fel: " . $e->getMessage();
     }
 
-    $stmt->bindParam(':textInput', $blogText);
-    $stmt->bindParam(':header', $blogHeader);           
-    $stmt->bindParam(':userID', $userID);
-    $stmt->bindParam(':timeCreated', $getTime);
-    $stmt->bindParam(':image_path', $image_path);
-
-    if ($stmt->execute()) {
-        echo "<div class='success'>Posten lyckades!</div>";
-        // header("Location: index.php");
-        // exit;
-    } else {
-        echo "<div class='error'>Något gick fel med databasen: " . $stmt->errorInfo()[2] . "</div>";
     }
-}
+    
+    $id = 1; // Antag att vi vill visa bilden med id 1
+    $stmt = $pdo->prepare("SELECT type, data FROM images WHERE id = ?");
+    $stmt->bindParam("i", $id);
+    $stmt->execute();
+    $stmt->bind_result($imageType, $imageData);
+    $stmt->fetch();   
 
-// Debugg kod
-function getUploadErrorMessage($errorCode) {
-switch ($errorCode) {
-    case UPLOAD_ERR_INI_SIZE:
-        return "The uploaded file exceeds the upload_max_filesize directive in php.ini.";
-    case UPLOAD_ERR_FORM_SIZE:
-        return "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.";
-    case UPLOAD_ERR_PARTIAL:
-        return "The uploaded file was only partially uploaded.";
-    case UPLOAD_ERR_NO_FILE:
-        return "No file was uploaded.";
-    case UPLOAD_ERR_NO_TMP_DIR:
-        return "Missing a temporary folder.";
-    case UPLOAD_ERR_CANT_WRITE:
-        return "Failed to write file to disk.";
-    case UPLOAD_ERR_EXTENSION:
-        return "A PHP extension stopped the file upload.";
-    default:
-        return "Unknown upload error.";
-}
+    header("Content-Type: " . $imageType);
+    echo $imageData;
+
+    if (isset($_POST['post_submit_button'])) {
+        $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated, image_path) 
+                VALUES (:textInput, :header, :userID, :timeCreated, :image_path)");
+
+        $userID = $_SESSION['user_id'];        
+   
+        $stmt->bindParam(':textInput', $blogText);
+        $stmt->bindParam(':header', $blogHeader);           
+        $stmt->bindParam(':userID', $userID);
+        $stmt->bindParam(':timeCreated', $getTime);
+        $stmt->bindParam(':image_path', $image_path);
+
+        if ($stmt->execute()) {
+            echo "<div class='success'>Posten lyckades!</div>";
+            // header("Location: index.php");
+            // exit;
+        } else {
+            echo "<div class='error'>Något gick fel med databasen: " . $stmt->errorInfo()[2] . "</div>";
+        }
+    }
+
 }
 ?>
 
@@ -142,7 +113,8 @@ switch ($errorCode) {
             <!-- Add Image -->
             <div class="div_create_post2">
             <div class="div_create_post_left">
-                <input type="file" name="image" id="image" accept="image/*">
+                <input type="file" name="image" id="image" accept="image/*" style="width: 13rem;">
+                <button type="submit" name="upload">Ladda upp!</button>
             </div>
 
             <!-- Submit Post Button -->

@@ -70,7 +70,7 @@
                 userID INT UNSIGNED NOT NULL,
                 textInput NVARCHAR(250) NOT NULL,
                 header NVARCHAR(40) NOT NULL,
-                image_path VARCHAR(255) NOT NULL,
+                image_type VARCHAR(255) NOT NULL,
                 file MEDIUMBLOB,
                 timeCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 timeUpdated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
