@@ -2,10 +2,10 @@
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
-header("location: login.php");
-exit;
+    header("location: login.php");
+    exit;
 } else {
-require 'db_connect.php';
+    require 'db_connect.php';
 }
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             // header("Location: index.php");
             // exit;
         } else {
-            echo "<div class='error' style='color: red;'>Något gick fel med databasen: " . $stmt->errorInfo()[2] . "</div>";
+            echo "<div class='error' style='color: red;'>Något gick fel med databasen: " . $stmt->errorInfo() . "</div>";
         }
     }
 
