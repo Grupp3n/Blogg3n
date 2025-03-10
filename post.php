@@ -64,16 +64,67 @@ $stmt_comments = $pdo->prepare($sql_comments);
 $stmt_comments->execute(['post_id' => $post_id]);
 $comments = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);
 
+
+
+// Skriver kod om likes
+if(isset($_POST['likeButton'])){
+    
+    $bool = false;
+    
+    
+    $sql_comments = 'SELECT * 
+                     FROM Likes                 
+                     WHERE id = :id';                     
+    $stmt_comments = $pdo->prepare($sql_comments);
+    $stmt_comments->execute(['id' => $_SESSION['user_id']]);
+    $comments = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);
+    
+    foreach($comments as $comment) {
+        if($comment['userID'] == $_SESSION['user_id'] && $comment['postID'] == $_GET['id']){
+            $bool = true;
+        }    
+    }
+
+    if($bool) {
+        // Här skall jag göra så att om man trycker på likebutton 1 gång till så skall man avgilla
+        echo "<p style='color: white;'> Du har redan gillat denna </p>";
+    } else {
+        $userID = $_SESSION['user_id'];
+        
+        $stmt = $pdo->prepare('INSERT INTO Likes (postID, userID) VALUES (:postID, :userID)');
+        if ($stmt->execute([
+            ':postID' => $_GET['id'],
+            ':userID' => $_SESSION['user_id']       
+        ]));                 
+    }
+    
+}
+
+// Här visas Countern "räknaren" på likes
+$counter = (int) 0;
+
+$sql_comments = 'SELECT * 
+                 FROM Likes                 
+                 WHERE postID = :postID';                     
+$stmt_comments = $pdo->prepare($sql_comments);
+$stmt_comments->execute(['postID' => $post_id]);
+$likes = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);
+
+foreach($likes as $like) {
+    $counter += 1;
+}
+
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kommentar</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Kommentar</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
 <body>
     <header>
         <a href="index.php">index</a>
@@ -89,9 +140,20 @@ $comments = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);
 
 <hr>
 
-<div class="commentsAndLike">
-    <h2 style="color: white;">Comments</h2>
-    <a href="" name="likeButton"><img src="./img/ThumbsUp.png" alt=""></a>
+<div>
+    <form method="POST" class="commentsAndLike">
+        <h2 style="color: white;">Comments</h2>  
+
+        <div class="commentsAndLike">
+
+            <p style="color: white; margin-right: 0.5rem;"><?php echo $counter ?></p>
+
+            <button type="submit" name="likeButton">
+                <img src="./img/ThumbsUp.png" alt="">
+            </button>
+
+        </div>
+    </form>
 </div>
 <?php if ($comments): ?>
     <?php foreach ($comments as $comment): ?>

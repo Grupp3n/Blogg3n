@@ -133,6 +133,7 @@
                         userID int UNSIGNED NOT NULL,
                         postID int UNSIGNED NOT NULL,
                         count int UNSIGNED,
+                        UNIQUE (userID, postID),
                         FOREIGN KEY (userID) REFERENCES Users(id) ON DELETE CASCADE,
                         FOREIGN KEY (postID) REFERENCES Posts(id) ON DELETE CASCADE
             )";
