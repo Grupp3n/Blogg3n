@@ -149,7 +149,7 @@ foreach($likes as $like) {
             <p style="color: white; margin-right: 0.5rem;"><?php echo $counter ?></p>
 
             <button type="submit" name="likeButton">
-                <img src="./img/ThumbsUp.png" alt="">
+                <img src="./img/ThumbsUp.png" alt="" style="width: 3rem; height: 2rem;">
             </button>
 
         </div>
