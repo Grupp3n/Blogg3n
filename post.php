@@ -143,7 +143,8 @@ foreach($likes as $like) {
     <h1 style="color: white;"><?php echo htmlspecialchars($post['header']); ?></h1>
 <p style="color: white;">Posted by: <?php echo htmlspecialchars($post['username']); ?></p>
 <?php if ($post['imagePath']): ?>    
-    <img src="data:image/*;base64, <?php echo $post2['image'] ?>" alt="<?php echo htmlspecialchars($post['header']); ?>" style="max-width: 100%; height: auto;">
+    <img class="post-image" src="data:image/*;base64,<?php echo $post2['image'] ?>" alt="<?php echo htmlspecialchars($post['header']); ?>" 
+    style="max-width: 600px; width: 100%; height: auto; display: block; margin: auto;">
 <?php endif; ?>
 <p style="color: white;"><?php echo htmlspecialchars($post['textInput']); ?></p>
 
