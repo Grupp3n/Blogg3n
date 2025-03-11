@@ -23,22 +23,25 @@ if (!$post) {
     die("Post not found.");
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id']) && $_SESSION['user_id'] == $post['userID']) {
-    $new_header = trim($_POST['header']);
-    $new_text = trim($_POST['textInput']);
+# Den första If-satsen med !isset($_POST['likeButton']) är till för att få bort felmeddelande över header!
+if(!isset($_POST['likeButton'])) {
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id']) && $_SESSION['user_id'] == $post['userID']) {
+        $new_header = trim($_POST['header']);
+        $new_text = trim($_POST['textInput']);
 
-    if (!empty($new_header) && !empty($new_text)) {
-        $update_sql = 'UPDATE Posts SET header = :header, textInput = :textInput WHERE id = :post_id';
-        $stmt_update = $pdo->prepare($update_sql);
-        $stmt_update->execute([
-            'header' => $new_header,
-            'textInput' => $new_text,
-            'post_id' => $post_id
-        ]);
-        header("Location: post.php?id=" . $post_id);
-        exit();
-    } else {
-        $error_message = "Both fields must be filled.";
+        if (!empty($new_header) && !empty($new_text)) {
+            $update_sql = 'UPDATE Posts SET header = :header, textInput = :textInput WHERE id = :post_id';
+            $stmt_update = $pdo->prepare($update_sql);
+            $stmt_update->execute([
+                'header' => $new_header,
+                'textInput' => $new_text,
+                'post_id' => $post_id
+            ]);
+            header("Location: post.php?id=" . $post_id);
+            exit();
+        } else {
+            $error_message = "Both fields must be filled.";
+        }
     }
 }
 
@@ -70,24 +73,30 @@ $comments = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);
 if(isset($_POST['likeButton'])){
     
     $bool = false;
-    
+    $likeID = "";
     
     $sql_comments = 'SELECT * 
                      FROM Likes                 
-                     WHERE id = :id';                     
+                     WHERE userID = :id';                     
     $stmt_comments = $pdo->prepare($sql_comments);
     $stmt_comments->execute(['id' => $_SESSION['user_id']]);
-    $comments = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);
+    $comments2 = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);    
     
-    foreach($comments as $comment) {
+    foreach($comments2 as $comment) {
         if($comment['userID'] == $_SESSION['user_id'] && $comment['postID'] == $_GET['id']){
             $bool = true;
+            $likeID = $comment['id'];
         }    
     }
+    
 
-    if($bool) {
-        // Här skall jag göra så att om man trycker på likebutton 1 gång till så skall man avgilla
-        echo "<p style='color: white;'> Du har redan gillat denna </p>";
+    if($bool) {       
+        $query = 'DELETE FROM Likes               
+                  WHERE id = :id';                     
+        $stmt_comments = $pdo->prepare($query);
+        $stmt_comments->execute(['id' => $likeID]);
+        $delete = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);
+
     } else {
         $userID = $_SESSION['user_id'];
         
@@ -142,8 +151,8 @@ foreach($likes as $like) {
 
 <div>
     <form method="POST" class="commentsAndLike">
-        <h2 style="color: white;">Comments</h2>  
-
+    <h2 style="color: white;">Comments</h2>  
+    
         <div class="commentsAndLike">
 
             <p style="color: white; margin-right: 0.5rem;"><?php echo "Likes: $counter" ?></p>
