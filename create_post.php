@@ -75,8 +75,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
 <body class="body_create_post">
     <header>    
-        <a href="index.php"><img src="img/transparent logo.png" alt="Nexlify" class="Logo"></a>
-        <button onclick="window.location.href='profile.php'">Profile</button>
+    <div class="dropdown">
+        <button class="dropbtn">Meny</button>
+        <div class="dropdown-content">
+            
+                <a href="profile.php">Profile</a>
+                <a href="logout.php">Logga ut</a>
+        </div>
     </header>
     
     <main class="main_create_post">
