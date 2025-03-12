@@ -41,8 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
        
     if (isset($_POST['post_submit_button'])) {        
 
-        $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated, imagePath) 
-                VALUES (:textInput, :header, :userID, :timeCreated, :imagePath)");
+        $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated, imagePath, combinedID) 
+                VALUES (:textInput, :header, :userID, :timeCreated, :imagePath, :combinedID)");
 
         $userID = $_SESSION['user_id'];        
    
@@ -51,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $stmt->bindParam(':userID', $userID);
         $stmt->bindParam(':timeCreated', $getTime);
         $stmt->bindParam(':imagePath', $_SESSION['pictureID']);
+        $stmt->bindParam(':combinedID', $number);
 
         if ($stmt->execute()) {
             echo "<div class='success'>Posten lyckades!</div>";

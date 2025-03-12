@@ -68,7 +68,6 @@
             $query = "CREATE TABLE Posts (
                 id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                 userID INT UNSIGNED NOT NULL,
-                blogID INT UNSIGNED,
                 combinedID INT UNSIGNED,
                 textInput NVARCHAR(250) NOT NULL,
                 header NVARCHAR(40) NOT NULL,
