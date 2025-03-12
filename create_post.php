@@ -45,7 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 VALUES (:textInput, :header, :userID, :timeCreated, :imagePath, :combinedID)");
 
         $userID = $_SESSION['user_id'];        
-   
+        $number = 1;
+
         $stmt->bindParam(':textInput', $blogText);
         $stmt->bindParam(':header', $blogHeader);
         $stmt->bindParam(':userID', $userID);
