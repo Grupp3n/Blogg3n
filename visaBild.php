@@ -19,6 +19,7 @@ try {
     $base64Image = $result['image'];
 
     $_SESSION['pictureID'] = $result['id'];
+    $_SESSION['check'] = true;
 
     if($base64Image) {       
         echo '<img style ="width: 300px; " src="data:image/*;base64,' . $base64Image . '" />';

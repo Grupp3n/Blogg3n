@@ -87,8 +87,9 @@ if(isset($_POST['likeButton'])){
             $bool = true;
             $likeID = $comment['id'];
         }    
-    }
-    
+    }    
+
+    $_SESSION['likeButton'] = true; #Till för att växla färg på LikeButton beroende på om man gillat det eller inte.
 
     if($bool) {       
         $query = 'DELETE FROM Likes               
@@ -96,7 +97,7 @@ if(isset($_POST['likeButton'])){
         $stmt_comments = $pdo->prepare($query);
         $stmt_comments->execute(['id' => $likeID]);
         $delete = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);
-
+        $_SESSION['likeButton'] = false;
     } else {
         $userID = $_SESSION['user_id'];
         
@@ -159,7 +160,11 @@ foreach($likes as $like) {
             <p style="color: white; margin-right: 0.5rem;"><?php echo "Likes: $counter" ?></p>
 
             <button type="submit" name="likeButton" style="background-color: transparent;">
+            <?php if(!$_SESSION['likeButton']): ?>
                 <img src="./img/thumbs-up-24.png" alt="" style="width:130%; background-color: white;">
+            <?php else: ?>
+                <img src="./img/thumbs-up-24.png" alt="" style="width:130%; background-color: green;">
+            <?php endif ?>
             </button>
 
         </div>

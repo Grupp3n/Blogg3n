@@ -15,11 +15,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $getTime = date_format($time, "Y-m-d H:i:s");
 
 
-    if(isset($_POST['upload'])) {
+    if(isset($_POST['upload']) && !empty($_POST['image'])) {
+        
         try {
             $userID = $_SESSION['user_id'];
             $code = $_POST['blogText'];
-                                         
+                                        
             $imageData = file_get_contents($_FILES['image']['tmp_name']);
             
             $base64Image = base64_encode($imageData);
@@ -36,14 +37,18 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             }
         } catch (PDOException $e) {
             echo "<p style='color: red;'>Fel: " . $e->getMessage() . "</p";
-        }        
+        }          
     }
-       
-    if (isset($_POST['post_submit_button'])) {        
+    
+    if (isset($_POST['post_submit_button'])) {   
 
-        $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated, imagePath, combinedID) 
-                VALUES (:textInput, :header, :userID, :timeCreated, :imagePath, :combinedID)");
-
+        if($_SESSION['check']) {
+            $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated, combinedID, imagePath) 
+                    VALUES (:textInput, :header, :userID, :timeCreated, :combinedID, :imagePath)");
+        } else {
+            $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated, combinedID) 
+                    VALUES (:textInput, :header, :userID, :timeCreated, :combinedID)");
+        }
         $userID = $_SESSION['user_id'];        
         $number = 1;
 
@@ -51,8 +56,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $stmt->bindParam(':header', $blogHeader);
         $stmt->bindParam(':userID', $userID);
         $stmt->bindParam(':timeCreated', $getTime);
-        $stmt->bindParam(':imagePath', $_SESSION['pictureID']);
         $stmt->bindParam(':combinedID', $number);
+        if($_SESSION['check']) {
+            $stmt->bindParam(':imagePath', $_SESSION['pictureID']);
+        }
 
         if ($stmt->execute()) {
             echo "<div class='success'>Posten lyckades!</div>";
@@ -61,9 +68,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         } else {
             echo "<div class='error' style='color: red;'>Något gick fel med databasen: " . $stmt->errorInfo() . "</div>";
         }
+        # Sätter den till false direkt efter post för att verifieringen skall vara lyckad för nästa gång
+        $_SESSION['check'] = false;
     }
-
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -115,11 +124,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             <!-- Add Image -->
             <div class="div_create_post2">
                 <div class="div_create_post_left">
-                    <?php if(!isset($_POST['upload'])): ?>
+                    <?php if(!isset($_POST['upload'])):?>
                         <input type="file" name="image" id="image" accept="image/*" style="width: 13rem;">
-                        <button type="submit" name="upload">Ladda upp!</button>
+                        <button type="submit" name="upload">Ladda upp!</button>                        
                     <?php else: ?>
-                        <?php require_once 'visaBild.php'; ?> 
+                        <?php require_once 'visaBild.php'; ?>
                     <?php endif ?>         
                 </div>
 
