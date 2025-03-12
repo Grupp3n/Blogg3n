@@ -67,6 +67,14 @@ $stmt_comments = $pdo->prepare($sql_comments);
 $stmt_comments->execute(['post_id' => $post_id]);
 $comments = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);
 
+//Hämtar alla Post för att se om man gillat eller inte. För att sätta färg
+$sql_comments = 'SELECT * 
+                     FROM Likes                 
+                     WHERE userID = :id';                     
+$stmt_comments = $pdo->prepare($sql_comments);
+$stmt_comments->execute(['id' => $_SESSION['user_id']]);
+$comments3 = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);    
+
 
 
 // Skriver kod om likes
@@ -89,25 +97,40 @@ if(isset($_POST['likeButton'])){
         }    
     }    
 
-    $_SESSION['likeButton'] = true; #Till för att växla färg på LikeButton beroende på om man gillat det eller inte.
+    $id = (int) $post['id']; 
 
-    if($bool) {       
+    if($bool) { 
         $query = 'DELETE FROM Likes               
                   WHERE id = :id';                     
         $stmt_comments = $pdo->prepare($query);
         $stmt_comments->execute(['id' => $likeID]);
         $delete = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);
-        $_SESSION['likeButton'] = false;
-    } else {
+        header("location: post.php?id=$id");
+    } else {       
         $userID = $_SESSION['user_id'];
         
         $stmt = $pdo->prepare('INSERT INTO Likes (postID, userID) VALUES (:postID, :userID)');
         if ($stmt->execute([
             ':postID' => $_GET['id'],
             ':userID' => $_SESSION['user_id']       
-        ]));                 
+        ]));    
+                     
+         #Till för att växla färg på LikeButton beroende på om man gillat det eller inte.
+         header("location: post.php?id=$id");
     }
     
+}
+
+foreach($comments3 as $comment) {
+    
+    if($comment['userID'] == $_SESSION['user_id'] && $comment['postID'] == $_GET['id']){
+        $id = $comment['postID'];
+        # Sätter color till true om allt stämmer överäns
+       $color = true;
+    //    header("location: post.php?id=$id");
+    } else {
+        $color = false;        
+    }
 }
 
 // Här visas Countern "räknaren" på likes
@@ -160,10 +183,11 @@ foreach($likes as $like) {
             <p style="color: white; margin-right: 0.5rem;"><?php echo "Likes: $counter" ?></p>
 
             <button type="submit" name="likeButton" style="background-color: transparent;">
-            <?php if(!$_SESSION['likeButton']): ?>
-                <img src="./img/thumbs-up-24.png" alt="" style="width:130%; background-color: white;">
-            <?php else: ?>
+            
+            <?php if($color): ?>
                 <img src="./img/thumbs-up-24.png" alt="" style="width:130%; background-color: green;">
+                <?php else: ?>
+                    <img src="./img/thumbs-up-24.png" alt="" style="width:130%; background-color: white;">
             <?php endif ?>
             </button>
 
