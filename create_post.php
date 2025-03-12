@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         <div class="dropdown-content">            
                 <a href="profile.php">Profile</a>
                 <a href="logout.php">Logga ut</a>            
-        </div>
+        </div>        
     </div>
         
     <div class="logo-con">
