@@ -69,6 +69,7 @@
                 id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                 userID INT UNSIGNED NOT NULL,
                 blogID INT UNSIGNED,
+                combinedID INT UNSIGNED,
                 textInput NVARCHAR(250) NOT NULL,
                 header NVARCHAR(40) NOT NULL,
                 imagePath VARCHAR(255),
@@ -171,12 +172,12 @@
             $conn->exec($query);
             
             ?>
-            <p style='color:white;'>
-                <?php  echo "Tabellen för Chatt skapades Framgångsrikt" ?>
-            </p> <p style='color: green;'>
-                <?php  echo "✔" ?>
-            </p>
-                br>
+                <p style='color:white;'>
+                    <?php  echo "Tabellen för Chatt skapades Framgångsrikt" ?>
+                </p> <p style='color: green;'>
+                    <?php  echo "✔" ?>
+                </p>
+                    br>
             <?php
 
             $conn = null;
@@ -190,13 +191,13 @@
             $query2 = "DROP TABLE Likes";            
             $query3 = "DROP TABLE Posts";  
             $query4 = "DROP TABLE Chatt";  
-            $query5 = "DROP TABLE Users";               
+            // $query5 = "DROP TABLE Users";               
 
             $conn->exec($query);
             $conn->exec($query2);
             $conn->exec($query3);
             $conn->exec($query4);
-            $conn->exec($query5);
+            // $conn->exec($query5);
            
             ?>
             <p style='color:white;'>
