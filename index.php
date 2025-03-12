@@ -41,6 +41,21 @@ $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
     $stmt_thumbnails->execute();
     $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
 
+
+    $sql_most_liked = 'SELECT p.id, p.userID, p.textInput, p.header, p.image, u.username,
+    COUNT(l.postID) as like_count
+    FROM Posts p
+    LEFT JOIN Users u ON p.userID = u.id
+    LEFT JOIN likes l ON p.id = l.postID
+    WHERE p.image IS NOT NULL
+    GROUP BY p.id, p.userID, p.textInput, p.header, p.image, u.username
+    ORDER BY like_count DESC
+    LIMIT 4';
+
+    $stmt_most_liked = $pdo->prepare($sql_most_liked);
+    $stmt_most_liked->execute();
+    $most_liked_posts = $stmt_most_liked->fetchAll(PDO::FETCH_ASSOC);
+    
 ?>
 
 <!DOCTYPE html>
@@ -104,7 +119,35 @@ $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
         <?php endif; ?>
     </div>
 
+    <!-- Most Like Posts -->
     <aside class="index-aside">
+        <h2>Most Liked Posts</h2>
+        <div class="post-thumbnails">
+            <?php if ($most_liked_posts): ?>
+                <?php foreach($most_liked_posts as $post): ?>
+                    <a href="post.php?id=<?= $post['id']; ?>" style="text-decoration: none; color: inherit;">
+                        <div class="thumbnail">
+                            <?php if ($post['image']): ?>
+                                <img src="data:image/*;base64, <?= htmlspecialchars($post['image']) ?>"
+                                     alt="<?= htmlspecialchars($post['header']); ?>"
+                                     style="max-width: 100%; height:auto;">
+                            <?php endif; ?>
+                            <div class="text-container">
+                            <h4><?= htmlspecialchars($post['header']); ?> 
+                                (<?= $post['like_count'] ?> likes)</h4>
+                            <p><?= htmlspecialchars($post['textInput']); ?></p>
+                        </div>
+                        </div>
+                    </a>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="thumbnail">
+                    <p>No posts have been liked yet</p>
+                </div>
+            <?php endif; ?>
+        </div>
+
+        <!-- Recent Headlines -->
         <h2>Recent Headlines</h2>
         <div class="post-thumbnails">
             <?php if ($thumbnail_posts): ?>
