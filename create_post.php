@@ -17,6 +17,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
     if(isset($_POST['upload'])) {
 
+        if(!isset($_FILES['image'])) {
+            header("location: create_post.php");
+            exit;
+        } 
         try {
             $userID = $_SESSION['user_id'];
             $code = $_POST['blogText'];
@@ -26,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             } else {
                 header("location: create_post.php");
                 exit;
-            }
+            } 
 
             $base64Image = base64_encode($imageData);
             
@@ -41,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             } else {
                 echo "<p style='color: red;'>Fel vid uppladdning</p>";
             }
+        
         } catch (PDOException $e) {
             echo "<p style='color: red;'>Fel: " . $e->getMessage() . "</p";
         }          

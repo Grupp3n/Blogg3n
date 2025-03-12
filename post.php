@@ -175,7 +175,7 @@ foreach($likes as $like) {
     
         <div class="commentsAndLike">
 
-            <p style="color: white; margin-right: 0.5rem;"><?php echo "Likes: $counter" ?></p>
+            <p style="color: white;"><?php echo "Likes: $counter" ?></p>
 
             <button type="submit" name="likeButton" style="background-color: transparent;">
             
