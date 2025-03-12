@@ -90,7 +90,7 @@ $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
     <?php endif; ?>
         
     <div class="logo-con">
-        <img src="img/transparent logo.png" alt="Nexlify">
+        <a href="index.php"><img src="img/transparent logo.png" alt="Nexlify"></a>
     </div>
    
 </header>
