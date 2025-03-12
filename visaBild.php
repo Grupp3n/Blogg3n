@@ -8,6 +8,7 @@ require 'db_connect.php';
 }
 
 try {
+    $_SESSION['check'] = true;
     $userID = $_SESSION['user_id'];
 
     $stmt = $pdo->prepare("SELECT id, image FROM Posts WHERE userID = :userID ORDER BY id DESC LIMIT 1");
@@ -19,7 +20,6 @@ try {
     $base64Image = $result['image'];
 
     $_SESSION['pictureID'] = $result['id'];
-    $_SESSION['check'] = true;
 
     if($base64Image) {       
         echo '<img style ="width: 300px; " src="data:image/*;base64,' . $base64Image . '" />';
