@@ -22,7 +22,7 @@
             </p> <p style='color: green;'>
                 <?php  echo "✔" ?>
             </p>
-                br>
+                <br>
             <?php
 
             $conn = null;
@@ -53,7 +53,7 @@
             </p> <p style='color: green;'>
                 <?php  echo "✔" ?>
             </p>
-                br>
+            <br>
             <?php
 
             $conn = null;
@@ -87,7 +87,7 @@
             </p> <p style='color: green;'>
                 <?php  echo "✔" ?>
             </p>
-                br>
+                <br>
             <?php
 
             $conn = null;
@@ -118,7 +118,7 @@
             </p> <p style='color: green;'>
                 <?php  echo "✔" ?>
             </p>
-                br>
+                <br>
             <?php
 
             $conn = null;
@@ -147,7 +147,7 @@
             </p> <p style='color: green;'>
                 <?php  echo "✔" ?>
             </p>
-                br>
+                <br>
             <?php
 
             $conn = null;
@@ -204,7 +204,7 @@
             </p> <p style='color: green;'>
                 <?php  echo "✔" ?>
             </p>
-                br>
+                <br>
             <?php
 
             $conn = null;

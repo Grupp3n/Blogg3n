@@ -15,8 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $getTime = date_format($time, "Y-m-d H:i:s");
 
 
-    if(isset($_POST['upload']) && !empty($_POST['image'])) {
-        
+    if(isset($_POST['upload'])) {
+
         try {
             $userID = $_SESSION['user_id'];
             $code = $_POST['blogText'];
@@ -25,13 +25,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             
             $base64Image = base64_encode($imageData);
             
-            $query = "INSERT INTO posts (imagePath, image, userID) VALUES (imagePath = NULL, :image, :userID)";
+            $query = "INSERT INTO Posts (imagePath, image, userID) VALUES (imagePath = NULL, :image, :userID)";
             $stmt = $pdo->prepare($query);
             $stmt->bindParam(":image", $base64Image, PDO::PARAM_STR);            
             $stmt->bindValue(":userID", $userID, PDO::PARAM_INT);
             
             if($stmt->execute()) {
                 echo "<p style='color: white;'>Bild uppladdad!</p>";
+                $_SESSION['check'] = true;
             } else {
                 echo "<p style='color: red;'>Fel vid uppladdning</p>";
             }
@@ -46,9 +47,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated, combinedID, imagePath) 
                     VALUES (:textInput, :header, :userID, :timeCreated, :combinedID, :imagePath)");
         } else {
-            $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated, combinedID) 
-                    VALUES (:textInput, :header, :userID, :timeCreated, :combinedID)");
+            $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated, combinedID, imagePath) 
+                    VALUES (:textInput, :header, :userID, :timeCreated, :combinedID, imagePath = NULL)");
         }
+        
         $userID = $_SESSION['user_id'];        
         $number = 1;
 
@@ -59,6 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $stmt->bindParam(':combinedID', $number);
         if($_SESSION['check']) {
             $stmt->bindParam(':imagePath', $_SESSION['pictureID']);
+            $_SESSION['check'] = false;
         }
 
         if ($stmt->execute()) {
@@ -69,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             echo "<div class='error' style='color: red;'>Något gick fel med databasen: " . $stmt->errorInfo() . "</div>";
         }
         # Sätter den till false direkt efter post för att verifieringen skall vara lyckad för nästa gång
-        $_SESSION['check'] = false;
+        
     }
 }
 
