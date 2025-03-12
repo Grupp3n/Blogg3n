@@ -74,15 +74,24 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 </head>
 
 <body class="body_create_post">
-    <header>    
+<header>
     <div class="dropdown">
         <button class="dropbtn">Meny</button>
-        <div class="dropdown-content">
-            
+        <div class="dropdown-content">            
                 <a href="profile.php">Profile</a>
-                <a href="logout.php">Logga ut</a>
+                <a href="logout.php">Logga ut</a>            
         </div>
-    </header>
+    </div>
+
+    <?php if ($INLOGGAD) : ?>
+        <button onclick="window.location.href='create_post.php'">Gör ett inlägg</button>
+    <?php endif; ?>
+        
+    <div class="logo-con">
+        <img src="img/transparent logo.png" alt="Nexlify">
+    </div>
+   
+</header>
     
     <main class="main_create_post">
 
