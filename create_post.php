@@ -82,13 +82,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 <a href="logout.php">Logga ut</a>            
         </div>
     </div>
-
-    <?php if ($INLOGGAD) : ?>
-        <button onclick="window.location.href='create_post.php'">Gör ett inlägg</button>
-    <?php endif; ?>
         
     <div class="logo-con">
-        <img src="img/transparent logo.png" alt="Nexlify">
+        <a href="index.php"><img src="img/transparent logo.png" alt="Nexlify"></a>
     </div>
    
 </header>
