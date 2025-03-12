@@ -42,13 +42,13 @@ $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
     $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
 
     // Fetcha från posts de senaste 4 inläggen för Recent Mostlikes
-    $sql_most_liked = 'SELECT p.id, p.userID, p.textInput, p.header, p.image, u.username,
+    $sql_most_liked = 'SELECT p.id, p.userID, p.textInput, p.header, p.imagePath, u.username,
     COUNT(l.postID) as like_count
     FROM Posts p
     LEFT JOIN Users u ON p.userID = u.id
     LEFT JOIN likes l ON p.id = l.postID
     WHERE p.combinedID IS NOT NULL
-    GROUP BY p.id, p.userID, p.textInput, p.header, p.image, u.username
+    GROUP BY p.id, p.userID, p.textInput, p.header, p.imagePath, u.username
     ORDER BY like_count DESC
     LIMIT 4';
 
@@ -124,21 +124,38 @@ $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
         <h2>Most Liked Posts</h2>
         <div class="post-thumbnails">
             <?php if ($most_liked_posts): ?>
-                <?php foreach($most_liked_posts as $post): ?>
+                <?php foreach($most_liked_posts as $post): ?>                    
+                    <?php if($post['like_count'] >= 1): ?>                        
                     <a href="post.php?id=<?= $post['id']; ?>" style="text-decoration: none; color: inherit;">
-                        <div class="thumbnail">
-                            <?php if ($post['image']): ?>
-                                <img src="data:image/*;base64, <?= htmlspecialchars($post['image']) ?>"
-                                     alt="<?= htmlspecialchars($post['header']); ?>"
-                                     style="max-width: 100%; height:auto;">
-                            <?php endif; ?>
+                        
+                    <div class="thumbnail">
+                        <?php 
+                                    //hämtar vald 'BILD' genom postID
+                            $pictureID = $main_post['imagePath'];
+
+                            $sql_post = 'SELECT p.id, p.userID, p.textInput, p.header, p.image, u.username
+                                        FROM Posts p
+                                        LEFT JOIN Users u ON p.userID = u.id
+                                        WHERE p.id = :post_id';
+                            $stmt_post = $pdo->prepare($sql_post);
+                            $stmt_post->execute(['post_id' => $post['imagePath']]);
+                            $post2 = $stmt_post->fetch(PDO::FETCH_ASSOC); 
+                        ?>
+                            <?php if ($post['imagePath']): ?>                        
+                        <img src="data:image/*;base64, <?php echo $post2['image'] ?>" 
+                        alt="<?php echo htmlspecialchars($post['header']); ?>" 
+                        style="max-width: 100%; height: auto;">
+                    <?php endif; ?>
+
                             <div class="text-container">
                             <h4><?= htmlspecialchars($post['header']); ?> 
                                 (<?= $post['like_count'] ?> likes)</h4>
                             <p><?= htmlspecialchars($post['textInput']); ?></p>
                         </div>
+
                         </div>
                     </a>
+                    <?php endif ?>
                 <?php endforeach; ?>
             <?php else: ?>
                 <div class="thumbnail">
