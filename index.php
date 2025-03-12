@@ -41,13 +41,13 @@ $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
     $stmt_thumbnails->execute();
     $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
 
-
+    // Fetcha från posts de senaste 4 inläggen för Recent Mostlikes
     $sql_most_liked = 'SELECT p.id, p.userID, p.textInput, p.header, p.image, u.username,
     COUNT(l.postID) as like_count
     FROM Posts p
     LEFT JOIN Users u ON p.userID = u.id
     LEFT JOIN likes l ON p.id = l.postID
-    WHERE p.image IS NOT NULL
+    WHERE p.combinedID IS NOT NULL
     GROUP BY p.id, p.userID, p.textInput, p.header, p.image, u.username
     ORDER BY like_count DESC
     LIMIT 4';

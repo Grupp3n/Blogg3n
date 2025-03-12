@@ -67,15 +67,6 @@ $stmt_comments = $pdo->prepare($sql_comments);
 $stmt_comments->execute(['post_id' => $post_id]);
 $comments = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);
 
-//Hämtar alla Post för att se om man gillat eller inte. För att sätta färg
-$sql_comments = 'SELECT * 
-                     FROM Likes                 
-                     WHERE userID = :id';                     
-$stmt_comments = $pdo->prepare($sql_comments);
-$stmt_comments->execute(['id' => $_SESSION['user_id']]);
-$comments3 = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);    
-
-
 
 // Skriver kod om likes
 if(isset($_POST['likeButton'])){
@@ -121,17 +112,21 @@ if(isset($_POST['likeButton'])){
     
 }
 
-foreach($comments3 as $comment) {
-    
-    if($comment['userID'] == $_SESSION['user_id'] && $comment['postID'] == $_GET['id']){
-        $id = $comment['postID'];
-        # Sätter color till true om allt stämmer överäns
-       $color = true;
-    //    header("location: post.php?id=$id");
-    } else {
-        $color = false;        
-    }
+//Hämtar alla Post för att se om man gillat eller inte. För att sätta färg
+$sql_comments = 'SELECT * 
+                 FROM Likes                 
+                 WHERE userID = :id';                     
+$stmt_comments = $pdo->prepare($sql_comments);
+$stmt_comments->execute(['id' => $_SESSION['user_id']]);
+$comments3 = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);    
+
+$color = false;
+foreach($comments3 as $comment) {        
+        if($comment['userID'] == $_SESSION['user_id'] && $comment['postID'] == $_GET['id']){
+            $color = true;
+        }
 }
+
 
 // Här visas Countern "räknaren" på likes
 $counter = (int) 0;
@@ -184,11 +179,14 @@ foreach($likes as $like) {
 
             <button type="submit" name="likeButton" style="background-color: transparent;">
             
-            <?php if($color): ?>
-                <img src="./img/thumbs-up-24.png" alt="" style="width:130%; background-color: green;">
+            
+    
+                <?php if($color): ?>
+                    <img src="./img/thumbs-up-24.png" alt="" style="width:130%; background-color: green;">     
                 <?php else: ?>
                     <img src="./img/thumbs-up-24.png" alt="" style="width:130%; background-color: white;">
-            <?php endif ?>
+                <?php endif ?>
+            
             </button>
 
         </div>
