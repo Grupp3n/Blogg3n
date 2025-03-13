@@ -213,44 +213,57 @@ $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
             <?php endif; ?>
         </div>
     </aside>
+
+    <!-- All Posts -->
     <div class="all_posts">
-        <h2>All Posts</h2>
-            <div class="all-post-container">
-                <?php if ($all_posts): ?>
-                <?php foreach ($all_posts as $post): ?>
+    <h2>All Posts</h2>
+    <div class="all-post-container">
+        <?php if ($all_posts): ?>
+            <?php foreach ($all_posts as $post): ?>
                 <a href="post.php?id=<?= $post['id']; ?>" style="text-decoration: none; color: inherit;">
                     <div class="all-post-item">
-                    <?php 
-                                //hämtar vald 'BILD' genom postID
-                        $pictureID = $main_post['imagePath'];
-    
-                        $sql_post = 'SELECT p.id, p.userID, p.textInput, p.header, p.image, u.username
-                                    FROM Posts p
-                                    LEFT JOIN Users u ON p.userID = u.id
-                                    WHERE p.id = :post_id';
-                        $stmt_post = $pdo->prepare($sql_post);
-                        $stmt_post->execute(['post_id' => $post['imagePath']]);
-                        $post2 = $stmt_post->fetch(PDO::FETCH_ASSOC); 
-                    ?>
-                        <?php if ($post['imagePath']): ?>                        
-                            <img src="data:image/*;base64, <?php echo $post2['image'] ?>" 
-                            alt="<?php echo htmlspecialchars($post['header']); ?>" 
-                            style="max-width: 100%; height: auto;">
-                        <?php endif; ?>
-                        <div class="text-container">
-                            <h4><?= htmlspecialchars($post['header']); ?></h4>
-                            <p><?= htmlspecialchars($post['textInput']); ?></p>
+                        <div class="all-post-item-inner">
+                            <div class="all-post-item-front">
+                            <?php 
+                                    //hämtar vald 'BILD' genom postID
+                            $pictureID = $main_post['imagePath'];
+
+                            $sql_post = 'SELECT p.id, p.userID, p.textInput, p.header, p.image, u.username
+                                        FROM Posts p
+                                        LEFT JOIN Users u ON p.userID = u.id
+                                        WHERE p.id = :post_id';
+                            $stmt_post = $pdo->prepare($sql_post);
+                            $stmt_post->execute(['post_id' => $post['imagePath']]);
+                            $post2 = $stmt_post->fetch(PDO::FETCH_ASSOC); 
+                        ?>
+                            <?php if ($post['imagePath']): ?>                        
+                        <img src="data:image/*;base64, <?php echo $post2['image'] ?>" 
+                        alt="<?php echo htmlspecialchars($post['header']); ?>" 
+                        style="max-width: 100%; height: auto;">
+                    <?php endif; ?>
+                                <h4><?= htmlspecialchars($post['header']); ?></h4>
+                            </div>
+                            <div class="all-post-item-back">
+                                <p><?= htmlspecialchars($post['textInput']); ?></p>
+                            </div>
                         </div>
                     </div>
                 </a>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <div class="thumbnail">
+            <?php endforeach; ?>
+        <?php else: ?>
+            <div class="all-post-item">
+                <div class="all-post-item-inner">
+                    <div class="all-post-item-front">
                         <p>No posts posted</p>
                     </div>
-                <?php endif; ?>
+                    <div class="all-post-item-back">
+                        <p>No posts posted</p>
+                    </div>
+                </div>
             </div>
+        <?php endif; ?>
     </div>
+</div>
 
 </main>
 
