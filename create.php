@@ -201,7 +201,7 @@
                          
             ?>
             <p style='color:white;'>
-                <?php  echo "Tabellen för Likes skapades Framgångsrikt" ?>
+                <?php  echo "Tabellen för Follower skapades Framgångsrikt" ?>
             </p> <p style='color: green;'>
                 <?php  echo "✔" ?>
             </p>
