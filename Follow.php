@@ -3,35 +3,6 @@
       
     require 'db_connect.php';
 
-    $query = '  SELECT * 
-                FROM Users                 
-                -- WHERE userID = :id
-            ';                     
-        $stmt = $pdo->prepare($query);
-        // $stmt->execute(['id' => $_SESSION['user_id']]);
-        $stmt->execute();
-        $follower = $stmt->fetchAll(PDO::FETCH_ASSOC);    
-        
-        $number;
-        if(!empty($follower)) {
-            foreach($follower as $follow) {
-                // if($comment['userID'] == $_SESSION['user_id'] && $comment['postID'] == $_GET['id']){
-                //     $bool = true;
-                //     $likeID = $comment['id'];
-                // }    
-                
-                echo "ID: " . $follow['id'] . " Namn: " . $follow['firstname'];
-                echo "<br>";
-
-                if($follow['id'] == 1) {
-                    $number = $follow['id'];
-                }
-            }    
-        } else {
-            echo "<p style='color: red;'> NÅGOT FEL </p>";
-        }
-
-
         $query = '  SELECT * 
                     FROM Follower                 
                     WHERE followedID = :id
