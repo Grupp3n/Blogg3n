@@ -1,7 +1,10 @@
 <?php
-    # Kod för likes. (KOPIERAD RAKT ÖVER IFRÅN POST.php)
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: index.php");
+        exit;
+    }
     
-        
+    # Kod för likes. (KOPIERAD RAKT ÖVER IFRÅN POST.php)
         $bool = false;
         $likeID = "";
         
