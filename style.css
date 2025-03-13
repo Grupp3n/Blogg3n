@@ -464,7 +464,7 @@ button {
   padding: 20px;
   min-height: calc(100vh - 100px);
   background-color: #1a2a44;
-  width: 80%;
+  width: 100%;
   max-width: 100%;
   margin: 0 auto;
   overflow-x: hidden;
@@ -667,7 +667,7 @@ button {
 }
 
 .all_posts h2 {
-  color: #333;
+  color: #e5e7eb;
 }
 
 .all_posts .post-thumbnails {

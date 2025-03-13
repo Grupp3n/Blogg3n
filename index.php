@@ -119,19 +119,57 @@ $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
         <?php endif; ?>
         <h3><?= htmlspecialchars($main_post['header']); ?></h3>
         <p><?= htmlspecialchars($main_post['textInput']); ?></p>
-        </a>
+    </a>
 </div>
-            <p>Posted by: <?= htmlspecialchars($main_post['username']); ?></p>
+<p>Posted by: <?= htmlspecialchars($main_post['username']); ?></p>
+<?php else: ?>
+    <h2>Main Headline</h2>
+    <div class="post-preview">
+        <p>No posts posted</p>
+    </div>
+    <?php endif; ?>
+</div>
+
+<aside class="index-aside">
+    <!-- Recent Headlines -->
+    <h2>Recent Headlines</h2>
+    <div class="post-thumbnails">
+        <?php if ($thumbnail_posts): ?>
+        <?php foreach ($thumbnail_posts as $post): ?>
+        <a href="post.php?id=<?= $post['id']; ?>" style="text-decoration: none; color: inherit;">
+            <div class="thumbnail">
+            <?php 
+                        //hämtar vald 'BILD' genom postID
+                $pictureID = $main_post['imagePath'];
+
+                $sql_post = 'SELECT p.id, p.userID, p.textInput, p.header, p.image, u.username
+                            FROM Posts p
+                            LEFT JOIN Users u ON p.userID = u.id
+                            WHERE p.id = :post_id';
+                $stmt_post = $pdo->prepare($sql_post);
+                $stmt_post->execute(['post_id' => $post['imagePath']]);
+                $post2 = $stmt_post->fetch(PDO::FETCH_ASSOC); 
+            ?>
+                <?php if ($post['imagePath']): ?>                        
+                    <img src="data:image/*;base64, <?php echo $post2['image'] ?>" 
+                    alt="<?php echo htmlspecialchars($post['header']); ?>" 
+                    style="max-width: 100%; height: auto;">
+                <?php endif; ?>
+                <div class="text-container">
+                    <h4><?= htmlspecialchars($post['header']); ?></h4>
+                    <p><?= htmlspecialchars($post['textInput']); ?></p>
+                </div>
+            </div>
+        </a>
+            <?php endforeach; ?>
         <?php else: ?>
-            <h2>Main Headline</h2>
-            <div class="post-preview">
+            <div class="thumbnail">
                 <p>No posts posted</p>
             </div>
         <?php endif; ?>
     </div>
-
+    
     <!-- Most Like Posts -->
-    <aside class="index-aside">
         <h2>Most Liked Posts</h2>
         <div class="post-thumbnails">
             <?php if ($most_liked_posts): ?>
@@ -174,46 +212,6 @@ $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
                 </div>
             <?php endif; ?>
         </div>
-
-        <!-- Recent Headlines -->
-        <h2>Recent Headlines</h2>
-        <div class="post-thumbnails">
-            <?php if ($thumbnail_posts): ?>
-            <?php foreach ($thumbnail_posts as $post): ?>
-            <a href="post.php?id=<?= $post['id']; ?>" style="text-decoration: none; color: inherit;">
-                <div class="thumbnail">
-                <?php 
-                            //hämtar vald 'BILD' genom postID
-                    $pictureID = $main_post['imagePath'];
-
-                    $sql_post = 'SELECT p.id, p.userID, p.textInput, p.header, p.image, u.username
-                                FROM Posts p
-                                LEFT JOIN Users u ON p.userID = u.id
-                                WHERE p.id = :post_id';
-                    $stmt_post = $pdo->prepare($sql_post);
-                    $stmt_post->execute(['post_id' => $post['imagePath']]);
-                    $post2 = $stmt_post->fetch(PDO::FETCH_ASSOC); 
-                ?>
-                    <?php if ($post['imagePath']): ?>                        
-                        <img src="data:image/*;base64, <?php echo $post2['image'] ?>" 
-                        alt="<?php echo htmlspecialchars($post['header']); ?>" 
-                        style="max-width: 100%; height: auto;">
-                    <?php endif; ?>
-                    <div class="text-container">
-                        <h4><?= htmlspecialchars($post['header']); ?></h4>
-                        <p><?= htmlspecialchars($post['textInput']); ?></p>
-                    </div>
-                </div>
-            </a>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <div class="thumbnail">
-                    <p>No posts posted</p>
-                </div>
-            <?php endif; ?>
-        </div>
-
-        
     </aside>
     <div class="all_posts">
         <h2>All Posts</h2>
