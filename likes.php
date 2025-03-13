@@ -5,10 +5,10 @@
         $bool = false;
         $likeID = "";
         
-        $sql_comments = 'SELECT * 
+        $sql = 'SELECT * 
                         FROM Likes                 
                         WHERE userID = :id';                     
-        $stmt_comments = $pdo->prepare($sql_comments);
+        $stmt_comments = $pdo->prepare($sql);
         $stmt_comments->execute(['id' => $_SESSION['user_id']]);
         $comments2 = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);    
         

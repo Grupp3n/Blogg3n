@@ -19,7 +19,8 @@
             ?>
             <p style='color:white;'>
                 <?php  echo "Databasen $dbname skapades Framgångsrikt" ?>
-            </p> <p style='color: green;'>
+            </p> 
+            <p style='color: green;'>
                 <?php  echo "✔" ?>
             </p>
                 <br>
@@ -50,7 +51,8 @@
             ?>
             <p style='color:white;'>
                 <?php  echo "Tabellen för Users skapades Framgångsrikt" ?>
-            </p> <p style='color: green;'>
+            </p> 
+            <p style='color: green;'>
                 <?php  echo "✔" ?>
             </p>
             <br>
@@ -69,7 +71,7 @@
                 id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                 userID INT UNSIGNED NOT NULL,
                 combinedID INT UNSIGNED,
-                textInput NVARCHAR(250) NOT NULL,
+                textInput TEXT(MAX) NOT NULL,
                 header NVARCHAR(40) NOT NULL,
                 imagePath VARCHAR(255),
                 image LONGTEXT,
@@ -84,7 +86,8 @@
             ?>
             <p style='color:white;'>
                 <?php  echo "Tabellen för Posts skapades Framgångsrikt" ?>
-            </p> <p style='color: green;'>
+            </p> 
+            <p style='color: green;'>
                 <?php  echo "✔" ?>
             </p>
                 <br>
@@ -103,7 +106,7 @@
                         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                         userID int UNSIGNED NOT NULL,
                         postID int UNSIGNED NOT NULL,
-                        textInput NVARCHAR(250) NOT NULL,
+                        textInput TEXT(MAX) NOT NULL,
                         timeCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         timeUpdated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         FOREIGN KEY (userID) REFERENCES Users(id) ON DELETE CASCADE,
@@ -115,7 +118,8 @@
             ?>
             <p style='color:white;'>
                 <?php  echo "Tabellen för Comments skapades Framgångsrikt" ?>
-            </p> <p style='color: green;'>
+            </p> 
+            <p style='color: green;'>
                 <?php  echo "✔" ?>
             </p>
                 <br>
@@ -144,7 +148,8 @@
             ?>
             <p style='color:white;'>
                 <?php  echo "Tabellen för Likes skapades Framgångsrikt" ?>
-            </p> <p style='color: green;'>
+            </p> 
+            <p style='color: green;'>
                 <?php  echo "✔" ?>
             </p>
                 <br>
@@ -162,7 +167,7 @@
                         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                         senderID int UNSIGNED NOT NULL,
                         receiverID int UNSIGNED NOT NULL,
-                        text nvarchar(250) NOT NULL, 
+                        text TEXT(MAX) NOT NULL, 
                         timeCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                       
                         FOREIGN KEY (senderID) REFERENCES Users(id) ON DELETE CASCADE,
                         FOREIGN KEY (receiverID) REFERENCES Users(id) ON DELETE CASCADE
@@ -173,7 +178,8 @@
             ?>
                 <p style='color:white;'>
                     <?php  echo "Tabellen för Chatt skapades Framgångsrikt" ?>
-                </p> <p style='color: green;'>
+                </p> 
+                <p style='color: green;'>
                     <?php  echo "✔" ?>
                 </p>
                     br>
@@ -202,7 +208,8 @@
             ?>
             <p style='color:white;'>
                 <?php  echo "Tabellen för Follower skapades Framgångsrikt" ?>
-            </p> <p style='color: green;'>
+            </p> 
+            <p style='color: green;'>
                 <?php  echo "✔" ?>
             </p>
                 <br>
@@ -233,7 +240,8 @@
             ?>
             <p style='color:white;'>
                 <?php  echo "Tabellerna har tagits bort Framgångsrikt" ?>
-            </p> <p style='color: green;'>
+            </p>
+            <p style='color: green;'>
                 <?php  echo "✔" ?>
             </p>
                 <br>
@@ -248,6 +256,9 @@
             <p style='color:white;'>
                 <?php  echo $e->getMessage() ?>
             </p> 
+            <p style='color: red;'>
+                <?php  echo "X" ?>
+            </p>
             <?php
     }
     

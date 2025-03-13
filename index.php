@@ -179,7 +179,7 @@ $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
                         
                     <div class="thumbnail">
                         <?php 
-                                    //hämtar vald 'BILD' genom postID
+                                //hämtar vald 'BILD' genom postID
                             $pictureID = $main_post['imagePath'];
 
                             $sql_post = 'SELECT p.id, p.userID, p.textInput, p.header, p.image, u.username
