@@ -25,29 +25,28 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $userID = $_SESSION['user_id'];
             $code = $_POST['blogText'];
                                      
-            if(isset($_FILES['image'])) {
+            if(isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
                 $imageData = file_get_contents($_FILES['image']['tmp_name']);
-            } else {
-                header("location: create_post.php");
-                exit;
-            } 
+                $base64Image = base64_encode($imageData);
+                
+                $query = "INSERT INTO Posts (imagePath, image, userID) VALUES (imagePath = NULL, :image, :userID)";
+                $stmt = $pdo->prepare($query);
+                $stmt->bindParam(":image", $base64Image, PDO::PARAM_STR);            
+                $stmt->bindValue(":userID", $userID, PDO::PARAM_INT);
 
-            $base64Image = base64_encode($imageData);
-            
-            $query = "INSERT INTO Posts (imagePath, image, userID) VALUES (imagePath = NULL, :image, :userID)";
-            $stmt = $pdo->prepare($query);
-            $stmt->bindParam(":image", $base64Image, PDO::PARAM_STR);            
-            $stmt->bindValue(":userID", $userID, PDO::PARAM_INT);
-            
-            if($stmt->execute()) {
-                echo "<p style='color: white;'>Bild uppladdad!</p>";
-                $_SESSION['check'] = true;
+                if($stmt->execute()) {
+                    echo "<p style='color: white;'>Bild uppladdad!</p>";
+                    $_SESSION['check'] = true;
+                } else {
+                    echo "<p style='color: red;'>Fel vid uppladdning</p>";
+                }
             } else {
-                echo "<p style='color: red;'>Fel vid uppladdning</p>";
+                echo "<p style='color: red;'>Ingen bild valdes att ladda upp!</p>";
+                header("Location: create_post.php");
             }
         
         } catch (PDOException $e) {
-            echo "<p style='color: red;'>Fel: " . $e->getMessage() . "</p";
+            echo "<p style='color: red;'>Fel: " . $e->getMessage() . "</p>";
         }          
     }
     
@@ -81,12 +80,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         } else {
             echo "<div class='error' style='color: red;'>Något gick fel med databasen: " . $stmt->errorInfo() . "</div>";
         }
-        # Sätter den till false direkt efter post för att verifieringen skall vara lyckad för nästa gång
-        
     }
 }
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
