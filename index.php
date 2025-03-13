@@ -215,11 +215,11 @@ $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
     </aside>
     <div class="all_posts">
         <h2>All Posts</h2>
-            <div class="post-thumbnails">
+            <div class="all-post-container">
                 <?php if ($all_posts): ?>
                 <?php foreach ($all_posts as $post): ?>
                 <a href="post.php?id=<?= $post['id']; ?>" style="text-decoration: none; color: inherit;">
-                    <div class="thumbnail">
+                    <div class="all-post-item">
                     <?php 
                                 //hämtar vald 'BILD' genom postID
                         $pictureID = $main_post['imagePath'];
