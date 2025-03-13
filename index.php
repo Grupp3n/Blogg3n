@@ -41,6 +41,17 @@ $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
     $stmt_thumbnails->execute();
     $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
 
+    // Fetcha alla posts
+    $all_thumbnails = 'SELECT p.id, p.textInput, p.header, p.imagePath, u.username, p.combinedID
+                    FROM Posts p
+                    LEFT JOIN Users u ON p.userID = u.id
+                    WHERE p.combinedID IS NOT NULL
+                    ORDER BY p.timeCreated DESC';
+
+    $stmt_allthumbnails = $pdo->prepare($all_thumbnails);
+    $stmt_allthumbnails->execute();
+    $all_posts = $stmt_allthumbnails->fetchAll(PDO::FETCH_ASSOC);
+
     // Fetcha från posts de senaste 4 inläggen för Recent Mostlikes
     $sql_most_liked = 'SELECT p.id, p.userID, p.textInput, p.header, p.imagePath, u.username,
     COUNT(l.postID) as like_count
@@ -201,7 +212,48 @@ $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
                 </div>
             <?php endif; ?>
         </div>
+
+        
     </aside>
+    <div class="all_posts">
+        <h2>All Posts</h2>
+            <div class="post-thumbnails">
+                <?php if ($all_posts): ?>
+                <?php foreach ($all_posts as $post): ?>
+                <a href="post.php?id=<?= $post['id']; ?>" style="text-decoration: none; color: inherit;">
+                    <div class="thumbnail">
+                    <?php 
+                                //hämtar vald 'BILD' genom postID
+                        $pictureID = $main_post['imagePath'];
+    
+                        $sql_post = 'SELECT p.id, p.userID, p.textInput, p.header, p.image, u.username
+                                    FROM Posts p
+                                    LEFT JOIN Users u ON p.userID = u.id
+                                    WHERE p.id = :post_id';
+                        $stmt_post = $pdo->prepare($sql_post);
+                        $stmt_post->execute(['post_id' => $post['imagePath']]);
+                        $post2 = $stmt_post->fetch(PDO::FETCH_ASSOC); 
+                    ?>
+                        <?php if ($post['imagePath']): ?>                        
+                            <img src="data:image/*;base64, <?php echo $post2['image'] ?>" 
+                            alt="<?php echo htmlspecialchars($post['header']); ?>" 
+                            style="max-width: 100%; height: auto;">
+                        <?php endif; ?>
+                        <div class="text-container">
+                            <h4><?= htmlspecialchars($post['header']); ?></h4>
+                            <p><?= htmlspecialchars($post['textInput']); ?></p>
+                        </div>
+                    </div>
+                </a>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="thumbnail">
+                        <p>No posts posted</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+    </div>
+
 </main>
 
 <div class="div_create_post">
