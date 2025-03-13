@@ -131,6 +131,12 @@ button {
   align-items: center;
 }
 
+.body_follow {
+    background-color: black;
+    color: white;
+    
+}
+
 /* @media (max-width:) */
   
 .cube {

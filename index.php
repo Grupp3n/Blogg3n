@@ -120,7 +120,7 @@ $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
         <h3><?= htmlspecialchars($main_post['header']); ?></h3>
         <p><?= htmlspecialchars($main_post['textInput']); ?></p>
         </a>
-</div>
+    </div>
             <p>Posted by: <?= htmlspecialchars($main_post['username']); ?></p>
         <?php else: ?>
             <h2>Main Headline</h2>
@@ -141,7 +141,7 @@ $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
                         
                     <div class="thumbnail">
                         <?php 
-                                    //hämtar vald 'BILD' genom postID
+                                //hämtar vald 'BILD' genom postID
                             $pictureID = $main_post['imagePath'];
 
                             $sql_post = 'SELECT p.id, p.userID, p.textInput, p.header, p.image, u.username
