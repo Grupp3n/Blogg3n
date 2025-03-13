@@ -182,6 +182,36 @@
             $conn = null;
         }
 
+        if(isset($_POST['createFollowerTableButton'])) {           
+
+            $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            $query = "CREATE TABLE Follower (
+                        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                        followedID int UNSIGNED NOT NULL,
+                        followerID int UNSIGNED NOT NULL,
+                        count int UNSIGNED,
+                        UNIQUE (followedID, followerID),
+                        FOREIGN KEY (followedID) REFERENCES Users(id) ON DELETE CASCADE,
+                        FOREIGN KEY (followerID) REFERENCES Users(id) ON DELETE CASCADE
+            )";
+
+            $conn->exec($query);
+                         
+            ?>
+            <p style='color:white;'>
+                <?php  echo "Tabellen för Follower skapades Framgångsrikt" ?>
+            </p> <p style='color: green;'>
+                <?php  echo "✔" ?>
+            </p>
+                <br>
+            <?php
+
+            $conn = null;
+        }      
+
+
         if(isset($_POST['dropsTableButton'])) {   
             $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -190,13 +220,15 @@
             $query2 = "DROP TABLE Likes";            
             $query3 = "DROP TABLE Posts";  
             $query4 = "DROP TABLE Chatt";  
-            // $query5 = "DROP TABLE Users";               
+            $query5 = "DROP TABLE Follower"; 
+            // $query6 = "DROP TABLE Users";               
 
             $conn->exec($query);
             $conn->exec($query2);
             $conn->exec($query3);
             $conn->exec($query4);
-            // $conn->exec($query5);
+            $conn->exec($query5);
+            // $conn->exec($query6);
            
             ?>
             <p style='color:white;'>
@@ -244,6 +276,7 @@
                     <button name="createCommentsTableButton">Skapa Comments table</button>
                     <button name="createLikesTableButton">Skapa Likes table</button>
                     <button name="createChattTableButton">Skapa Chatt table</button>
+                    <button name="createFollowerTableButton">Skapa Follower table</button>
                     <button name="dropsTableButton">Drop Tables and Users</button>
                 </form>
             </div>

@@ -70,45 +70,8 @@ $comments = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);
 
 // Skriver kod om likes
 if(isset($_POST['likeButton'])){
-    
-    $bool = false;
-    $likeID = "";
-    
-    $sql_comments = 'SELECT * 
-                     FROM Likes                 
-                     WHERE userID = :id';                     
-    $stmt_comments = $pdo->prepare($sql_comments);
-    $stmt_comments->execute(['id' => $_SESSION['user_id']]);
-    $comments2 = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);    
-    
-    foreach($comments2 as $comment) {
-        if($comment['userID'] == $_SESSION['user_id'] && $comment['postID'] == $_GET['id']){
-            $bool = true;
-            $likeID = $comment['id'];
-        }    
-    }    
-
-    $id = (int) $post['id']; 
-
-    if($bool) { 
-        $query = 'DELETE FROM Likes               
-                  WHERE id = :id';                     
-        $stmt_comments = $pdo->prepare($query);
-        $stmt_comments->execute(['id' => $likeID]);
-        $delete = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);
-        header("location: post.php?id=$id");
-    } else {       
-        $userID = $_SESSION['user_id'];
         
-        $stmt = $pdo->prepare('INSERT INTO Likes (postID, userID) VALUES (:postID, :userID)');
-        if ($stmt->execute([
-            ':postID' => $_GET['id'],
-            ':userID' => $_SESSION['user_id']       
-        ]));    
-                     
-         #Till för att växla färg på LikeButton beroende på om man gillat det eller inte.
-         header("location: post.php?id=$id");
-    }
+    require 'likes.php';
     
 }
 
@@ -175,7 +138,7 @@ foreach($likes as $like) {
     
         <div class="commentsAndLike">
 
-            <p style="color: white; margin-right: 0.5rem;"><?php echo "Likes: $counter" ?></p>
+            <p style="color: white;"><?php echo "Likes: $counter" ?></p>
 
             <button type="submit" name="likeButton" style="background-color: transparent;">
             
