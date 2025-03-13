@@ -457,13 +457,14 @@ button {
 .index-main {
   background: linear-gradient(135deg, #1a2a44 0%, #2a3a54 100%);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: flex-start;
   padding: 20px;
   min-height: calc(100vh - 100px);
   background-color: #1a2a44;
-  width: 100%;
+  width: 80%;
   max-width: 100%;
   margin: 0 auto;
   overflow-x: hidden;
@@ -480,7 +481,7 @@ button {
   display: flex;
   flex-direction: column;
   justify-content: flex-start; 
-  width: 68%; 
+  width: 50%; 
   box-sizing: border-box; 
 }
 
