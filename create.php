@@ -1,8 +1,4 @@
-<?php     
-    if (!isset($_SESSION['user_id'])) {
-        header("Location: index.php");
-        exit;
-    }
+<?php      
 
     $servername = "localhost";
     $dbname = "nexlify";
@@ -75,7 +71,7 @@
                 id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                 userID INT UNSIGNED NOT NULL,
                 combinedID INT UNSIGNED,
-                textInput TEXT(MAX) NOT NULL,
+                textInput TEXT NOT NULL,
                 header NVARCHAR(40) NOT NULL,
                 imagePath VARCHAR(255),
                 image LONGTEXT,
@@ -110,7 +106,7 @@
                         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                         userID int UNSIGNED NOT NULL,
                         postID int UNSIGNED NOT NULL,
-                        textInput TEXT(MAX) NOT NULL,
+                        textInput TEXT NOT NULL,
                         timeCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         timeUpdated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         FOREIGN KEY (userID) REFERENCES Users(id) ON DELETE CASCADE,
@@ -171,7 +167,7 @@
                         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                         senderID int UNSIGNED NOT NULL,
                         receiverID int UNSIGNED NOT NULL,
-                        text TEXT(MAX) NOT NULL, 
+                        text TEXT NOT NULL, 
                         timeCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                       
                         FOREIGN KEY (senderID) REFERENCES Users(id) ON DELETE CASCADE,
                         FOREIGN KEY (receiverID) REFERENCES Users(id) ON DELETE CASCADE
