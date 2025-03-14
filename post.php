@@ -138,19 +138,18 @@ foreach($likes as $like) {
     
         <div class="commentsAndLike">
 
-            <p style="color: white;"><?php echo "Likes: $counter" ?></p>
-
-            <button type="submit" name="likeButton" style="background-color: transparent;">
+            <?php if(!empty($_SESSION['user_id'])): ?>
+                <p style="color: white;"><?php echo "Likes: $counter" ?></p>
+                <button type="submit" name="likeButton" style="background-color: transparent;">       
+        
+                    <?php if($color): ?>
+                        <img src="./img/thumbs-up-24.png" alt="" style="width:130%; background-color: green;">     
+                    <?php else: ?>
+                        <img src="./img/thumbs-up-24.png" alt="" style="width:130%; background-color: white;">
+                    <?php endif ?>
             
-            
-    
-                <?php if($color): ?>
-                    <img src="./img/thumbs-up-24.png" alt="" style="width:130%; background-color: green;">     
-                <?php else: ?>
-                    <img src="./img/thumbs-up-24.png" alt="" style="width:130%; background-color: white;">
-                <?php endif ?>
-            
-            </button>
+                </button>
+            <?php endif ?>
 
         </div>
     </form>
