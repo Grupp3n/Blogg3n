@@ -1289,3 +1289,118 @@ margin: 10px auto;
 
 /* SLUT */
 
+/* HÄR SKRIVER MARCUS SIN KOD */
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #121212; /* Mörk bakgrund */
+  color: #e5e7eb;
+}
+header {
+  background: #000; /* Svart header */
+  color: #fff;
+  padding: 1rem;
+}
+nav {
+  background: #000; /* Matchande nav */
+  padding: 1rem;
+}
+nav a {
+  color: #e5e7eb;
+  text-decoration: none;
+  margin-right: 1rem;
+}
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 2rem;
+}
+.main-content {
+  max-width: 600px;
+  width: 100%;
+}
+.profile-info {
+  text-align: center;
+  background: #1a2a44; /* Mörkt kort */
+  color: #e5e7eb;
+  padding: 1.5rem;
+  border-radius: 4px;
+}
+.profile-info img {
+  width: 450px;
+  height: 150px;
+  object-fit: scale-down;
+  margin-bottom: 1rem;
+}
+.update-profile-form, .create-post-form {
+  background: #1a2a44; /* Mörkt kort */
+  color: #e5e7eb;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  border-radius: 4px;
+}
+.update-profile-form label,
+.create-post-form label {
+  font-weight: bold;
+}
+.update-profile-form input,
+.create-post-form textarea {
+  width: 100%;
+  margin: 0.5rem 0 1rem;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  background: #2a3a54;
+  color: #e5e7eb;
+  border: none;
+  border-radius: 4px;
+}
+.update-profile-form button,
+.create-post-form button {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  background: #000;
+  color: #e5e7eb;
+  border: none;
+  border-radius: 4px;
+}
+.posts {
+  background: #1a2a44; /* Mörkt kort */
+  color: #e5e7eb;
+  margin-top: 1rem;
+  padding: 1.5rem;
+  border-radius: 4px;
+}
+.posts h3 {
+  margin-top: 0;            
+}
+.post {
+  background: #2a3a54; /* Något ljusare än containerna */
+  color: #e5e7eb;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 4px;
+}
+.post p {
+  margin: 0 0 0.5rem;
+}
+.notifications {
+  width: 200px;
+  margin-left: 2rem;
+}
+.notifications h4 {
+  margin-top: 0;
+}
+@media (max-width: 768px) {
+  .container {
+      flex-direction: column;
+      align-items: center;
+  }
+  .notifications {
+      width: 100%;
+      margin-left: 0;
+      margin-top: 2rem;
+  }
+}
+

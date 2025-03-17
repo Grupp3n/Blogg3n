@@ -51,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_post'])) {
         $message = "Både rubrik och innehåll måste fyllas i.";
     }
 }
+
 // Hämta aktuell användardata från databasen
 $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
 $stmt->execute([':id' => $user_id]);
@@ -71,121 +72,24 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <title>Profil - <?php echo htmlspecialchars($user['username']); ?></title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-        }
-        header {
-            background: #333;
-            color: #fff;
-            padding: 1rem;
-        }
-        nav {
-            background: #555;
-            padding: 1rem;
-        }
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            margin-right: 1rem;
-        }
-        .container {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            padding: 2rem;
-        }
-        .main-content {
-            max-width: 600px;
-            width: 100%;
-        }
-        .profile-info {
-            text-align: center;
-            background: #fff;
-            padding: 1.5rem;
-            border-radius: 4px;
-        }
-        .profile-info img {
-            width: 450px;
-            height: 150px;
-            object-fit: scale-down;
-            /* border-radius: 25%; */
-            margin-bottom: 1rem;
-        }
-        .update-profile-form, .create-post-form {
-            background: #fff;
-            padding: 1.5rem;
-            margin-top: 1rem;
-            border-radius: 4px;
-        }
-        .update-profile-form label,
-        .create-post-form label {
-            font-weight: bold;
-        }
-        .update-profile-form input,
-        .create-post-form textarea {
-            width: 100%;
-            margin: 0.5rem 0 1rem;
-            padding: 0.5rem;
-            box-sizing: border-box;
-        }
-        .update-profile-form button,
-        .create-post-form button {
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            background: #333;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-        }
-        .posts {
-            background: #fff;
-            margin-top: 1rem;
-            padding: 1.5rem;
-            border-radius: 4px;
-        }
-        .posts h3 {
-            margin-top: 0;            
-        }
-        .post {
-            background-color: blueviolet;
-            background: #f9f9f9;
-            margin-bottom: 1rem;
-            padding: 1rem;
-            border-radius: 4px;
-        }
-        .post p {
-            margin: 0 0 0.5rem;
-        }
-        .notifications {
-            width: 200px;
-            margin-left: 2rem;
-        }
-        .notifications h4 {
-            margin-top: 0;
-        }
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-                align-items: center;
-            }
-            .notifications {
-                width: 100%;
-                margin-left: 0;
-                margin-top: 2rem;
-            }
-        }
-    </style>
 </head>
 <body>
-    <header>
-        <h1>Nexlify</h1>
-    </header>
-    <nav>
-        <a href="index.php">Home</a>
-    </nav>
+<header>
+    <div class="dropdown">
+        <button class="dropbtn">Meny</button>
+        <div class="dropdown-content">            
+                <a href="profile.php">Profile</a>
+                <a href="logout.php">Logga ut</a>            
+        </div>        
+    </div>
+        
+    <div class="logo-con">
+        <a href="index.php"><img src="img/transparent logo.png" alt="Nexlify"></a>
+    </div>
+   
+</header>
+
+<main>
     <div class="container">
         <div class="main-content">
             <div class="profile-info">
@@ -235,5 +139,6 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <p>Nya kommentarer på dina blogginlägg</p>            
         </div>
     </div>
+</main>
 </body>
 </html>
