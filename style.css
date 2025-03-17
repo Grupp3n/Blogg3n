@@ -904,7 +904,6 @@ button {
 #editForm {
   position: fixed; 
   top: 80px; 
-  right: 105px; 
   width: 400px; 
   z-index: 100; 
 }
