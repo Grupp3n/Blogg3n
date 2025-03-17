@@ -68,77 +68,89 @@ $stmt->execute([':userID' => $user_id]);
 $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
     <title>Profil - <?php echo htmlspecialchars($user['username']); ?></title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header>
-    <div class="dropdown">
-        <button class="dropbtn">Meny</button>
-        <div class="dropdown-content">            
-                <a href="profile.php">Profile</a>
-                <a href="logout.php">Logga ut</a>            
-        </div>        
+    <!-- "Gör ett inlägg" knappen längst till vänster -->
+    <div class="header-button left-button">
+        <a href="create_post.php" class="btn">Gör ett inlägg</a>
     </div>
-        
+    <!-- Logotypen centrerad -->
     <div class="logo-con">
         <a href="index.php"><img src="img/transparent logo.png" alt="Nexlify"></a>
     </div>
-   
+    <!-- Dropdown-menyn "Meny" längst till höger -->
+    <div class="dropdown right-dropdown">
+        <button class="dropbtn">Meny</button>
+        <div class="dropdown-content">            
+            <a href="profile.php">Profile</a>
+            <a href="logout.php">Logga ut</a>            
+        </div>        
+    </div>
 </header>
 
 <main>
-    <div class="container">
-        <div class="main-content">
-            <div class="profile-info">
-                <img src="img/transparent logo.png" alt="Profilbild">
-                <h2><?php echo htmlspecialchars($user['username']); ?></h2>
-            </div>
-            <?php if ($message): ?>
-                <p><?php echo htmlspecialchars($message); ?></p>
-            <?php endif; ?>
-            
-            <!-- UPPDATERA PROFIL -->
-            <form class="update-profile-form" method="post" action="">
-                <label for="username">Användarnamn:</label><br>
-                <input type="text" name="username" id="username" value="<?php echo htmlspecialchars($user['username']); ?>"><br>
-                <label for="email">E-post:</label><br>
-                <input type="email" name="email" id="email" value="<?php echo htmlspecialchars($user['email']); ?>"><br>
-                <button type="submit" name="update_profile">Uppdatera profil</button>
-            </form>
+    <!-- Profilsektionen -->
+    <div class="profile-info">
+        <div class="profile-info-box">
+            <img src="img/transparent logo.png" alt="Profilbild">
+        </div>
+        <h2><?php echo htmlspecialchars($user['username']); ?></h2>
+    </div>
+    
+    <?php if ($message): ?>
+        <p class="message"><?php echo htmlspecialchars($message); ?></p>
+    <?php endif; ?>
+    
+    <!-- Uppdatera profil -->
+    <form class="update-profile-form" method="post" action="">
+        <div class="form-group">
+            <label for="username">Användarnamn:</label>
+            <input type="text" name="username" id="username" value="<?php echo htmlspecialchars($user['username']); ?>">
+        </div>
+        <div class="form-group">
+            <label for="email">E-post:</label>
+            <input type="email" name="email" id="email" value="<?php echo htmlspecialchars($user['email']); ?>">
+        </div>
+        <button type="submit" name="update_profile">Uppdatera profil</button>
+    </form>
 
-            <!-- SKAPA INLÄGG -->
-            <form class="create-post-form" method="post" action="">
-                <label for="post_header">Rubrik:</label><br>
-                <input type="text" name="post_header" id="post_header" placeholder="Ange rubrik"><br>
-                <label for="post_content">Nytt inlägg:</label><br>
-                <textarea name="post_content" id="post_content" placeholder="Vad vill du dela idag?"></textarea><br>
-                <button type="submit" name="create_post">Publicera</button>
-            </form>
+    <!-- Skapa inlägg -->
+    <form class="create-post-form" method="post" action="">
+        <div class="form-group">
+            <label for="post_header">Skapa ett inlägg:</label>
+            <input type="text" name="post_header" id="post_header" placeholder="Ange rubrik">
+        </div>
+        <div class="form-group">
             
-            <!-- LISTA INLÄGG FRÅN DATABAS -->
-            <div class="posts">
-                <h3>Senaste inlägg</h3>
-                <?php if (!empty($posts)): ?>
-                    <?php foreach ($posts as $post): ?>
-                        <div class="post">
-                            <h3><?php echo nl2br(htmlspecialchars($post['header'])); ?></h3>
-                            <p><?php echo nl2br(htmlspecialchars($post['textInput'])); ?></p>
-                            <small>Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
-                        </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p>Inga inlägg ännu.</p>
-                <?php endif; ?>
-            </div>
+            <textarea name="post_content" id="post_content" placeholder="Vad vill du dela?"></textarea>
+        </div>
+        <button type="submit" name="create_post">Publicera</button>
+    </form>
+    
+    <!-- Inlägg och notifieringar sida vid sida -->
+    <div class="content-columns">
+        <div class="posts">
+            <h3>Senaste inlägg</h3>
+            <?php if (!empty($posts)): ?>
+                <?php foreach ($posts as $post): ?>
+                    <div class="post">
+                        <h4><?php echo nl2br(htmlspecialchars($post['header'])); ?></h4>
+                        <p><?php echo nl2br(htmlspecialchars($post['textInput'])); ?></p>
+                        <small>Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>Inga inlägg ännu.</p>
+            <?php endif; ?>
         </div>
         <div class="notifications">
-            <h4>Notifieringar</h4>
-            <p>Nya kommentarer på dina blogginlägg</p>            
+            <h3>Nya kommentarer</h3>
         </div>
     </div>
 </main>
