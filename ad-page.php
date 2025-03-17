@@ -9,6 +9,5 @@
 <body>
     <h1 class="h1-virus">YOU HAVE A VIRUS, SCAN THE QR CODE FOR A QUICK REPAIR!</h1>
     <img src="img/Swish-codes.gif" alt="swish code" class="ad-page-swish">
-    <img src="img/virus spam.gif" alt="swish code" class="virus-spam">
 </body>
 </html>
