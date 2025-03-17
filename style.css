@@ -1285,7 +1285,6 @@ form button {
   cursor: pointer;
 }
 
-/* === Inläggssektionen === */
 .posts {
   margin: 2rem auto;
   max-width: 500px;
@@ -1310,7 +1309,6 @@ form button {
   border-bottom: none;
 }
 
-/* === Notifieringar === */
 .notifications {
   margin: 2rem auto;
   max-width: 500px;
@@ -1321,7 +1319,6 @@ form button {
   color: #fff;
 }
 
-/* === Inlägg och notifieringar sida vid sida === */
 .content-columns {
   display: flex;
   justify-content: space-between;
@@ -1350,7 +1347,6 @@ form button {
   }
 }
 
-/* === Header-justeringar === */
 header {
   position: relative;
   display: flex;
