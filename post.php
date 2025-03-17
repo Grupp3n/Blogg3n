@@ -192,36 +192,39 @@ foreach($likes as $like) {
 
 <hr>
 
-<!-- Post Update form -->
-<?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $post['userID']): ?>
-    <button id="toggleEditForm">Edit Post</button>
 
-    <div id="editForm" style="display: none;">
-        <h2 style="color: white;">Edit Post</h2>
-        <?php if (!empty($error_message)): ?>
-            <p style="color: red;"><?php echo $error_message; ?></p>
-        <?php endif; ?>
-        <form action="post.php?id=<?php echo $post_id; ?>" method="post">
-            <label style="color: white;">Header:</label><br>
-            <input type="text" name="header" value="<?php echo htmlspecialchars($post['header']); ?>" required><br>
-    
-            <label style="color: white;">Text:</label><br>
-            <textarea name="textInput" required><?php echo htmlspecialchars($post['textInput']); ?></textarea><br>
-    
-            <button type="submit">Update Post</button>
-        </form>
+<!-- Edit Post -->
+<?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $post['userID']): ?>
+
+<div class="edit-post-container">
+    <div class="post-control">
+        <button id="toggleEditForm" class="edit-form-button">Edit Post</button>
     </div>
 
-    <script>
-        document.getElementById("toggleEditForm").addEventListener("click", function () {
-            var form = document.getElementById("editForm");
-            if (form.style.display === "none") {
-                form.style.display = "block";
-            } else {
-                form.style.display = "none";
-            }
-        })
-    </script>
+    <div id="editForm" class="edit-form" style="display: none;">
+        <h2>Edit Post</h2>
+        <?php if (!empty($error_message)): ?>
+            <p style="color: red;"> <?php echo $error_message; ?></p>
+        <?php endif; ?>
+
+        <form action="post.php?id=<?php echo $post_id; ?>" method="post">
+            <label for="header">Header:</label>
+            <input type="text" id="header" name="header" value="<?php echo htmlspecialchars($post['header']); ?>" required>
+
+            <label for="textInput">Text:</label>
+            <textarea id="textInput" name="textInput" rows="6" required><?php echo htmlspecialchars($post['textInput']); ?></textarea>
+
+            <button type="submit" style="margin-top: 20px;">Update Post</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById('toggleEditForm').addEventListener('click', function () {
+        var editForm = document.getElementById('editForm');
+        editForm.style.display = editForm.style.display === 'none' ? 'block' : 'none';
+    });
+</script>
 <?php endif; ?>
 </main>
 </body>
