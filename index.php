@@ -17,9 +17,11 @@ $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
     $stmt_main->execute();
     $main_post = $stmt_main->fetch(PDO::FETCH_ASSOC);
 
-
-    //hämtar vald 'BILD' genom postID
-    $pictureID = $main_post['imagePath'];
+if($main_post != NULL) {
+    if(!empty($main_post['imagePath'])) {
+        //hämtar vald 'BILD' genom postID
+        $pictureID = $main_post['imagePath'];
+    }
 
     $sql_post = 'SELECT p.id, p.userID, p.textInput, p.header, p.image, u.username
                 FROM Posts p
@@ -28,18 +30,18 @@ $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
     $stmt_post = $pdo->prepare($sql_post);
     $stmt_post->execute(['post_id' => $pictureID]);
     $post2 = $stmt_post->fetch(PDO::FETCH_ASSOC);
-
-
+}  
     // Fetcha från posts de senaste 4 inläggen för Recent Headlines
     $sql_thumbnails = 'SELECT p.id, p.textInput, p.header, p.imagePath, u.username, p.combinedID
-                    FROM Posts p
-                    LEFT JOIN Users u ON p.userID = u.id
-                    WHERE p.combinedID IS NOT NULL
-                    ORDER BY p.timeCreated DESC LIMIT 4';
+                        FROM Posts p
+                        LEFT JOIN Users u ON p.userID = u.id
+                        WHERE p.combinedID IS NOT NULL
+                        ORDER BY p.timeCreated DESC LIMIT 4';
 
     $stmt_thumbnails = $pdo->prepare($sql_thumbnails);
     $stmt_thumbnails->execute();
     $thumbnail_posts = $stmt_thumbnails->fetchAll(PDO::FETCH_ASSOC);
+
 
     // Fetcha alla posts
     $all_thumbnails = 'SELECT p.id, p.textInput, p.header, p.imagePath, u.username, p.combinedID
@@ -51,6 +53,7 @@ $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
     $stmt_allthumbnails = $pdo->prepare($all_thumbnails);
     $stmt_allthumbnails->execute();
     $all_posts = $stmt_allthumbnails->fetchAll(PDO::FETCH_ASSOC);
+
 
     // Fetcha från posts de senaste 4 inläggen för Recent Mostlikes
     $sql_most_liked = 'SELECT p.id, p.userID, p.textInput, p.header, p.imagePath, u.username,
@@ -66,7 +69,8 @@ $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
     $stmt_most_liked = $pdo->prepare($sql_most_liked);
     $stmt_most_liked->execute();
     $most_liked_posts = $stmt_most_liked->fetchAll(PDO::FETCH_ASSOC);
-    
+
+
 ?>
 
 <!DOCTYPE html>
@@ -107,16 +111,16 @@ $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
 </header>
 
 <main class="index-main">
-    <div class="main-content">
-        <?php if ($main_post): ?>
-            <h2>Main Headline</h2>
-            <div class="post-preview">
-            <a href="post.php?id=<?= $main_post['id']; ?>" style="text-decoration: none; color: inherit;">
-        <?php if ($main_post['imagePath']): ?>
-             <img src="data:image/*;base64, <?php echo $post2['image'] ?>" 
-             alt="<?php echo htmlspecialchars($post['header']); ?>" 
-             style="max-width: 100%; height: auto;">
-        <?php endif; ?>
+    <div class="main-content">        
+            <?php if ($main_post): ?>
+                <h2>Main Headline</h2>
+                <div class="post-preview">
+                <a href="post.php?id=<?= $main_post['id']; ?>" style="text-decoration: none; color: inherit;">
+            <?php if ($main_post['imagePath']): ?>
+                <img src="data:image/*;base64, <?php echo $post2['image'] ?>" 
+                alt="<?php echo htmlspecialchars($post['header']); ?>" 
+                style="max-width: 100%; height: auto;">
+            <?php endif; ?>        
         <h3><?= htmlspecialchars($main_post['header']); ?></h3>
         <p><?= htmlspecialchars($main_post['textInput']); ?></p>
     </a>
@@ -133,7 +137,7 @@ $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
 <aside class="index-aside">
     <!-- Recent Headlines -->
     <h2>Recent Headlines</h2>
-    <div class="post-thumbnails">
+    <div class="post-thumbnails">    
         <?php if ($thumbnail_posts): ?>
         <?php foreach ($thumbnail_posts as $post): ?>
         <a href="post.php?id=<?= $post['id']; ?>" style="text-decoration: none; color: inherit;">
@@ -161,12 +165,13 @@ $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
                 </div>
             </div>
         </a>
-            <?php endforeach; ?>
+            <?php endforeach; ?>            
         <?php else: ?>
             <div class="thumbnail">
                 <p>No posts posted</p>
             </div>
         <?php endif; ?>
+        
     </div>
     
     <!-- Most Like Posts -->
