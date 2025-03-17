@@ -1,9 +1,10 @@
 <?php
+session_start();
+    
 if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit;
 }
-    session_start();
       
     require 'db_connect.php';
 
@@ -23,7 +24,7 @@ if (!isset($_SESSION['user_id'])) {
         foreach($follower as $follow) { 
 
             if($follow['followerID']) {
-                $counterFollower += 1;
+                $counterFollowed += 1;
             }
             
         }
@@ -41,7 +42,7 @@ if (!isset($_SESSION['user_id'])) {
         foreach($follower2 as $follow) {
             
             if($follow['followedID']) {
-                $counterFollowed += 1;
+                $counterFollower += 1;
             }
         }
 
@@ -102,10 +103,9 @@ if (!isset($_SESSION['user_id'])) {
             <?php foreach($followAll as $follow): ?>  
                 
                 <!-- DET FÖRSTA ÄR USERID ---------  DET ANDRA ÄR PROFILSIDAN MAN ÄR INNE PÅ -->
-                <?php if($follow['followerID'] == $_SESSION['user_id'] && $follow['followedID'] == 1): ?> <!-- HÄR SKALL ÄVEN EN KONTROLL AV USERS SAMT EN KONTROLL EMOT ANVÄNDARENS PROFIL. SÅ MAN INTE KAN GILLA SIN EGNA SIDA-->
+                <?php if($follow['followerID'] == $_SESSION['user_id'] && $follow['followedID'] == 2): ?> <!-- HÄR SKALL ÄVEN EN KONTROLL AV USERS SAMT EN KONTROLL EMOT ANVÄNDARENS PROFIL. SÅ MAN INTE KAN GILLA SIN EGNA SIDA-->
                     <?php $bool = false; ?>
                     <?php $_SESSION['deleteid'] = $follow['id']; ?>
-                    <?php var_dump($follow['id']); ?>
                 <?php endif ?>
             <?php endforeach ?>           
                     
