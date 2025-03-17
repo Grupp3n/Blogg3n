@@ -117,9 +117,20 @@ foreach($likes as $like) {
         <link rel="stylesheet" href="style.css">
     </head>
 <body>
-    <header>
-        <a href="index.php">index</a>
-    </header>
+<header>
+    <div class="dropdown">
+        <button class="dropbtn">Meny</button>
+        <div class="dropdown-content">            
+                <a href="profile.php">Profile</a>
+                <a href="logout.php">Logga ut</a>            
+        </div>        
+    </div>
+        
+    <div class="logo-con">
+        <a href="index.php"><img src="img/transparent logo.png" alt="Nexlify"></a>
+    </div>
+   
+</header>
 
     <main>
     <h1 style="color: white;"><?php echo htmlspecialchars($post['header']); ?></h1>
