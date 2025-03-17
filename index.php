@@ -87,7 +87,19 @@ if($main_post != NULL) {
         <img src="ad.gif" alt="Sticky Ad" class="ad-image">
     </a>
 </div> -->
-<header>
+<header> 
+    <div class="header-button left-button">
+        <?php if ($INLOGGAD) : ?>
+            <a href="create_post.php" class="btn">Gör ett inlägg</a>
+        <?php else: ?>
+            <div></div>
+        <?php endif; ?>
+    </div>        
+            
+    <div class="logo-con">
+        <a href="index.php"><img src="img/transparent logo.png" alt="Nexlify"></a>
+    </div>
+        
     <div class="dropdown">
         <button class="dropbtn">Meny</button>
         <div class="dropdown-content">
@@ -99,15 +111,6 @@ if($main_post != NULL) {
             <?php endif; ?>
         </div>
     </div>
-
-    <?php if ($INLOGGAD) : ?>
-        <button onclick="window.location.href='create_post.php'">Gör ett inlägg</button>
-    <?php endif; ?>
-        
-    <div class="logo-con">
-        <a href="index.php"><img src="img/transparent logo.png" alt="Nexlify"></a>
-    </div>
-   
 </header>
 
 <main class="index-main">

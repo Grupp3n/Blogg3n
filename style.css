@@ -73,8 +73,6 @@ button {
   justify-content: center;  
 }
 
-
-
 .main_create_post {
   display: flex;
   flex-direction: column;
@@ -133,12 +131,9 @@ button {
 
 .body_follow {
     background-color: black;
-    color: white;
-    
+    color: white;    
 }
 
-/* @media (max-width:) */
-  
 .cube {
   width: 100%;
   flex-direction: column;
