@@ -13,7 +13,7 @@ if (!isset($_SESSION['user_id'])) {
                 ';  
         $stmt = $pdo->prepare($query);
         
-        $stmt->execute(['id' => 3]);  # Skall ändra till USERID
+        $stmt->execute(['id' => $_SESSION['user_id']]);  # Skall ändra till USERID
         $follower = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         $counterFollower = 0;
@@ -34,7 +34,7 @@ if (!isset($_SESSION['user_id'])) {
                 ';  
         $stmt = $pdo->prepare($query);
         
-        $stmt->execute(['id' => 3]);  # Skall ändra till USERID
+        $stmt->execute(['id' => $_SESSION['user_id']]);  # Skall ändra till USERID
         $follower2 = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         # Denna skall räkna hur många användaren följer
@@ -66,7 +66,7 @@ if (!isset($_SESSION['user_id'])) {
                 $stmt2 = $pdo->prepare($query2);               
 
                 $stmt2->execute([
-                    'followerID' => 3, # Här skall man implentera USERID
+                    'followerID' => $_SESSION['user_id'], # Här skall man implentera USERID
                     'followedID' => 2  # Här lägger man till den användaren man är inne på
                 ]);   
                 header("location: follow.php");  # skall ändras så man resetar den sidan man är på (profilen)             
@@ -102,15 +102,15 @@ if (!isset($_SESSION['user_id'])) {
             <?php foreach($followAll as $follow): ?>  
                 
                 <!-- DET FÖRSTA ÄR USERID ---------  DET ANDRA ÄR PROFILSIDAN MAN ÄR INNE PÅ -->
-                <?php if($follow['followerID'] == 3 && $follow['followedID'] == 1): ?> <!-- HÄR SKALL ÄVEN EN KONTROLL AV USERS SAMT EN KONTROLL EMOT ANVÄNDARENS PROFIL. SÅ MAN INTE KAN GILLA SIN EGNA SIDA-->
+                <?php if($follow['followerID'] == $_SESSION['user_id'] && $follow['followedID'] == 1): ?> <!-- HÄR SKALL ÄVEN EN KONTROLL AV USERS SAMT EN KONTROLL EMOT ANVÄNDARENS PROFIL. SÅ MAN INTE KAN GILLA SIN EGNA SIDA-->
                     <?php $bool = false; ?>
                     <?php $_SESSION['deleteid'] = $follow['id']; ?>
                     <?php var_dump($follow['id']); ?>
                 <?php endif ?>
             <?php endforeach ?>           
                     
-                    
-            <?php if($visitProfile != $userID): ?> <!-- KONTROLLERA SÅ ATT INTE PROFILSIDAN MAN ÄR INNE PÅ ÄR ENS EGNA PROFIL -->
+        <!-- HÄR SKALL ÄNDRAS TILL DEN sidans ID man är inne på-->
+            <?php if($visitProfile != $_SESSION['user_id']): ?> <!-- KONTROLLERA SÅ ATT INTE PROFILSIDAN MAN ÄR INNE PÅ ÄR ENS EGNA PROFIL -->
                 <?php if($bool): ?>
                         <button name="follow-button">Follow</button>
                     <?php else: ?>
