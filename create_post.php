@@ -51,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     }
     
     if (isset($_POST['post_submit_button'])) {   
+        $_SESSION['check'];
 
         if($_SESSION['check']) {
             $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated, combinedID, imagePath) 
@@ -62,6 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         
         $userID = $_SESSION['user_id'];        
         $number = 1;
+
 
         $stmt->bindParam(':textInput', $blogText);
         $stmt->bindParam(':header', $blogHeader);

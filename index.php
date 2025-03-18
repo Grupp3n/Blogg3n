@@ -18,10 +18,11 @@ $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
     $main_post = $stmt_main->fetch(PDO::FETCH_ASSOC);
 
 if($main_post != NULL) {
+
     if(!empty($main_post['imagePath'])) {
         //hämtar vald 'BILD' genom postID
         $pictureID = $main_post['imagePath'];
-    }
+    } 
 
     $sql_post = 'SELECT p.id, p.userID, p.textInput, p.header, p.image, u.username
                 FROM Posts p
