@@ -465,6 +465,15 @@ button {
   opacity: 0.8;
 }
 
+.post-main {
+  background: linear-gradient(135deg, #1a2a44 0%, #2a3a54 100%);
+  padding: 20px;
+  min-height: calc(100vh - 100px);
+  background-color: #1a2a44;
+  width: 100%;
+  max-width: 100%;
+}
+
 .index-main {
   background: linear-gradient(135deg, #1a2a44 0%, #2a3a54 100%);
   display: flex;
@@ -475,7 +484,7 @@ button {
   padding: 20px;
   min-height: calc(100vh - 100px);
   background-color: #1a2a44;
-  width: 95%;
+  width: 100%;
   max-width: 100%;
   margin: 0 auto;
   overflow-x: hidden;
