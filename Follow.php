@@ -57,7 +57,7 @@ if (!isset($_SESSION['user_id'])) {
         $bool = true;  
         $deleteID = 0;
         
-        $visitProfile = 2;
+        $visitProfile = $_SESSION['GuestID'];
         $userID = 3;
 
         if($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -103,7 +103,7 @@ if (!isset($_SESSION['user_id'])) {
             <?php foreach($followAll as $follow): ?>  
                 
                 <!-- DET FÖRSTA ÄR USERID ---------  DET ANDRA ÄR PROFILSIDAN MAN ÄR INNE PÅ -->
-                <?php if($follow['followerID'] == $_SESSION['user_id'] && $follow['followedID'] == 2): ?> <!-- HÄR SKALL ÄVEN EN KONTROLL AV USERS SAMT EN KONTROLL EMOT ANVÄNDARENS PROFIL. SÅ MAN INTE KAN GILLA SIN EGNA SIDA-->
+                <?php if($follow['followerID'] == $_SESSION['user_id'] && $follow['followedID'] == $_SESSION['GuestID']): ?> <!-- HÄR SKALL ÄVEN EN KONTROLL AV USERS SAMT EN KONTROLL EMOT ANVÄNDARENS PROFIL. SÅ MAN INTE KAN GILLA SIN EGNA SIDA-->
                     <?php $bool = false; ?>
                     <?php $_SESSION['deleteid'] = $follow['id']; ?>
                 <?php endif ?>

@@ -129,6 +129,16 @@ button {
   align-items: center;
 }
 
+.a_normal {
+  text-decoration: underline;
+  color: whitesmoke;
+  
+}
+
+.guest_profile__p {
+  color: white;
+}
+
 .body_follow {
     background-color: black;
     color: white;    
@@ -897,8 +907,16 @@ button {
 }
 
 #editForm {
-  position: fixed; 
+  position: fixed;   
   top: 80px; 
+  width: 400px; 
+  z-index: 100; 
+}
+
+#editForm2 {
+  position: fixed; 
+  right: 200px;
+  top: 200px; 
   width: 400px; 
   z-index: 100; 
 }

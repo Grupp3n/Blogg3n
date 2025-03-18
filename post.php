@@ -58,7 +58,7 @@ $stmt_post->execute(['post_id' => $pictureID]);
 $post2 = $stmt_post->fetch(PDO::FETCH_ASSOC);
 
 //Hämtar kommentarerna för valt inlägg
-$sql_comments = 'SELECT c.textInput, c.timeCreated, u.username 
+$sql_comments = 'SELECT c.textInput, c.timeCreated, u.username, c.userID 
                  FROM Comments c
                  LEFT JOIN Users u ON c.userID = u.id
                  WHERE c.postID = :post_id
@@ -133,8 +133,14 @@ foreach($likes as $like) {
 </header>
 
     <main>
-    <h1 style="color: white;"><?php echo htmlspecialchars($post['header']); ?></h1>
-<p style="color: white;">Posted by: <?php echo htmlspecialchars($post['username']); ?></p>
+        
+        <h1 style="color: white;"><?php echo htmlspecialchars($post['header']); ?></h1>
+        <p style="color: white;">Posted by:
+            <a href="guest_profile.php" class="a_normal">                   
+                <?php $_SESSION['GuestID'] = $post['userID']?> 
+                <?php echo htmlspecialchars($post['username']); ?>
+            </a>
+        </p>
 <?php if ($post['imagePath']): ?>    
     <img class="post-image" src="data:image/*;base64,<?php echo $post2['image'] ?>" alt="<?php echo htmlspecialchars($post['header']); ?>" 
     style="max-width: 600px; width: 100%; height: auto; display: block; margin: auto;">
@@ -168,7 +174,12 @@ foreach($likes as $like) {
 <?php if ($comments): ?>
     <?php foreach ($comments as $comment): ?>
         <div class="comment">
-            <p style="color: white;"><strong><?php echo htmlspecialchars($comment['username']); ?></strong>:</p>
+            <p style="color: white;"><strong>
+                <a href="guest_profile.php" class="a_normal">
+                    <?php $_SESSION['GuestID'] = $comment['userID']?> 
+                    <?php echo htmlspecialchars($comment['username']);?>:
+                </a>
+            </strong></p>
             <p style="color: white;"><?php echo nl2br(htmlspecialchars($comment['textInput'])); ?></p>
             <p style="color: white;"><small><?php echo $comment['timeCreated']; ?></small></p>
         </div>
