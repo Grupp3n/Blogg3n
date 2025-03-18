@@ -121,8 +121,9 @@ foreach($likes as $like) {
     <div class="dropdown">
         <button class="dropbtn">Meny</button>
         <div class="dropdown-content">            
-                <a href="profile.php">Profile</a>
-                <a href="logout.php">Logga ut</a>            
+            <a href="profile.php">Profile</a>
+            <a href="follow.php">Followers</a>
+            <a href="logout.php">Logga ut</a>              
         </div>        
     </div>
         
