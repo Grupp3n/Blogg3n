@@ -30,15 +30,15 @@ if (!isset($_SESSION['user_id'])) {
             
         }
 
-        $query = '  SELECT Follower.*, U.*
+        $query2 = '  SELECT Follower.*, U.*
                     FROM Follower  
                     LEFT JOIN Users as U on followerID = U.id                     
                     WHERE followerID = :id
                 ';  
-        $stmt = $pdo->prepare($query);
+        $stmt2 = $pdo->prepare($query2);
         
-        $stmt->execute(['id' => $_SESSION['user_id']]);  # Skall ändra till USERID
-        $follower2 = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt2->execute(['id' => $_SESSION['user_id']]);  # Skall ändra till USERID
+        $follower2 = $stmt2->fetchAll(PDO::FETCH_ASSOC);
 
         # Denna skall räkna hur många användaren följer
         foreach($follower2 as $follow) {
@@ -129,44 +129,43 @@ if (!isset($_SESSION['user_id'])) {
                 ';  
                 $stmt = $pdo->prepare($query);
 
-                $stmt->execute(['id' => $follow['followedID']]);  # Skall ändra till USERID
-                $follower = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $stmt->execute(['id' => $follow['followedID']]); 
+                $follower3 = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 
-                foreach($follower as $follow) { ?>
+                foreach($follower3 as $follow) { ?>
                 <a href="guest_profile.php?guest_id=<?php echo $follow['id']; ?>" class="a_normal">
-                <?php echo htmlspecialchars($follow['firstname'] . " " . $follow['lastname']);
-                    echo "<br>"; ?>
+                    <?php echo htmlspecialchars($follow['firstname'] . " " . $follow['lastname']);?>
+                    <br>
                 </a>
                <?php }
             } ?>
         </div>
-        
+       
         <div>
             <p>Follower: <?php echo $counterFollower ?></p>
+            
             <?php if($counterFollower > 0): ?>
                 <?php foreach($follower as $follow) { 
 
                     $query = '  SELECT id, firstname, lastname
                                 FROM Users                                      
-                                WHERE id = :id
-                                ';  
+                                WHERE id = :id';  
                     $stmt = $pdo->prepare($query);
+                    $stmt->execute(['id' => $follow['followerID']]);  
+                    $followerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                    $stmt->execute(['id' => $follow['followerID']]);  # Skall ändra till USERID
-                    $follower = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                    foreach($follower as $follow) { ?>
-                    <a href="guest_profile.php?guest_id=<?php echo $follow['id']; ?>" class="a_normal">
-                    <?php echo htmlspecialchars($follow['firstname'] . " " . $follow['lastname']);
-                        echo "<br>"; ?>
-                    </a>
-                    <?php }
+                    foreach ($followerData as $fData) { ?>
+                        <a href="guest_profile.php?guest_id=<?php echo htmlspecialchars($fData['id']); ?>" class="a_normal">
+                            <?php echo htmlspecialchars($fData['firstname'] . " " . $fData['lastname']); ?>
+                            <br>
+                        </a>
+                <?php }
                 } ?>
            <?php endif ?>
         </div>
 
 
     </div>
-    </form>
+    
 </body>
 </html>
