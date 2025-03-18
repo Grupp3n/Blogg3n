@@ -1,6 +1,8 @@
 <?php
 session_start();
     
+$INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit;
@@ -116,6 +118,8 @@ if (!isset($_SESSION['user_id'])) {
             </div>
         </div>
     </header> 
+
+<main class="index-main">
     <form method="POST">        
         <div class="body_follow__div">
 
@@ -166,6 +170,6 @@ if (!isset($_SESSION['user_id'])) {
 
 
     </div>
-    
+</main>
 </body>
 </html>

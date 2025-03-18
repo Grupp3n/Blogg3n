@@ -217,6 +217,10 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <?php endif ?>
         <button type="submit" name="create_post">Publicera</button>
     </form>
+
+    <div class="form-group2">
+        <button name="follower_button"><a href="follow.php" name="follower_button_a">Followers</a></button>
+    </div>
     
     <!-- Inlägg och notifieringar sida vid sida -->
     <div class="content-columns">

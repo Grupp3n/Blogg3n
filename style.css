@@ -163,6 +163,24 @@ button {
   color: white;
 }
 
+.follower_button,
+.follower_button_a {
+  text-decoration: none;
+  background-color: #1b73e8;
+}
+
+.form-group2 > button,
+.form-group2 > button>a {
+  display: flex;
+  justify-self: center;
+  align-self: center;
+  background-color: #1b73e8;
+  text-decoration: none;
+  color: white;
+  font-size: large;
+  border-radius: 7%;
+}
+
 .body_follow {
     background-color: black;
     color: white;     
