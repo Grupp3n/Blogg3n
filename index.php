@@ -118,6 +118,7 @@ if($main_post != NULL) {
                 <a href="login.php">Log in</a>
             <?php else : ?>
                 <a href="profile.php">Profile</a>
+                <a href="follow.php">Followers</a>
                 <a href="logout.php">Logga ut</a>
             <?php endif; ?>
         </div>
