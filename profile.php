@@ -157,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 }
             } else {
                 echo "<p style='color: red;'>Ingen bild valdes att ladda upp!</p>";
-                header("Location: create_post.php");
+                header("Location: profile.php");
             }
         
         } catch (PDOException $e) {
