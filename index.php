@@ -70,7 +70,8 @@ if($main_post != NULL) {
     $stmt_most_liked->execute();
     $most_liked_posts = $stmt_most_liked->fetchAll(PDO::FETCH_ASSOC);
 
-
+    #En counter för Most Liked posts
+    $counter = 0;
 ?>
 
 <!DOCTYPE html>
@@ -183,9 +184,9 @@ if($main_post != NULL) {
             <?php if ($most_liked_posts): ?>
                 <?php foreach($most_liked_posts as $post): ?>                    
                     <?php if($post['like_count'] >= 1): ?>                        
-                    <a href="post.php?id=<?= $post['id']; ?>" style="text-decoration: none; color: inherit;">
+                        <a href="post.php?id=<?= $post['id']; ?>" style="text-decoration: none; color: inherit;">
                         
-                    <div class="thumbnail">
+                        <div class="thumbnail">
                         <?php 
                                 //hämtar vald 'BILD' genom postID
                             $pictureID = $main_post['imagePath'];
@@ -199,10 +200,10 @@ if($main_post != NULL) {
                             $post2 = $stmt_post->fetch(PDO::FETCH_ASSOC); 
                         ?>
                             <?php if ($post['imagePath']): ?>                        
-                        <img src="data:image/*;base64, <?php echo $post2['image'] ?>" 
-                        alt="<?php echo htmlspecialchars($post['header']); ?>" 
-                        style="max-width: 100%; height: auto;">
-                    <?php endif; ?>
+                                <img src="data:image/*;base64, <?php echo $post2['image'] ?>" 
+                                alt="<?php echo htmlspecialchars($post['header']); ?>" 
+                                style="max-width: 100%; height: auto;">
+                            <?php endif; ?>
 
                             <div class="text-container">
                             <h4><?= htmlspecialchars($post['header']); ?> 
@@ -211,13 +212,15 @@ if($main_post != NULL) {
                         </div>
 
                         </div>
-                    </a>
+                    </a> 
+                    <?php elseif($counter == 0): ?>
+                        <div class="thumbnail">
+                            <p>No posts have been liked yet</p>
+                            <?php $counter++ ?>
+                        </div>                   
                     <?php endif ?>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <div class="thumbnail">
-                    <p>No posts have been liked yet</p>
-                </div>
+                    <?php endforeach; ?>
+            
             <?php endif; ?>
         </div>
     </aside>

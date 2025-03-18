@@ -184,7 +184,9 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </form>
 
     <!-- Skicka DM -->
-    <?php if($_SESSION['GuestID'] != $_SESSION['user_id']): ?>
+    <?php if($_SESSION['GuestID'] == $_SESSION['user_id']): ?>
+        <?php header("Location: profile.php") ?>
+    <?php else: ?>
         <form class="create-post-form" method="POST">
             <div class="form-group">
                 

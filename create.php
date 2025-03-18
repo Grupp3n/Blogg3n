@@ -39,6 +39,7 @@
 
             $query = "CREATE TABLE Users (
                         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                        image LONGTEXT,
                         firstname NVARCHAR(50) NOT NULL,
                         lastname NVARCHAR(50) NOT NULL,
                         email NVARCHAR(50) NOT NULL UNIQUE,
@@ -228,14 +229,14 @@
             $query3 = "DROP TABLE Posts";  
             $query4 = "DROP TABLE Chatt";  
             $query5 = "DROP TABLE Follower"; 
-            // $query6 = "DROP TABLE Users";               
+            $query6 = "DROP TABLE Users";               
 
             $conn->exec($query);
             $conn->exec($query2);
             $conn->exec($query3);
             $conn->exec($query4);
             $conn->exec($query5);
-            // $conn->exec($query6);
+            $conn->exec($query6);
            
             ?>
             <p style='color:white;'>
