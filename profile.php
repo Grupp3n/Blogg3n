@@ -130,24 +130,24 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         }
     }
 
-    if(isset($_POST['change_picture'])) {
+    if(isset($_POST['profilePicture'])) {
 
-        if(!isset($_FILES['image'])) {
-            header("location: profile.php");
-            exit;
-        } 
+        // if(!isset($_FILES['image3'])) {
+        //     header("location: profile.php");
+        //     exit;
+        // } 
         try {
             $userID = $_SESSION['user_id'];
             $code = $_POST['blogText'];
                                      
-            if(isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-                $imageData = file_get_contents($_FILES['image']['tmp_name']);
+            if(isset($_FILES['image3']) && $_FILES['image3']['error'] == 0) {
+                $imageData = file_get_contents($_FILES['image3']['tmp_name']);
                 $base64Image = base64_encode($imageData);
                 
-                $query = "INSERT INTO Users (id, image) VALUES (:image, :id)";
+                $query = "UPDATE Users SET image = :image WHERE id = :id";
                 $stmt = $pdo->prepare($query);
                 $stmt->bindParam(":image", $base64Image, PDO::PARAM_STR);            
-                $stmt->bindValue(":userID", $userID, PDO::PARAM_INT);
+                $stmt->bindValue(":id", $userID, PDO::PARAM_INT);
 
                 if($stmt->execute()) {
                     echo "<p style='color: white;'>Bild uppladdad!</p>";
@@ -157,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 }
             } else {
                 echo "<p style='color: red;'>Ingen bild valdes att ladda upp!</p>";
-                header("Location: create_post.php");
+                // header("Location: profile.php");
             }
         
         } catch (PDOException $e) {
@@ -167,7 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 }
     
 // Hämta aktuell användardata från databasen
-$stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
+$stmt = $pdo->prepare("SELECT * FROM Users WHERE id = :id");
 $stmt->execute([':id' => $user_id]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -218,7 +218,12 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <!-- Profilsektionen -->
     <div class="profile-info">
         <div class="profile-info-box">
-            <img src="img/transparent logo.png" alt="Profilbild">
+            <?php if($user['image'] == null): ?>
+                <img src="img/transparent logo.png" alt="Profilbild">
+            <?php else: ?>
+                <img src="data:image/*;base64, <?php echo $user['image'] ?>"
+                style="max-width: 100%; height: auto;">
+            <?php endif ?>
         </div>
             <form  method="POST">                
                 <button class="DM_funktion" id="toggleEditForm" name="picture_change">Ändra bild</button>
@@ -229,13 +234,14 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <p style="color: red;"> <?php echo $error_message; ?></p>
                     <?php endif; ?>
 
-                    <form action="guest_profile.php?id=<?php echo $user_id; ?>" method="post">                    
+                    <form method="post">                    
 
                     <?php if(!isset($_POST['upload'])):?>
-                        <input type="file" name="image2" id="image" accept="image/*" style="width: 13rem;">
-                        <button type="submit" name="upload">Ladda upp!</button> 
+                        <input type="file" name="image3" id="image" accept="image/*" style="width: 13rem;">
+                        <button type="submit" name="profilePicture">Ladda upp!</button> 
                     <?php else: ?>
                         <?php require_once 'visaBild.php'; ?>
+                        <button type="submit" name="ok">OK</button> 
                     <?php endif ?>                        
                     </form>
                 </div>
