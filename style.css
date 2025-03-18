@@ -149,7 +149,16 @@ button {
 
 .body_follow {
     background-color: black;
-    color: white;    
+    color: white;     
+}
+
+.body_follow__div {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: row;
+  margin-top: 4rem;
+  font-size: 2rem;
 }
 
 .cube {

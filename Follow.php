@@ -99,25 +99,26 @@ if (!isset($_SESSION['user_id'])) {
     <title>Document</title>
 </head>
 <body class="body_follow">
-<header>    
-            
-    <div class="logo-con">
-        <a href="index.php"><img src="img/transparent logo.png" alt="Nexlify"></a>
-    </div>
-        
-    <div class="dropdown">
-        <button class="dropbtn">Meny</button>
-        <div class="dropdown-content">
-            <?php if (!$INLOGGAD) : ?>
-                <a href="login.php">Log in</a>
-            <?php else : ?>
-                <a href="profile.php">Profile</a>
-                <a href="logout.php">Logga ut</a>
-            <?php endif; ?>
+    <header>    
+                
+        <div class="logo-con">
+            <a href="index.php"><img src="img/transparent logo.png" alt="Nexlify"></a>
         </div>
-    </div>
-</header> 
+            
+        <div class="dropdown">
+            <button class="dropbtn">Meny</button>
+            <div class="dropdown-content">
+                <?php if (!$INLOGGAD) : ?>
+                    <a href="login.php">Log in</a>
+                <?php else : ?>
+                    <a href="profile.php">Profile</a>
+                    <a href="logout.php">Logga ut</a>
+                <?php endif; ?>
+            </div>
+        </div>
+    </header> 
     <form method="POST">        
+        <div class="body_follow__div">
 
             
             <?php foreach($followAll as $follow): ?>  
@@ -139,24 +140,23 @@ if (!isset($_SESSION['user_id'])) {
                 <?php endif ?>                
             <?php endif ?>
             
-            
+        <div>
             <p>Following: <?php echo $counterFollowed ?></p>   
                  
            <?php foreach($follower as $follow) { 
                 echo $follow['firstname'] . " " . $follow['lastname'];
             } ?>
-
-            <br>
-            <br>
-            <br>
-            
+        </div>
+        
+        <div>
             <p>Follower: <?php echo $counterFollower ?></p>
             <?php foreach($follower2 as $follow) { 
                 echo $follow['firstname'] . " " . $follow['lastname'];
             } ?>
+        </div>
 
 
-
+    </div>
     </form>
 </body>
 </html>
