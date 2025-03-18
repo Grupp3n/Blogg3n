@@ -8,10 +8,12 @@ $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
 
 
     // Fetcha från posts för main content (Stora bilden)
-    $sql_main = 'SELECT p.id, p.userID, p.textInput, p.header, p.imagePath, u.username
+    $sql_main = 'SELECT p.id, p.userID, p.textInput, p.header, p.imagePath, u.username, p.combinedID
                 FROM Posts p
-                LEFT JOIN Users u ON p.userID = u.id
-                ORDER BY p.timeCreated DESC LIMIT 1';
+                LEFT JOIN Users u ON p.userID = u.id  
+                WHERE p.combinedID IS NOT NULL              
+                ORDER BY p.timeCreated DESC LIMIT 1
+                ';
 
     $stmt_main = $pdo->prepare($sql_main);
     $stmt_main->execute();
