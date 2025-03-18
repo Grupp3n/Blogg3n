@@ -1303,6 +1303,36 @@ form button {
 
 }
 
+.search-form{
+display: flex;
+align-items: center;
+margin-left: -400px;
+gap: 0px;
+
+}
+.search-form input{
+  width: 150px;
+  padding: 5px;
+  font-size: 14px;
+  border: 1px;
+  border-radius: 5px;
+}
+
+.search-form button {
+  padding: 5px 8px;
+  background-color: #007BFF;
+  color: white;
+  width: 50px;
+  font-size: 10px;
+  border: none;
+  cursor: pointer;
+  margin-left: 5px;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+
+
+
 /* .post-image{
 max-width: 200px;
 width: 100%;

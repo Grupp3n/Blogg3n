@@ -96,7 +96,12 @@ if($main_post != NULL) {
         <?php else: ?>
             <div></div>
         <?php endif; ?>
-    </div>        
+    </div>   
+    
+    <form action="search.php" method="GET" class="search-form">
+    <input type="text" name="sökning" placeholder="Search for posts..." required>
+    <button type="submit">Search</button>
+</form>
             
     <div class="logo-con">
         <a href="index.php"><img src="img/transparent logo.png" alt="Nexlify"></a>
@@ -289,6 +294,7 @@ if($main_post != NULL) {
     <img src="./img/Swish-codes.gif" style="width: 150px; margin-left: 1rem;">
 </div>
 
+
 <div id="adPopup" class="popup">
     <div class="popup-content">
         <a href="ad-page.php" class="ad-link">
@@ -298,5 +304,6 @@ if($main_post != NULL) {
         <a href="#" class="popup-close-link">Close</a>
     </div>
 </div>
+
 </body>
 </html>
