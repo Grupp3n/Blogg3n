@@ -33,38 +33,15 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         }
     }
 
-    if (isset($_POST['create_post'])){
-
-        $post_header  = trim($_POST['post_header']);
-        $post_content = trim($_POST['post_content']);
-        
-        if (!empty($post_header) && !empty($post_content)) {
-            $stmt = $pdo->prepare("INSERT INTO posts (userID, header, textInput, timeCreated) VALUES (:userID, :header, :textInput, NOW())");
-            if ($stmt->execute([
-                ':userID'    => $user_id,
-                ':header'    => $post_header,
-                ':textInput' => $post_content
-                ])) {
-                    $message = "Inlägg publicerat!";
-                } else {
-                    $message = "Fel vid publicering av inlägg.";
-                }
-            } else {
-                $message = "Både rubrik och innehåll måste fyllas i.";
-            }
-        }
-
-
     $blogHeader = htmlspecialchars($_POST['post_header']);
     $blogText = htmlspecialchars($_POST['post_content']);
     $time = date_create();
     $getTime = date_format($time, "Y-m-d H:i:s");
 
-
     if(isset($_POST['upload'])) {
 
-        if(!isset($_FILES['image'])) {
-            // header("location: create_post.php");
+        if(!isset($_FILES['image2'])) {
+            header("location: profile.php");
             exit;
         } 
         try {
@@ -75,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 $imageData = file_get_contents($_FILES['image2']['tmp_name']);
                 $base64Image = base64_encode($imageData);
                 
-                $query = "INSERT INTO Posts (imagePath, image, userID) VALUES (imagePath = NULL, :image, :userID)";
+                $query = "INSERT INTO Posts (imagePath, image, userID) VALUES (NULL, :image, :userID)";
                 $stmt = $pdo->prepare($query);
                 $stmt->bindParam(":image", $base64Image, PDO::PARAM_STR);            
                 $stmt->bindValue(":userID", $userID, PDO::PARAM_INT);
@@ -88,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 }
             } else {
                 echo "<p style='color: red;'>Ingen bild valdes att ladda upp!</p>";
-                // header("Location: create_post.php");
+                header("Location: profile.php");
             }
         
         } catch (PDOException $e) {
@@ -96,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         }          
     }
     
-    if (isset($_POST['post_submit_button'])) {   
+    if (isset($_POST['create_post'])) {   
         $_SESSION['check'];
 
         if($_SESSION['check']) {
@@ -142,10 +119,22 @@ if (!$user) {
 }
 
 // Hämta inlägg från DB för den inloggade användaren
-$stmt = $pdo->prepare("SELECT header, textInput, timeCreated FROM posts WHERE userID = :userID ORDER BY timeCreated DESC");
+
+$stmt = $pdo->prepare("SELECT id, header, textInput, timeCreated FROM posts WHERE userID = :userID ORDER BY timeCreated DESC");
 $stmt->execute([':userID' => $user_id]);
 $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$stmt = $pdo->prepare("
+    SELECT c.textInput, c.timeCreated, p.header, p.id AS post_id
+    FROM comments c 
+    JOIN posts p ON c.postID = p.id 
+    WHERE p.userID = :userID AND c.userID != :userID
+    ORDER BY c.timeCreated DESC
+");
+$stmt->execute([':userID' => $user_id]);
+$comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+var_dump($comments);
 ?>
+
 <!DOCTYPE html>
 <html lang="sv">
 <head>
@@ -200,10 +189,10 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </form>
 
     <!-- Skapa inlägg -->
-    <form class="create-post-form" method="post" action="">
+    <<form method="POST" enctype="multipart/form-data" class="form_create_post">
         <div class="form-group">
             <label for="post_header">Skapa ett inlägg:</label>
-            <input type="text" name="post_header" id="post_header" placeholder="Ange rubrik">
+            <input type="text" name="post_header" id="post_header" placeholder="Ange rubrik" required>
         </div>
         <div class="form-group">
             
@@ -220,24 +209,48 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     <!-- Inlägg och notifieringar sida vid sida -->
     <div class="content-columns">
-        <div class="posts">
-            <h3>Senaste inlägg</h3>
-            <?php if (!empty($posts)): ?>
-                <?php foreach ($posts as $post): ?>
-                    <div class="post">
-                        <h4><?php echo nl2br(htmlspecialchars($post['header'])); ?></h4>
-                        <p><?php echo nl2br(htmlspecialchars($post['textInput'])); ?></p>
-                        <small>Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p>Inga inlägg ännu.</p>
-            <?php endif; ?>
-        </div>
+    <div class="posts">
+    <h3>Senaste inlägg</h3>
+    <?php if (!empty($posts)): ?>
+        <?php foreach ($posts as $post): ?>
+            <div class="post">
+                <h4>
+                    <a href="post.php?id=<?php echo htmlspecialchars($post['id']); ?>">
+                        <?php echo nl2br(htmlspecialchars($post['header'])); ?>
+                    </a>
+                </h4>
+                <p>
+                    <a href="post.php?id=<?php echo htmlspecialchars($post['id']); ?>">
+                        <?php echo nl2br(htmlspecialchars($post['textInput'])); ?>
+                    </a>
+                </p>
+                <small>Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p>Inga inlägg ännu.</p>
+    <?php endif; ?>
+</div>
         <div class="notifications">
-            <h3>Nya kommentarer</h3>
-        </div>
-    </div>
+    <h3>Nya kommentarer</h3>
+    <?php if (!empty($comments)): ?>
+        <?php foreach ($comments as $comment): ?>
+            <div class="comment">
+                <p>
+                    <a href="post.php?id=<?php echo htmlspecialchars($comment['post_id']); ?>">
+                        <?php echo nl2br(htmlspecialchars($comment['textInput'])); ?>
+                    </a>
+                </p>
+                <small>
+                    Kommentar tid: <?php echo htmlspecialchars($comment['timeCreated']); ?> 
+                    | På inlägg: <?php echo htmlspecialchars($comment['header']); ?>
+                </small>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p>Inga nya kommentarer.</p>
+    <?php endif; ?>
+</div>
 </main>
 </body>
 </html>

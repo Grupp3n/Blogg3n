@@ -65,9 +65,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body class="Amer">
     <div class="body-container">
        
-        <div class="body-logo">
-            <img src="./img\transparent logo.png" alt="Logotyp">
-        </div>
+    <div class="body-logo">
+    <a href="login.php">
+        <img src="./img/transparent%20logo.png" alt="Logotyp">
+    </a>
+</div>
 
        
         <div class="body-form-container">
