@@ -76,8 +76,17 @@ button {
 .main_create_post {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   margin-top: 2rem;
   padding: 1rem;
+  background: linear-gradient(135deg, #1a2a44 0%, #2a3a54 100%);
+  position: relative;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  padding: 25px;
+  width: 100%;
 }
 
 .main_create_post>img {
@@ -85,6 +94,10 @@ button {
   width: 500px;
   height: 125px;
   margin-top: 3rem;    
+}
+
+.main_create_post_text {
+  align-self: center;
 }
 
 .form_create_post {
@@ -105,6 +118,9 @@ button {
   display: flex;
   font-size: 1.5rem;
   width: 80rem;
+  max-height: 450px;
+  max-width: 750px;
+  margin-bottom: 20px;
   background: #333;
   color: white;
   resize: none;
@@ -200,17 +216,30 @@ button {
 }
 
 .div_create_post2 { 
+  background: radial-gradient(circle, rgba(26, 42, 68, 0.9) 0%, rgba(42, 58, 84, 0.7) 100%);
   display: flex;
   width: 100%;
   flex-direction: row;
   justify-content: center;  
   align-items: center;
+  margin-bottom: 20px;
+}
+
+.div_create_post2:hover {
+  background: radial-gradient(circle, rgba(26, 42, 68, 0.9) 0%, rgba(42, 58, 84, 0.7) 100%);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.4), 0 0 15px rgba(229, 231, 235, 0.3); 
 }
 
 .div_create_post_left {
   flex: 1;
   display: flex;
+  flex-direction: column;
   justify-content: flex-start;
+  
+}
+
+.div_create_post_left button {
+  width: 150px;
 }
 
 .div_create_post_middle {
@@ -450,6 +479,7 @@ button {
 /* HÄR SKRIVER PHILLIP SIN KOD */
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
 
 .sticky-ad {
   position: fixed;
