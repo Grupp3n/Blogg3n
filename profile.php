@@ -55,10 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         }
 
 
-    $blogHeader = htmlspecialchars($_POST['post_header']);
-    $blogText = htmlspecialchars($_POST['post_content']);
-    $time = date_create();
-    $getTime = date_format($time, "Y-m-d H:i:s");
+   
 
 
     if(isset($_POST['upload'])) {
@@ -96,7 +93,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         }          
     }
     
-    if (isset($_POST['post_submit_button'])) {   
+    if (isset($_POST['post_submit_button'])) { 
+        $blogHeader = htmlspecialchars($_POST['post_header']);
+        $blogText = htmlspecialchars($_POST['post_content']);
+        $time = date_create();
+        $getTime = date_format($time, "Y-m-d H:i:s");  
         $_SESSION['check'];
 
         if($_SESSION['check']) {
@@ -138,7 +139,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         // } 
         try {
             $userID = $_SESSION['user_id'];
-            $code = $_POST['blogText'];
                                      
             if(isset($_FILES['image3']) && $_FILES['image3']['error'] == 0) {
                 $imageData = file_get_contents($_FILES['image3']['tmp_name']);
@@ -221,11 +221,10 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php if($user['image'] == null): ?>
                 <img src="img/transparent logo.png" alt="Profilbild">
             <?php else: ?>
-                <img src="data:image/*;base64, <?php echo $user['image'] ?>"
-                style="max-width: 100%; height: auto;">
+                <img src="data:image/*;base64, <?php echo $user['image'] ?>">
             <?php endif ?>
         </div>
-            <form  method="POST">                
+            <form  method="POST" enctype="multipart/form-data">                
                 <button class="DM_funktion" id="toggleEditForm" name="picture_change">Ändra bild</button>
 
                 <div id="editForm2" class="edit-form" style="display: <?php echo $toggle ?>;">
@@ -236,7 +235,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                     <form method="post">                    
 
-                    <?php if(!isset($_POST['upload'])):?>
+                    <?php if(!isset($_POST['profilePicture'])):?>
                         <input type="file" name="image3" id="image" accept="image/*" style="width: 13rem;">
                         <button type="submit" name="profilePicture">Ladda upp!</button> 
                     <?php else: ?>
