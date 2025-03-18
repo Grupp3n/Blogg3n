@@ -25,7 +25,7 @@ if (!isset($_SESSION['user_id'])) {
         foreach($follower as $follow) { 
 
             if($follow['followerID']) {
-                $counterFollowed += 1;
+                $counterFollower += 1;
             }
             
         }
@@ -44,7 +44,7 @@ if (!isset($_SESSION['user_id'])) {
         foreach($follower2 as $follow) {
             
             if($follow['followedID']) {
-                $counterFollower += 1;
+                $counterFollowed += 1;
             }
         }
 
@@ -59,7 +59,6 @@ if (!isset($_SESSION['user_id'])) {
         $bool = true;  
         $deleteID = 0;
         
-        $visitProfile = $_SESSION['GuestID'];
         $userID = 3;
 
         if($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -120,39 +119,50 @@ if (!isset($_SESSION['user_id'])) {
     <form method="POST">        
         <div class="body_follow__div">
 
-            
-            <?php foreach($followAll as $follow): ?>  
-                
-                <!-- DET FÖRSTA ÄR USERID ---------  DET ANDRA ÄR PROFILSIDAN MAN ÄR INNE PÅ -->
-                <?php if($follow['followerID'] == $_SESSION['user_id'] && $follow['followedID'] == $_SESSION['GuestID']): ?> <!-- HÄR SKALL ÄVEN EN KONTROLL AV USERS SAMT EN KONTROLL EMOT ANVÄNDARENS PROFIL. SÅ MAN INTE KAN GILLA SIN EGNA SIDA-->
-                    <?php $bool = false; ?>
-                    <?php $_SESSION['deleteid'] = $follow['id']; ?>
-                <?php endif ?>
-            <?php endforeach ?>           
-                    
-        <!-- HÄR SKALL ÄNDRAS TILL DEN sidans ID man är inne på-->
-            <?php if($visitProfile != $_SESSION['user_id']): ?> <!-- KONTROLLERA SÅ ATT INTE PROFILSIDAN MAN ÄR INNE PÅ ÄR ENS EGNA PROFIL -->
-                
-                <?php if($bool): ?>
-                        <button name="follow-button">Follow</button>
-                    <?php else: ?>
-                        <button name="unfollow-button">Unfollow</button>
-                <?php endif ?>                
-            <?php endif ?>
-            
         <div>
-            <p>Following: <?php echo $counterFollowed ?></p>   
-                 
-           <?php foreach($follower as $follow) { 
-                echo $follow['firstname'] . " " . $follow['lastname'];
+            <p>Following: <?php echo $counterFollowed ?></p>                    
+           <?php foreach($follower2 as $follow) { 
+
+                $query = '  SELECT id, firstname, lastname
+                FROM Users                                      
+                WHERE id = :id
+                ';  
+                $stmt = $pdo->prepare($query);
+
+                $stmt->execute(['id' => $follow['followedID']]);  # Skall ändra till USERID
+                $follower = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                
+                foreach($follower as $follow) { ?>
+                <a href="guest_profile.php?guest_id=<?php echo $follow['id']; ?>" class="a_normal">
+                <?php echo htmlspecialchars($follow['firstname'] . " " . $follow['lastname']);
+                    echo "<br>"; ?>
+                </a>
+               <?php }
             } ?>
         </div>
         
         <div>
             <p>Follower: <?php echo $counterFollower ?></p>
-            <?php foreach($follower2 as $follow) { 
-                echo $follow['firstname'] . " " . $follow['lastname'];
-            } ?>
+            <?php if($counterFollower > 0): ?>
+                <?php foreach($follower as $follow) { 
+
+                    $query = '  SELECT id, firstname, lastname
+                                FROM Users                                      
+                                WHERE id = :id
+                                ';  
+                    $stmt = $pdo->prepare($query);
+
+                    $stmt->execute(['id' => $follow['followerID']]);  # Skall ändra till USERID
+                    $follower = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                    foreach($follower as $follow) { ?>
+                    <a href="guest_profile.php?guest_id=<?php echo $follow['id']; ?>" class="a_normal">
+                    <?php echo htmlspecialchars($follow['firstname'] . " " . $follow['lastname']);
+                        echo "<br>"; ?>
+                    </a>
+                    <?php }
+                } ?>
+           <?php endif ?>
         </div>
 
 
