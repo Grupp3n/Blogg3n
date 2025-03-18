@@ -121,128 +121,17 @@ foreach($posts2 as $post) {
 <head>
     <meta charset="UTF-8">
     <title>Profil - <?php echo htmlspecialchars($user['username']); ?></title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: grey;
-        }
-        header {
-            background: #333;
-            color: #fff;
-            padding: 1rem;
-        }
-        nav {
-            background: #555;
-            padding: 1rem;
-        }
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            margin-right: 1rem;
-        }
-        .container {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            padding: 2rem;
-        }
-        .main-content {
-            max-width: 600px;
-            width: 100%;
-        }
-        .profile-info {
-            text-align: center;
-            background: darkgray;
-            padding: 1.5rem;
-            border-radius: 4px;
-        }
-        .profile-info img {
-            width: 120px;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 50%;
-            margin-bottom: 1rem;
-        }
-        .update-profile-form, .create-post-form {
-            background: darkgray;
-            padding: 1.5rem;
-            margin-top: 1rem;
-            border-radius: 4px;
-        }
-        .update-profile-form label,
-        .create-post-form label {
-            font-weight: bold;
-        }
-        .update-profile-form input,
-        .create-post-form textarea {
-            width: 100%;
-            margin: 0.5rem 0 1rem;
-            padding: 0.5rem;
-            box-sizing: border-box;
-        }
-        .update-profile-form button,
-        .create-post-form button {
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            background: #333;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-        }
-        .posts {
-            background: darkgray;
-            margin-top: 1rem;
-            padding: 1.5rem;
-            border-radius: 4px;
-        }
-        .posts h3 {
-            margin-top: 0;
-        }
-        .post {
-            /* display: none; */
-            background: lightgray;
-            margin-bottom: 1rem;
-            padding: 1rem;
-            border-radius: 4px;
-        }        
-        .post p {
-            margin: 0 0 0.5rem;
-        }
-
-        /* Tar bort Pilen i details */
-       .no_arrow {
-        list-style: none;
-       }       
-       .no_arrow_hidden {
-        list-style: none;
-        display: none;
-       }
-
-        .notifications {
-            width: 200px;
-            margin-left: 2rem;
-        }
-        .notifications h4 {
-            margin-top: 0;
-        }
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-                align-items: center;
-            }
-            .notifications {
-                width: 100%;
-                margin-left: 0;
-                margin-top: 2rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>Nexlify</h1>
-    </header>
+<header>
+   
+    <!-- Logotypen centrerad -->
+    <div class="logo-con">
+        <a href="index.php"><img src="img/transparent logo.png" alt="Nexlify"></a>
+    </div>
+    
+</header>
     <nav>
       
         <!-- Fler länkar kan läggas till -->

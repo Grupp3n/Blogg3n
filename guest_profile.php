@@ -112,13 +112,9 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 'id' => $_SESSION['deleteid'], # Här skall man implentera USERID                    
             ]);    
             $delete = $stmt->fetchAll(PDO::FETCH_ASSOC); 
-            header("location: guest_profile.php");  # skall ändras så man resetar den sidan man är på (profilen)
+            header("location: guest_profile.php");  
         }
 
-
-        
-        
-        
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
