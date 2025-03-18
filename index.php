@@ -22,7 +22,9 @@ if($main_post != NULL) {
     if(!empty($main_post['imagePath'])) {
         //hämtar vald 'BILD' genom postID
         $pictureID = $main_post['imagePath'];
-    } 
+    } else {
+        $pictureID = null;
+    }
 
     $sql_post = 'SELECT p.id, p.userID, p.textInput, p.header, p.image, u.username
                 FROM Posts p
