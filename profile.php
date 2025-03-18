@@ -15,43 +15,122 @@ require_once 'db_connect.php';
 
 $user_id = $_SESSION['user_id'];
 $message = '';
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
+    if (isset($_POST['update_profile'])) {
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
     $username = trim($_POST['username']);
     $email    = trim($_POST['email']);
-
+    
     $stmt = $pdo->prepare("UPDATE users SET username = :username, email = :email WHERE id = :id");
     if ($stmt->execute([
         ':username' => $username,
         ':email'    => $email,
         ':id'       => $user_id
-    ])) {
-        $message = "Profil uppdaterad!";
-    } else {
-        $message = "Fel vid uppdatering av profil.";
-    }
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_post'])) {
-    $post_header  = trim($_POST['post_header']);
-    $post_content = trim($_POST['post_content']);
-    
-    if (!empty($post_header) && !empty($post_content)) {
-        $stmt = $pdo->prepare("INSERT INTO posts (userID, header, textInput, timeCreated) VALUES (:userID, :header, :textInput, NOW())");
-        if ($stmt->execute([
-            ':userID'    => $user_id,
-            ':header'    => $post_header,
-            ':textInput' => $post_content
         ])) {
-            $message = "Inlägg publicerat!";
+            $message = "Profil uppdaterad!";
         } else {
-            $message = "Fel vid publicering av inlägg.";
+            $message = "Fel vid uppdatering av profil.";
         }
-    } else {
-        $message = "Både rubrik och innehåll måste fyllas i.";
+    }
+
+    if (isset($_POST['create_post'])){
+
+        $post_header  = trim($_POST['post_header']);
+        $post_content = trim($_POST['post_content']);
+        
+        if (!empty($post_header) && !empty($post_content)) {
+            $stmt = $pdo->prepare("INSERT INTO posts (userID, header, textInput, timeCreated) VALUES (:userID, :header, :textInput, NOW())");
+            if ($stmt->execute([
+                ':userID'    => $user_id,
+                ':header'    => $post_header,
+                ':textInput' => $post_content
+                ])) {
+                    $message = "Inlägg publicerat!";
+                } else {
+                    $message = "Fel vid publicering av inlägg.";
+                }
+            } else {
+                $message = "Både rubrik och innehåll måste fyllas i.";
+            }
+        }
+
+
+    $blogHeader = htmlspecialchars($_POST['post_header']);
+    $blogText = htmlspecialchars($_POST['post_content']);
+    $time = date_create();
+    $getTime = date_format($time, "Y-m-d H:i:s");
+
+
+    if(isset($_POST['upload'])) {
+
+        if(!isset($_FILES['image'])) {
+            // header("location: create_post.php");
+            exit;
+        } 
+        try {
+            $userID = $_SESSION['user_id'];
+            $code = $_POST['post_content'];
+                                     
+            if(isset($_FILES['image2']) && $_FILES['image2']['error'] == 0) {
+                $imageData = file_get_contents($_FILES['image2']['tmp_name']);
+                $base64Image = base64_encode($imageData);
+                
+                $query = "INSERT INTO Posts (imagePath, image, userID) VALUES (imagePath = NULL, :image, :userID)";
+                $stmt = $pdo->prepare($query);
+                $stmt->bindParam(":image", $base64Image, PDO::PARAM_STR);            
+                $stmt->bindValue(":userID", $userID, PDO::PARAM_INT);
+
+                if($stmt->execute()) {
+                    echo "<p style='color: white;'>Bild uppladdad!</p>";
+                    $_SESSION['check'] = true;
+                } else {
+                    echo "<p style='color: red;'>Fel vid uppladdning</p>";
+                }
+            } else {
+                echo "<p style='color: red;'>Ingen bild valdes att ladda upp!</p>";
+                // header("Location: create_post.php");
+            }
+        
+        } catch (PDOException $e) {
+            echo "<p style='color: red;'>Fel: " . $e->getMessage() . "</p>";
+        }          
+    }
+    
+    if (isset($_POST['post_submit_button'])) {   
+        $_SESSION['check'];
+
+        if($_SESSION['check']) {
+            $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated, combinedID, imagePath) 
+                    VALUES (:textInput, :header, :userID, :timeCreated, :combinedID, :imagePath)");
+        } else {
+            $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated, combinedID, imagePath) 
+                    VALUES (:textInput, :header, :userID, :timeCreated, :combinedID, imagePath = NULL)");
+        }
+        
+        $userID = $_SESSION['user_id'];        
+        $number = 1;
+
+
+        $stmt->bindParam(':textInput', $blogText);
+        $stmt->bindParam(':header', $blogHeader);
+        $stmt->bindParam(':userID', $userID);
+        $stmt->bindParam(':timeCreated', $getTime);
+        $stmt->bindParam(':combinedID', $number);
+        if($_SESSION['check']) {
+            $stmt->bindParam(':imagePath', $_SESSION['pictureID']);
+            $_SESSION['check'] = false;
+        }
+
+        if ($stmt->execute()) {
+            echo "<div class='success'>Posten lyckades!</div>";
+            // header("Location: index.php");
+            // exit;
+        } else {
+            echo "<div class='error' style='color: red;'>Något gick fel med databasen: " . $stmt->errorInfo() . "</div>";
+        }
     }
 }
-
+    
 // Hämta aktuell användardata från databasen
 $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
 $stmt->execute([':id' => $user_id]);
@@ -130,6 +209,12 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             
             <textarea name="post_content" id="post_content" placeholder="Vad vill du dela?"></textarea>
         </div>
+        <?php if(!isset($_POST['upload'])):?>
+                        <input type="file" name="image2" id="image" accept="image/*" style="width: 13rem;">
+                        <button type="submit" name="upload">Ladda upp!</button> 
+                    <?php else: ?>
+                        <?php require_once 'visaBild.php'; ?>
+                    <?php endif ?>
         <button type="submit" name="create_post">Publicera</button>
     </form>
     
