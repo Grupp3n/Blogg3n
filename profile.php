@@ -144,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 $imageData = file_get_contents($_FILES['image']['tmp_name']);
                 $base64Image = base64_encode($imageData);
                 
-                $query = "INSERT INTO Posts (imagePath, image, userID) VALUES (imagePath = NULL, :image, :userID)";
+                $query = "INSERT INTO Users (id, image) VALUES (:image, :id)";
                 $stmt = $pdo->prepare($query);
                 $stmt->bindParam(":image", $base64Image, PDO::PARAM_STR);            
                 $stmt->bindValue(":userID", $userID, PDO::PARAM_INT);
@@ -174,6 +174,11 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$user) {
     header("Location: index.php");
     exit;
+}
+
+$toggle = "none";
+if(isset($_POST['picture_change'])) {
+    $toggle = "block";
 }
 
 // Hämta inlägg från DB för den inloggade användaren
@@ -215,9 +220,32 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="profile-info-box">
             <img src="img/transparent logo.png" alt="Profilbild">
         </div>
-        <form method="POST">
-            <button name="change_picture" class="change_picture">Change Picture!</button>
-        </form>
+            <form  method="POST">                
+                <button class="DM_funktion" id="toggleEditForm" name="picture_change">Ändra bild</button>
+
+                <div id="editForm2" class="edit-form" style="display: <?php echo $toggle ?>;">
+                    <h2>Ändra bild</h2>
+                    <?php if (!empty($error_message)): ?>
+                        <p style="color: red;"> <?php echo $error_message; ?></p>
+                    <?php endif; ?>
+
+                    <form action="guest_profile.php?id=<?php echo $user_id; ?>" method="post">                    
+
+                    <?php if(!isset($_POST['upload'])):?>
+                        <input type="file" name="image2" id="image" accept="image/*" style="width: 13rem;">
+                        <button type="submit" name="upload">Ladda upp!</button> 
+                    <?php else: ?>
+                        <?php require_once 'visaBild.php'; ?>
+                    <?php endif ?>                        
+                    </form>
+                </div>
+                <script>
+                    document.getElementById('toggleEditForm').addEventListener('click', function () {
+                        var editForm = document.getElementById('editForm2');
+                        editForm.style.display = editForm.style.display === 'none' ? 'block' : 'none';
+                    });
+                </script>   
+            </form>
         <h2 style="color:white; margin-top: 1rem;"><?php echo htmlspecialchars($user['username']); ?></h2>
     </div>
     
@@ -249,11 +277,11 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <textarea name="post_content" id="post_content" placeholder="Vad vill du dela?"></textarea>
         </div>
         <?php if(!isset($_POST['upload'])):?>
-                        <input type="file" name="image2" id="image" accept="image/*" style="width: 13rem;">
-                        <button type="submit" name="upload">Ladda upp!</button> 
-                    <?php else: ?>
-                        <?php require_once 'visaBild.php'; ?>
-                    <?php endif ?>
+            <input type="file" name="image2" id="image" accept="image/*" style="width: 13rem;">
+            <button type="submit" name="upload">Ladda upp!</button> 
+        <?php else: ?>
+            <?php require_once 'visaBild.php'; ?>
+        <?php endif ?>
         <button type="submit" name="create_post">Publicera</button>
     </form>
 
