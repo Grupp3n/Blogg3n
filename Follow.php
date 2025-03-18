@@ -99,6 +99,24 @@ if (!isset($_SESSION['user_id'])) {
     <title>Document</title>
 </head>
 <body class="body_follow">
+<header>    
+            
+    <div class="logo-con">
+        <a href="index.php"><img src="img/transparent logo.png" alt="Nexlify"></a>
+    </div>
+        
+    <div class="dropdown">
+        <button class="dropbtn">Meny</button>
+        <div class="dropdown-content">
+            <?php if (!$INLOGGAD) : ?>
+                <a href="login.php">Log in</a>
+            <?php else : ?>
+                <a href="profile.php">Profile</a>
+                <a href="logout.php">Logga ut</a>
+            <?php endif; ?>
+        </div>
+    </div>
+</header> 
     <form method="POST">        
 
             
