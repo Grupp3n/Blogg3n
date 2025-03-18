@@ -132,7 +132,7 @@ foreach($likes as $like) {
    
 </header>
 
-    <main>
+    <main class="post-main">
         
         <h1 style="color: white;"><?php echo htmlspecialchars($post['header']); ?></h1>
         <p style="color: white;">Posted by:
