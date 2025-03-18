@@ -142,8 +142,7 @@ foreach($likes as $like) {
             </a>
         </p>
 <?php if ($post['imagePath']): ?>    
-    <img class="post-image" src="data:image/*;base64,<?php echo $post2['image'] ?>" alt="<?php echo htmlspecialchars($post['header']); ?>" 
-    style="max-width: 600px; width: 100%; height: auto; display: block; margin: auto;">
+    <img class="post-image" src="data:image/*;base64,<?php echo $post2['image'] ?>" alt="<?php echo htmlspecialchars($post['header']); ?>" >
 <?php endif; ?>
 <p style="color: white;"><?php echo htmlspecialchars($post['textInput']); ?></p>
 
@@ -160,9 +159,9 @@ foreach($likes as $like) {
                 <button type="submit" name="likeButton" style="background-color: transparent;">       
         
                     <?php if($color): ?>
-                        <img src="./img/thumbs-up-24.png" alt="" style="width:130%; background-color: green;">     
+                        <img class="thumbsup" src="./img/thumbs-up-24.png" alt="" style="width:130%; background-color: green;">     
                     <?php else: ?>
-                        <img src="./img/thumbs-up-24.png" alt="" style="width:130%; background-color: white;">
+                        <img  class="thumbsup" src="./img/thumbs-up-24.png" alt="" style="width:130%; background-color: white;">
                     <?php endif ?>
             
                 </button>
