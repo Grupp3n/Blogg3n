@@ -146,7 +146,7 @@ if (!isset($_SESSION['user_id'])) {
         </div>
        
         <div>
-            <p>Follower: <?php echo $counterFollower ?></p>
+            <p>Followers: <?php echo $counterFollower ?></p>
             
             <?php if($counterFollower > 0): ?>
                 <?php foreach($follower as $follow) { 
