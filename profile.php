@@ -124,8 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
         if ($stmt->execute()) {
             echo "<div class='success'>Posten lyckades!</div>";
-            // header("Location: index.php");
-            // exit;
+            
         } else {
             echo "<div class='error' style='color: red;'>Något gick fel med databasen: " . $stmt->errorInfo() . "</div>";
         }
@@ -133,10 +132,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
     if(isset($_POST['profilePicture'])) {
 
-        // if(!isset($_FILES['image3'])) {
-        //     header("location: profile.php");
-        //     exit;
-        // } 
+        if(!isset($_FILES['image3'])) {
+            header("location: profile.php");
+            exit;
+        } 
         try {
             $userID = $_SESSION['user_id'];
                                      
@@ -157,7 +156,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 }
             } else {
                 echo "<p style='color: red;'>Ingen bild valdes att ladda upp!</p>";
-                header("Location: create_post.php");
+                header("Location: profile.php");
             }
         
         } catch (PDOException $e) {
