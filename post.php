@@ -138,7 +138,7 @@ foreach($likes as $like) {
         <p style="color: white;">Posted by:
             <a href="guest_profile.php" class="a_normal">                   
                 <?php $_SESSION['GuestID'] = $post['userID']?> 
-                <?php echo htmlspecialchars($post['username']); ?>
+                <?php echo htmlspecialchars($post['username']); ?>                
             </a>
         </p>
 <?php if ($post['imagePath']): ?>    
@@ -175,8 +175,7 @@ foreach($likes as $like) {
     <?php foreach ($comments as $comment): ?>
         <div class="comment">
             <p style="color: white;"><strong>
-                <a href="guest_profile.php" class="a_normal">
-                    <?php $_SESSION['GuestID'] = $comment['userID']?> 
+                <a href="guest_profile.php?guest_id=<?= $comment['userID'] ?>" class="a_normal" >                     
                     <?php echo htmlspecialchars($comment['username']);?>:
                 </a>
             </strong></p>

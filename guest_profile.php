@@ -8,19 +8,26 @@ if (!isset($_SESSION['user_id'])) {
 
 require_once 'db_connect.php';
 
+if (isset($_GET['guest_id'])) {
+    $_SESSION['GuestID'] = $_GET['guest_id'];
+}
+
 $user_id = $_SESSION['GuestID'];
+$visitProfile = $_SESSION['GuestID'];
+
 $message = '';
 
 
 // Hämta aktuell användardata från databasen
-$stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
+$stmt = $pdo->prepare("SELECT username, firstname, email, image FROM users WHERE id = :id");
 $stmt->execute([':id' => $user_id]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$user) {
-    header("Location: index.php");
+    header("Location: guest_profile.php");
     exit;
 }
+
 
 // Hämta inlägg från DB för den inloggade användaren
 $stmt = $pdo->prepare("SELECT header, textInput, timeCreated FROM posts WHERE userID = :userID ORDER BY timeCreated DESC");
@@ -80,7 +87,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $bool = true;  
     $deleteID = 0;
     
-    $visitProfile = $_SESSION['GuestID'];
+    
     
 
     if($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -91,7 +98,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             $stmt2->execute([
                 'followerID' => $_SESSION['user_id'], # Här skall man implentera USERID
-                'followedID' => $_SESSION['GuestID']  # Här lägger man till den användaren man är inne på
+                'followedID' => $user_id  # Här lägger man till den användaren man är inne på
             ]);   
             header("location: guest_profile.php");  # skall ändras så man resetar den sidan man är på (profilen)             
         }
@@ -109,35 +116,36 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
 
-        if(isset($_POST['Send_message'])) {
-            require 'chatt.php';
-        }
+        
+        
         
     }
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['textInput'])) {
-    
-        // Hämtar alla users för att veta vilket ID man skall skicka meddelande till
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE firstname = :firstname");
-        $stmt->execute([':firstname' => $_SESSION['GuestID']]);
-        $userName = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-        $receiver_id = $userName['id'];      //denna raden skall bytas mot användarnamn och inte ID
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if(isset($_POST['Send_message'])) {
         
-        $post_content = trim($textInput);
-        if (!empty($post_content)) {
-            $stmt = $pdo->prepare("INSERT INTO chatt (text, senderID, receiverID, timeCreated) VALUES (:text, :senderID, :receiverID, NOW())");
-            if ($stmt->execute([
-                ':senderID'    => $user_id,
-                ':receiverID'    => $receiver_id,
-                ':text' => $post_content
-            ])) {
-                $message = "Inlägg publicerat!";
-            } else {
-                $message = "Fel vid publicering av inlägg.";
+            // Hämtar alla users för att veta vilket ID man skall skicka meddelande till
+            $stmt = $pdo->prepare("SELECT * FROM Users WHERE firstname = :firstname");
+            $stmt->execute([':firstname' => $user['firstname']]);
+            $userName = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+            $receiver_id = $userName['id'];      
+            
+            $post_content = trim($_POST['textInput']);
+            if (!empty($post_content)) {
+                $stmt = $pdo->prepare("INSERT INTO chatt (text, senderID, receiverID, timeCreated) VALUES (:text, :senderID, :receiverID, NOW())");
+                if ($stmt->execute([
+                    ':senderID'    => $_SESSION['user_id'],
+                    ':receiverID'    => $receiver_id,
+                    ':text' => $post_content
+                ])) { ?>
+                    <p style='color: white; position: absolute; top: 21rem;'> <?php echo "Meddelande skickades!"; ?></p><?php
+                } else { ?>
+                    <p style='color: white; position: absolute; top: 21rem;'> <?php echo"Något blev fel när det skulle skickas"; ?></p><?php
+                }
+            } else { ?>
+                <p style='color: red; position: absolute; top: 21rem;'> <?php echo "Inlägget får inte vara tomt"; ?></p><?php
             }
-        } else {
-            $message = "Inlägget får inte vara tomt.";
         }
     }
     
@@ -174,7 +182,12 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <!-- Profilsektionen -->
     <div class="profile-info">
         <div class="profile-info-box">
-            <img src="img/transparent logo.png" alt="Profilbild">
+            <?php if($user['image'] === null): ?>
+                <img src="img/transparent logo.png" alt="Profilbild">
+            <?php else: ?>
+               <?php $_SESSION['guest'] == true ?>
+                <img src="<?php require 'visaProfilBild.php' ?>" alt="Profilbild"> <!-- Här skall bilden för användaren visas om det finns någon -->
+            <?php endif ?>
         </div>
         <h2 style="color: white;"><?php echo htmlspecialchars($user['username']); ?></h2>
     </div>
@@ -197,7 +210,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php foreach($followAll as $follow): ?>  
                 
                 <!-- DET FÖRSTA ÄR USERID ---------  DET ANDRA ÄR PROFILSIDAN MAN ÄR INNE PÅ -->
-                <?php if($follow['followerID'] == $_SESSION['user_id'] && $follow['followedID'] == $_SESSION['GuestID']): ?> <!-- HÄR SKALL ÄVEN EN KONTROLL AV USERS SAMT EN KONTROLL EMOT ANVÄNDARENS PROFIL. SÅ MAN INTE KAN GILLA SIN EGNA SIDA-->
+                <?php if($follow['followerID'] == $_SESSION['user_id'] && $follow['followedID'] == $user_id): ?> <!-- HÄR SKALL ÄVEN EN KONTROLL AV USERS SAMT EN KONTROLL EMOT ANVÄNDARENS PROFIL. SÅ MAN INTE KAN GILLA SIN EGNA SIDA-->
                     <?php $bool = false; ?>
                     <?php $_SESSION['deleteid'] = $follow['id']; ?>
                 <?php endif ?>
@@ -214,7 +227,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </form>
 
     <!-- Skicka DM -->
-    <?php if($_SESSION['GuestID'] == $_SESSION['user_id']): ?>
+    <?php if($user_id == $_SESSION['user_id']): ?>
         <?php header("Location: profile.php") ?>
     <?php else: ?>
         <form class="create-post-form" method="POST">
@@ -228,7 +241,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <p style="color: red;"> <?php echo $error_message; ?></p>
                         <?php endif; ?>
 
-                        <form action="guest_profile.php?id=<?php echo $_SESSION['GuestID']; ?>" method="post">                    
+                        <form action="guest_profile.php?id=<?php echo $user_id; ?>" method="post">                    
 
                             <label for="textInput">Text:</label>
                             <textarea id="textInput" name="textInput" rows="20" required placeholder="Inputs chatt message here..."></textarea>

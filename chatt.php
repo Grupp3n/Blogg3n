@@ -1,9 +1,9 @@
 <?php
 session_start();
 
-if(!$_SESSION['INLOGGAD']) {
-    header("location: index.php");
-    exit;
+if(!isset($_SESSION['user_id'])) {
+    // header("location: index.php");
+    // exit;
 } else {
 
     // Hämta användarnamn
@@ -40,8 +40,8 @@ if(!$_SESSION['INLOGGAD']) {
     }
     
     // Hämta aktuell användardata från databasen
-    $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
-    $stmt->execute([':id' => $user_id]);
+    $stmt = $pdo->prepare("SELECT id, username, email FROM users WHERE id = :id");
+    $stmt->execute([':id' => $_SESSION['GuestID']]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
     
     if (!$user) {

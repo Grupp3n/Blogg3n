@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($user && password_verify($password, $user['password'])) {
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['username'] = $user['username'];
-                echo "<div class='success'>Inloggning lyckades! Välkommen, " . htmlspecialchars($user['username']) . "!</div>";
+                echo "<div class='success'>Inloggning lyckades! Välkommen, " . htmlspecialchars($user['username']) . "!</div>";                
                 header("Location: index.php");
                 exit();
             } else {

@@ -1171,7 +1171,7 @@ form button {
     background: #0056b3;
 }
 
-.success, .error {
+.success, .error {  
   padding: 10px;
   margin-top: 10px;
   text-align: center;
