@@ -223,14 +223,11 @@ if($main_post != NULL) {
                         </a> 
                     <?php elseif($counter == 0): ?>
                         <?php $counter++ ?>
+                        <div class="thumbnail">
+                            <p>No posts have been liked yet</p>
+                        </div>                  
                     <?php endif ?>
-                <?php endforeach; ?>
-            <?php else: ?>
-                
-                <div class="thumbnail">
-                    <p>No posts have been liked yet</p>
-                </div>                  
-            
+                <?php endforeach; ?>            
             <?php endif; ?>
         </div>
     </aside>
