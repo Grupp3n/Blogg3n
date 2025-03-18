@@ -6,7 +6,14 @@ if(!$_SESSION['INLOGGAD']) {
     exit;
 } else {
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_post2'])) {
+    // Hämta användarnamn
+    $stmt = $pdo->prepare("SELECT username, email FROM users WHERE id = :id");
+    $stmt->execute([':id' => $_SESSION['GuestID']]);
+    $guestUser = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    print_r($guestUser['username']);
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['textInput'])) {
     
         // Hämtar alla users för att veta vilket ID man skall skicka meddelande till
         $stmt = $pdo->prepare("SELECT * FROM users WHERE firstname = :firstname");

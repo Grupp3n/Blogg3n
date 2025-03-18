@@ -107,10 +107,40 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $delete = $stmt->fetchAll(PDO::FETCH_ASSOC); 
             header("location: guest_profile.php");  # skall ändras så man resetar den sidan man är på (profilen)
         }
+
+
+        if(isset($_POST['Send_message'])) {
+            require 'chatt.php';
+        }
         
     }
 
-
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['textInput'])) {
+    
+        // Hämtar alla users för att veta vilket ID man skall skicka meddelande till
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE firstname = :firstname");
+        $stmt->execute([':firstname' => $_SESSION['GuestID']]);
+        $userName = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+        $receiver_id = $userName['id'];      //denna raden skall bytas mot användarnamn och inte ID
+        
+        $post_content = trim($textInput);
+        if (!empty($post_content)) {
+            $stmt = $pdo->prepare("INSERT INTO chatt (text, senderID, receiverID, timeCreated) VALUES (:text, :senderID, :receiverID, NOW())");
+            if ($stmt->execute([
+                ':senderID'    => $user_id,
+                ':receiverID'    => $receiver_id,
+                ':text' => $post_content
+            ])) {
+                $message = "Inlägg publicerat!";
+            } else {
+                $message = "Fel vid publicering av inlägg.";
+            }
+        } else {
+            $message = "Inlägget får inte vara tomt.";
+        }
+    }
+    
 ?>
 
 <!DOCTYPE html>
@@ -203,7 +233,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <label for="textInput">Text:</label>
                             <textarea id="textInput" name="textInput" rows="20" required placeholder="Inputs chatt message here..."></textarea>
 
-                            <button type="submit" style="margin-top: 20px;">Skicka Meddelande</button>
+                            <button type="submit" style="margin-top: 20px;" name="Send_message">Skicka Meddelande</button>
                         </form>
                     </div>
                     <script>
