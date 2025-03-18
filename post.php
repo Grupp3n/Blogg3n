@@ -142,8 +142,7 @@ foreach($likes as $like) {
             </a>
         </p>
 <?php if ($post['imagePath']): ?>    
-    <img class="post-image" src="data:image/*;base64,<?php echo $post2['image'] ?>" alt="<?php echo htmlspecialchars($post['header']); ?>" 
-    style="max-width: 600px; width: 100%; height: auto; display: block; margin: auto;">
+    <img class="post-image" src="data:image/*;base64,<?php echo $post2['image'] ?>" alt="<?php echo htmlspecialchars($post['header']); ?>" >
 <?php endif; ?>
 <p style="color: white;"><?php echo htmlspecialchars($post['textInput']); ?></p>
 
