@@ -144,32 +144,32 @@ if($main_post != NULL) {
     <h2>Recent Headlines</h2>
     <div class="post-thumbnails">    
         <?php if ($thumbnail_posts): ?>
-        <?php foreach ($thumbnail_posts as $post): ?>
-        <a href="post.php?id=<?= $post['id']; ?>" style="text-decoration: none; color: inherit;">
-            <div class="thumbnail">
-            <?php 
-                        //hämtar vald 'BILD' genom postID
-                $pictureID = $main_post['imagePath'];
+            <?php foreach ($thumbnail_posts as $post): ?>
+                <a href="post.php?id=<?= $post['id']; ?>" style="text-decoration: none; color: inherit;">
+                    <div class="thumbnail">
+                    <?php 
+                                //hämtar vald 'BILD' genom postID
+                        $pictureID = $main_post['imagePath'];
 
-                $sql_post = 'SELECT p.id, p.userID, p.textInput, p.header, p.image, u.username
-                            FROM Posts p
-                            LEFT JOIN Users u ON p.userID = u.id
-                            WHERE p.id = :post_id';
-                $stmt_post = $pdo->prepare($sql_post);
-                $stmt_post->execute(['post_id' => $post['imagePath']]);
-                $post2 = $stmt_post->fetch(PDO::FETCH_ASSOC); 
-            ?>
-                <?php if ($post['imagePath']): ?>                        
-                    <img src="data:image/*;base64, <?php echo $post2['image'] ?>" 
-                    alt="<?php echo htmlspecialchars($post['header']); ?>" 
-                    style="max-width: 100%; height: auto;">
-                <?php endif; ?>
-                <div class="text-container">
-                    <h4><?= htmlspecialchars($post['header']); ?></h4>
-                    <p><?= htmlspecialchars($post['textInput']); ?></p>
-                </div>
-            </div>
-        </a>
+                        $sql_post = 'SELECT p.id, p.userID, p.textInput, p.header, p.image, u.username
+                                    FROM Posts p
+                                    LEFT JOIN Users u ON p.userID = u.id
+                                    WHERE p.id = :post_id';
+                        $stmt_post = $pdo->prepare($sql_post);
+                        $stmt_post->execute(['post_id' => $post['imagePath']]);
+                        $post2 = $stmt_post->fetch(PDO::FETCH_ASSOC); 
+                    ?>
+                        <?php if ($post['imagePath']): ?>                        
+                            <img src="data:image/*;base64, <?php echo $post2['image'] ?>" 
+                            alt="<?php echo htmlspecialchars($post['header']); ?>" 
+                            style="max-width: 100%; height: auto;">
+                        <?php endif; ?>
+                        <div class="text-container">
+                            <h4><?= htmlspecialchars($post['header']); ?></h4>
+                            <p><?= htmlspecialchars($post['textInput']); ?></p>
+                        </div>
+                    </div>
+                </a>
             <?php endforeach; ?>            
         <?php else: ?>
             <div class="thumbnail">
@@ -213,14 +213,16 @@ if($main_post != NULL) {
                         </div>
 
                         </div>
-                    </a> 
+                        </a> 
                     <?php elseif($counter == 0): ?>
-                        <div class="thumbnail">
-                            <p>No posts have been liked yet</p>
-                            <?php $counter++ ?>
-                        </div>                   
+                        <?php $counter++ ?>
                     <?php endif ?>
-                    <?php endforeach; ?>
+                <?php endforeach; ?>
+            <?php else: ?>
+                
+                <div class="thumbnail">
+                    <p>No posts have been liked yet</p>
+                </div>                  
             
             <?php endif; ?>
         </div>
