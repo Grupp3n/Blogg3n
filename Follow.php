@@ -8,8 +8,9 @@ if (!isset($_SESSION['user_id'])) {
       
     require 'db_connect.php';
 
-        $query = '  SELECT * 
-                    FROM Follower                 
+        $query = '  SELECT Follower.*, U.*
+                    FROM Follower  
+                    LEFT JOIN Users as U on followerID = U.id               
                     WHERE followedID = :id
                 ';  
         $stmt = $pdo->prepare($query);
@@ -29,8 +30,9 @@ if (!isset($_SESSION['user_id'])) {
             
         }
 
-        $query = '  SELECT * 
-                    FROM Follower                 
+        $query = '  SELECT Follower.*, U.*
+                    FROM Follower  
+                    LEFT JOIN Users as U on followerID = U.id                     
                     WHERE followerID = :id
                 ';  
         $stmt = $pdo->prepare($query);
@@ -99,7 +101,7 @@ if (!isset($_SESSION['user_id'])) {
 <body class="body_follow">
     <form method="POST">        
 
-            <p>Alma</p>
+            
             <?php foreach($followAll as $follow): ?>  
                 
                 <!-- DET FÖRSTA ÄR USERID ---------  DET ANDRA ÄR PROFILSIDAN MAN ÄR INNE PÅ -->
@@ -111,16 +113,29 @@ if (!isset($_SESSION['user_id'])) {
                     
         <!-- HÄR SKALL ÄNDRAS TILL DEN sidans ID man är inne på-->
             <?php if($visitProfile != $_SESSION['user_id']): ?> <!-- KONTROLLERA SÅ ATT INTE PROFILSIDAN MAN ÄR INNE PÅ ÄR ENS EGNA PROFIL -->
+                
                 <?php if($bool): ?>
                         <button name="follow-button">Follow</button>
                     <?php else: ?>
                         <button name="unfollow-button">Unfollow</button>
                 <?php endif ?>                
             <?php endif ?>
+            
+            
+            <p>Following: <?php echo $counterFollowed ?></p>   
+                 
+           <?php foreach($follower as $follow) { 
+                echo $follow['firstname'] . " " . $follow['lastname'];
+            } ?>
 
-            <p>Following: <?php echo $counterFollowed ?></p>
+            <br>
+            <br>
+            <br>
+            
             <p>Follower: <?php echo $counterFollower ?></p>
-        
+            <?php foreach($follower2 as $follow) { 
+                echo $follow['firstname'] . " " . $follow['lastname'];
+            } ?>
 
 
 
