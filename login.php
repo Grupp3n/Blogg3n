@@ -54,15 +54,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label>Lösenord:</label>
             <input type="password" name="password" placeholder="Lösenord" required>
             <div class="remember-me">
-          <input type="checkbox" name="remember_me" id="remember_me">
-          <label for="remember_me">Kom ihåg mig</label>
-        </div>
+                <input type="checkbox" name="remember_me" id="remember_me" style="width: 2rem; margin-bottom: 0.4rem;">
+                <label for="remember_me">Kom ihåg mig</label>
+            </div>
             <div class="register">
                 <button type="submit">Logga in</button>
             </div>
+            <br>
         </form>
         <a href="register.php">Inte medlem? Registrera dig här</a>
-        <a href="ChangePassword.php">Har du glömt lösenord eller användar namn?</a>
+        <a href="ChangePassword.php">Byt lösenord?</a>
+        <a href="glömt_lösenord.php">Glömt lösenord?</a>
     </div>
 </div>
 
