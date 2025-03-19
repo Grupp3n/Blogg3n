@@ -1,5 +1,11 @@
 <?php
-session_start();
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
+// Inkludera nödvändiga filer, t.ex. databasanslutning och chattfunktionen
+require_once 'db_connect.php';
+include 'chatt.php';
 
 // Test-användare:
 if (!isset($_SESSION['user_id'])) {
@@ -11,7 +17,7 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-require_once 'db_connect.php';
+// require_once 'db_connect.php';
 
 $user_id = $_SESSION['user_id'];
 $message = '';
@@ -33,34 +39,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         }
     }
 
-    if (isset($_POST['create_post'])){
-
-        $post_header  = trim($_POST['post_header']);
-        $post_content = trim($_POST['post_content']);
-        
-        if (!empty($post_header) && !empty($post_content)) {
-            $stmt = $pdo->prepare("INSERT INTO posts (userID, header, textInput, timeCreated) VALUES (:userID, :header, :textInput, NOW())");
-            if ($stmt->execute([
-                ':userID'    => $user_id,
-                ':header'    => $post_header,
-                ':textInput' => $post_content
-                ])) {
-                    $message = "Inlägg publicerat!";
-                } else {
-                    $message = "Fel vid publicering av inlägg.";
-                }
-            } else {
-                $message = "Både rubrik och innehåll måste fyllas i.";
-            }
-        }
-
-
-   
-
+    $blogHeader = isset($_POST['post_header']);
+    $blogText = isset($_POST['post_content']);
+    $time = date_create();
+    $getTime = date_format($time, "Y-m-d H:i:s");
 
     if(isset($_POST['upload'])) {
 
-        if(!isset($_FILES['image'])) {
+        if(!isset($_FILES['image2'])) {
             header("location: profile.php");
             exit;
         } 
@@ -72,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 $imageData = file_get_contents($_FILES['image2']['tmp_name']);
                 $base64Image = base64_encode($imageData);
                 
-                $query = "INSERT INTO Posts (imagePath, image, userID) VALUES (imagePath = NULL, :image, :userID)";
+                $query = "INSERT INTO Posts (imagePath, image, userID) VALUES (NULL, :image, :userID)";
                 $stmt = $pdo->prepare($query);
                 $stmt->bindParam(":image", $base64Image, PDO::PARAM_STR);            
                 $stmt->bindValue(":userID", $userID, PDO::PARAM_INT);
@@ -93,11 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         }          
     }
     
-    if (isset($_POST['post_submit_button'])) { 
-        $blogHeader = htmlspecialchars($_POST['post_header']);
-        $blogText = htmlspecialchars($_POST['post_content']);
-        $time = date_create();
-        $getTime = date_format($time, "Y-m-d H:i:s");  
+    if (isset($_POST['create_post'])) {   
         $_SESSION['check'];
 
         if($_SESSION['check']) {
@@ -202,10 +184,21 @@ if(isset($_POST['picture_change'])) {
 }
 
 // Hämta inlägg från DB för den inloggade användaren
-$stmt = $pdo->prepare("SELECT header, textInput, timeCreated FROM posts WHERE userID = :userID ORDER BY timeCreated DESC");
+
+$stmt = $pdo->prepare("SELECT id, header, textInput, timeCreated FROM posts WHERE userID = :userID ORDER BY timeCreated DESC");
 $stmt->execute([':userID' => $user_id]);
 $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$stmt = $pdo->prepare("
+    SELECT c.textInput, c.timeCreated, p.header, p.id AS post_id
+    FROM comments c 
+    JOIN posts p ON c.postID = p.id 
+    WHERE p.userID = :userID AND c.userID != :userID
+    ORDER BY c.timeCreated DESC
+");
+$stmt->execute([':userID' => $user_id]);
+$comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 <!DOCTYPE html>
 <html lang="sv">
 <head>
@@ -243,6 +236,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <main">
     <!-- Profilsektionen -->
     <div class="profile-info">
+        <h2 style="color:white; margin-top: 1rem;"><?php echo htmlspecialchars($user['username']); ?></h2>
         <div class="profile-info-box">
             <?php if($user['image'] == null): ?>
                 <img src="logo.jpeg" alt="Profilbild">
@@ -252,6 +246,9 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
             <form  method="POST" enctype="multipart/form-data">                
                 <button class="DM_funktion" id="toggleEditForm" name="picture_change">Ändra bild</button>
+                <div class="form-group2">
+                <button name="follower_button"><a href="follow.php" name="follower_button_a">Followers</a></button>
+        </div>
 
                 <div id="editForm2" class="edit-form" style="display: <?php echo $toggle ?>;">
                     <h2>Ändra bild</h2>
@@ -279,7 +276,6 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     });
                 </script>   
             </form>
-        <h2 style="color:white; margin-top: 1rem;"><?php echo htmlspecialchars($user['username']); ?></h2>
     </div>
     
     <?php if ($message): ?>
@@ -300,10 +296,10 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </form>
 
     <!-- Skapa inlägg -->
-    <form class="create-post-form" method="post" action="">
+    <<form method="POST" enctype="multipart/form-data" class="form_create_post">
         <div class="form-group">
             <label for="post_header">Skapa ett inlägg:</label>
-            <input type="text" name="post_header" id="post_header" placeholder="Ange rubrik">
+            <input type="text" name="post_header" id="post_header" placeholder="Ange rubrik" required>
         </div>
         <div class="form-group">
             
@@ -318,30 +314,96 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <button type="submit" name="create_post">Publicera</button>
     </form>
 
-    <div class="form-group2">
-        <button name="follower_button"><a href="follow.php" name="follower_button_a">Followers</a></button>
+    <!-- Chat-ruta -->
+<div class="chat-container">
+    <div class="chat-header">
+        <h3>Chatt</h3>
     </div>
+    <div class="chat-users">
+        <h4>Konversationer</h4>
+        <?php foreach ($chat_users as $chat_user): ?>
+            <form method="POST">
+                <button type="submit" name="selected_user" value="<?php echo $chat_user['id']; ?>">
+                    <?php echo htmlspecialchars($chat_user['username']); ?>
+                </button>
+            </form>
+        <?php endforeach; ?>
+    </div>
+
+    <div class="chat-body">
+        <h4>Meddelanden</h4>
+        <?php 
+        if (isset($_POST['selected_user'])) {
+            $selected_user_id = $_POST['selected_user'];
+
+            foreach ($messages as $msg) {
+                if (
+                    ($msg['senderID'] == $selected_user_id && $msg['receiverID'] == $user_id) || 
+                    ($msg['senderID'] == $user_id && $msg['receiverID'] == $selected_user_id)
+                ) {
+                    echo "<div class='chat-message'>";
+                    echo "<strong>" . htmlspecialchars($msg['sender_name']) . ":</strong> " . htmlspecialchars($msg['text']);
+                    echo "<small>" . htmlspecialchars($msg['timeCreated']) . "</small>";
+                    echo "</div>";
+                }
+            }
+        } else {
+            echo "<p>Välj en konversation</p>";
+        }
+        ?>
+    </div>
+
+    <form method="POST" class="chat-form">
+        <input type="hidden" name="receiver_id" value="<?php echo $selected_user_id ?? ''; ?>">
+        <input type="text" name="message_text" placeholder="Skriv ett svar..." required>
+        <button type="submit" name="reply_message">Skicka</button>
+    </form>
+</div>
     
     <!-- Inlägg och notifieringar sida vid sida -->
     <div class="content-columns">
-        <div class="posts">
-            <h3>Senaste inlägg</h3>
-            <?php if (!empty($posts)): ?>
-                <?php foreach ($posts as $post): ?>
-                    <div class="post">
-                        <h4><?php echo nl2br(htmlspecialchars($post['header'])); ?></h4>
-                        <p><?php echo nl2br(htmlspecialchars($post['textInput'])); ?></p>
-                        <small>Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p>Inga inlägg ännu.</p>
-            <?php endif; ?>
-        </div>
+    <div class="posts">
+    <h3>Senaste inlägg</h3>
+    <?php if (!empty($posts)): ?>
+        <?php foreach ($posts as $post): ?>
+            <div class="post">
+                <h4>
+                    <a href="post.php?id=<?php echo htmlspecialchars($post['id']); ?>">
+                        <?php echo nl2br(htmlspecialchars($post['header'])); ?>
+                    </a>
+                </h4>
+                <p>
+                    <a href="post.php?id=<?php echo htmlspecialchars($post['id']); ?>">
+                        <?php echo nl2br(htmlspecialchars($post['textInput'])); ?>
+                    </a>
+                </p>
+                <small>Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p>Inga inlägg ännu.</p>
+    <?php endif; ?>
+</div>
         <div class="notifications">
-            <h3>Nya kommentarer</h3>
-        </div>
-    </div>
+    <h3>Nya kommentarer</h3>
+    <?php if (!empty($comments)): ?>
+        <?php foreach ($comments as $comment): ?>
+            <div class="comment">
+                <p>
+                    <a href="post.php?id=<?php echo htmlspecialchars($comment['post_id']); ?>">
+                        <?php echo nl2br(htmlspecialchars($comment['textInput'])); ?>
+                    </a>
+                </p>
+                <small>
+                    Kommentar tid: <?php echo htmlspecialchars($comment['timeCreated']); ?> 
+                    | På inlägg: <?php echo htmlspecialchars($comment['header']); ?>
+                </small>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p>Inga nya kommentarer.</p>
+    <?php endif; ?>
+</div>
 </main>
 </body>
 </html>

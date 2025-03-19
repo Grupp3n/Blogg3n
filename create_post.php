@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         }          
     }
     
-    if (isset($_POST['post_submit_button'])) {   
+    if (isset($_POST['post_submit_button']) && $blogText != null || $blogHeader != null) {   
         
 
         if(isset($_SESSION['check'])) {
