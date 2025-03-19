@@ -15,6 +15,7 @@ if (isset($_GET['guest_id'])) {
 $user_id = $_SESSION['GuestID'];
 $visitProfile = $_SESSION['GuestID'];
 
+ # en kontroll så man inte Besöker sin egna sida
 if($user_id == $_SESSION['user_id']) {
     header("Location: profile.php");
     exit;
