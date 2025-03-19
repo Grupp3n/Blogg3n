@@ -116,7 +116,7 @@ foreach($likes as $like) {
         <title>Kommentar</title>
         <link rel="stylesheet" href="style.css">
     </head>
-<body>
+<body class="body_main">
 <header>
     <div class="dropdown">
         <button class="dropbtn">Meny</button>
