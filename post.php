@@ -242,7 +242,11 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
         <button class="P-Comment" type="submit">Post Comment</button>
     </form>
 <?php else: ?>
-    <p style="color: white;"><button style="background-color: #007BFF; color: white; border-radius: 10px; padding: 9px; margin:5px;" href="login.php" >Log in</button> to comment.</p>
+    <p style="color: white;">
+    <a href="login.php" style="text-decoration: none; display: inline-block;">
+        <button style="background-color: #007BFF; color: white; border-radius: 10px; padding: 9px; margin: 5px; border: none; cursor: pointer;">
+            Log in </button>
+    </a> to comment.</p>
 <?php endif; ?>
 
 <hr>

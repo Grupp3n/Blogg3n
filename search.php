@@ -3,13 +3,16 @@ session_start();
 
 require 'db_connect.php';
 
+//kollar efter valid sökning, så Get kan hämta från url
 if (!isset($_GET['sökning']) || empty(trim($_GET['sökning']))) {
     die("no search input.");
 }
 
+//prp query, kollar GET: sökningen, wrappar queryn i % som är lika med LIKE funktion i SQL
 $search_query = trim($_GET['sökning']);
 $search_query = "%{$search_query}%";
 
+//SQL söker efter liknande text/headline
 $sql = "SELECT id, header, textInput FROM Posts WHERE header LIKE :query OR textInput LIKE :query";
 $stmt = $pdo->prepare($sql);
 $stmt->execute(['query' => $search_query]);
@@ -50,7 +53,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </header>
 
 
-    
+    <!-- form 2 ser till så du kan söka igen inom search.php sidan-->
     <main class="search-main">
     <div class="search-container">
     <form action="search.php" method="GET" class="search-form">
@@ -58,6 +61,8 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <button type="submit">Search</button>
     </div>
 </form>
+
+    <!--Här visas resultat för sökningen, samt länkar till postID för att komma åt posten -->
         <h1 class="sök-header">Related Posts</h1>
         
         <?php if ($posts): ?>
