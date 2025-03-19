@@ -50,7 +50,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </header>
 
     
-    <main>
+    <main class="search-main">
         <h1>Search Results</h1>
         
         <?php if ($posts): ?>
