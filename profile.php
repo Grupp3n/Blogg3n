@@ -163,6 +163,27 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             echo "<p style='color: red;'>Fel: " . $e->getMessage() . "</p>";
         }          
     }
+    
+    if(isset($_POST['removePicture'])) {
+        try {
+            $userID = $_SESSION['user_id'];
+                
+            $query = "UPDATE Users SET image = :image WHERE id = :id";
+            $stmt = $pdo->prepare($query);
+            $stmt->bindParam(":image", $null, PDO::PARAM_STR);            
+            $stmt->bindValue(":id", $userID, PDO::PARAM_INT);
+
+            if($stmt->execute()) {
+                echo "<p style='color: white;'>Bild borttagen</p>";
+            } else {
+                echo "<p style='color: red;'>Något gick fel!</p>";
+            }
+            
+        
+        } catch (PDOException $e) {
+            echo "<p style='color: red;'>Fel: " . $e->getMessage() . "</p>";
+        }          
+    }
 }
     
 // Hämta aktuell användardata från databasen
@@ -236,11 +257,13 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                     <?php if(!isset($_POST['profilePicture'])):?>
                         <input type="file" name="image3" id="image" accept="image/*" style="width: 13rem;">
-                        <button type="submit" name="profilePicture">Ladda upp!</button> 
+                        <button type="submit" name="profilePicture" style="margin-top: 1rem;">Ladda upp!</button> 
                     <?php else: ?>
                         <?php require_once 'visaBild.php'; ?>
                         <button type="submit" name="ok">OK</button> 
-                    <?php endif ?>                        
+                    <?php endif ?>  
+                    
+                    <button type="submit" name="removePicture" style="margin-top: 5rem;">Ta bort bild</button> 
                     </form>
                 </div>
                 <script>
