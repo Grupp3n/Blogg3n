@@ -105,7 +105,7 @@ if($main_post != NULL) {
     <form action="search.php" method="GET" class="search-form">
     <input type="text" name="sökning" placeholder="Search for posts..." required>
     <button type="submit">Search</button>
-</form>
+    </form>
             
     <div class="logo-con">
         <a href="index.php"><img src="img/transparent logo.png" alt="Nexlify"></a>
