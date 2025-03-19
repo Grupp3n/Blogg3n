@@ -161,23 +161,31 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="body_main">
-<header>
-    <!-- "Gör ett inlägg" knappen längst till vänster -->
-    <div class="header-button left-button">
-        <a href="create_post.php" class="btn">Gör ett inlägg</a>
-    </div>
-    <!-- Logotypen centrerad -->
+<header> 
+    <div class="header-button left-button">        
+        <a href="create_post.php" class="btn">Gör ett inlägg</a>        
+    </div>   
+    
+    <form action="search.php" method="GET" class="search-form">
+    <input type="text" name="sökning" placeholder="Search for posts..." required>
+    <button type="submit">Search</button>
+    </form>
+            
     <div class="logo-con">
         <a href="index.php"><img src="img/transparent logo.png" alt="Nexlify"></a>
     </div>
-    <!-- Dropdown-menyn "Meny" längst till höger -->
-    <div class="dropdown right-dropdown">
+        
+    <div class="dropdown">
         <button class="dropbtn">Meny</button>
-        <div class="dropdown-content">            
-            <a href="profile.php">Profile</a>
-            <a href="follow.php">Followers</a>
-            <a href="logout.php">Logga ut</a>           
-        </div>        
+        <div class="dropdown-content">
+            <?php if (!$INLOGGAD) : ?>
+                <a href="login.php">Log in</a>
+            <?php else : ?>
+                <a href="profile.php">Profile</a>
+                <a href="follow.php">Followers</a>
+                <a href="logout.php">Logga ut</a>
+            <?php endif; ?>
+        </div>
     </div>
 </header>
 
