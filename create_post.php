@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
                 if($stmt->execute()) {
                     echo "<p style='color: white;'>Bild uppladdad!</p>";
-                    $_SESSION['check'] = true;
+                    $_SESSION['checking'] = true;
                 } else {
                     echo "<p style='color: red;'>Fel vid uppladdning</p>";
                 }
@@ -52,14 +52,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     
     if (isset($_POST['post_submit_button']) && $blogText != null || $blogHeader != null) {   
         
-
-        if(isset($_SESSION['check'])) {
+        var_dump($_SESSION['checking']);
+        if(isset($_SESSION['checking'])) {
             $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated, combinedID, imagePath) 
-                    VALUES (:textInput, :header, :userID, :timeCreated, :combinedID, :imagePath)");
-                    $_SESSION['check'] = false;
+                    VALUES (:textInput, :header, :userID, :timeCreated, :combinedID, :imagePath)");  
         } else {
             $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated, combinedID, imagePath) 
-                    VALUES (:textInput, :header, :userID, :timeCreated, :combinedID, imagePath = NULL)");
+                    VALUES (:textInput, :header, :userID, :timeCreated, :combinedID, imagePath = NULL)");            
         }
         
         $userID = $_SESSION['user_id'];        
@@ -71,12 +70,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $stmt->bindParam(':userID', $userID);
         $stmt->bindParam(':timeCreated', $getTime);
         $stmt->bindParam(':combinedID', $number);
-        if(isset($_SESSION['check'])) {
+        if(isset($_SESSION['checking'])) {
             $stmt->bindParam(':imagePath', $_SESSION['pictureID']);
-            $_SESSION['check'] = false;
+            $_SESSION['checking'] = false;
         }
+        
 
         if ($stmt->execute()) {
+            $_SESSION['checking'] = false;
             echo "<div class='success'>Posten lyckades!</div>";
             // header("Location: index.php");
             // exit;
@@ -85,6 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         }
     }
 }
+var_dump($_SESSION['checking']);
 ?>
 
 

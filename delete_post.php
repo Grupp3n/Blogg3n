@@ -5,6 +5,7 @@ if (!isset($_SESSION['user_id'])) {
 }
     require 'db_connect.php';
 
+    $_SESSION['checking'] = false;
 
     //Kollar så användare är inloggad
     $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
