@@ -19,7 +19,7 @@ $message = '';
 
 
 // Hämta aktuell användardata från databasen
-$stmt = $pdo->prepare("SELECT username, firstname, email, image FROM users WHERE id = :id");
+$stmt = $pdo->prepare("SELECT id, username, firstname, email, image FROM users WHERE id = :id");
 $stmt->execute([':id' => $user_id]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -175,15 +175,16 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </header>
 
+
+
 <main>
     <!-- Profilsektionen -->
     <div class="profile-info">
         <div class="profile-info-box">
-            <?php if($user['image'] === null): ?>
+            <?php if($user['image'] == null): ?>
                 <img src="img/transparent logo.png" alt="Profilbild">
             <?php else: ?>
-               <?php $_SESSION['guest'] == true ?>
-                <img src="<?php require 'visaProfilBild.php' ?>" alt="Profilbild"> <!-- Här skall bilden för användaren visas om det finns någon -->
+               <img src="data:image/*;base64, <?php echo $user['image'] ?>"> <!-- Här skall bilden för användaren visas om det finns någon -->
             <?php endif ?>
         </div>
         <h2 style="color: white;"><?php echo htmlspecialchars($user['username']); ?></h2>
