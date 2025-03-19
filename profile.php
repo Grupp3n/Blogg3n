@@ -245,7 +245,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="profile-info">
         <div class="profile-info-box">
             <?php if($user['image'] == null): ?>
-                <img src="img/transparent logo.png" alt="Profilbild">
+                <img src="logo.jpeg" alt="Profilbild">
             <?php else: ?>
                 <img src="data:image/*;base64, <?php echo $user['image'] ?>">
             <?php endif ?>
