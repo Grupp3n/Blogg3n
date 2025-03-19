@@ -130,7 +130,7 @@ button {
 }
 
 .body_main {
-  background-color: #2a3a54
+  background: linear-gradient(135deg, #1a2a44 0%, #2a3a54 100%);
 }
 
 .post_submit_button {
