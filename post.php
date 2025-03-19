@@ -116,14 +116,16 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
         $button = true;    
     
         if(isset($_POST['ja'])) {
-            $_SESSION['delete'] = $post['id'];
-            require 'delete_post.php';  
-        }  elseif(isset($_POST['ja'])) {
+            $_SESSION['delete'] = $post['id']; 
+            $_SESSION['pictureDelete'] = $post['imagePath'];
+            require 'delete_post.php'; 
+            header("Location: index.php");
+            exit;
+        }  elseif(isset($_POST['nej'])) {
             exit;
         }
     }    
 }
-
 
 ?>
 
@@ -275,21 +277,21 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
 
 <!-- En popup för Ja eller Nej vid delete av Post -->
 <?php if($button): ?>
-        <div class="edit-post-container" style="background-color: transparent; height: 0rem;">
-            <div id="editForm" class="edit-form" style="display: block; height: 8rem; margin-top: 20rem;">
-                <h2>Vill du fortsätta med en delete?</h2>
-                <?php if (!empty($error_message)): ?>
-                    <p style="color: red;"> <?php echo $error_message; ?></p>
-                <?php endif; ?>
+    <div class="edit-post-container" style="background-color: transparent; height: 0rem;">
+        <div id="editForm" class="edit-form" style="display: block; height: 8rem; margin-top: 20rem;">
+            <h2>Vill du fortsätta med en delete?</h2>
+            <?php if (!empty($error_message)): ?>
+                <p style="color: red;"> <?php echo $error_message; ?></p>
+            <?php endif; ?>
 
-                <form action="post.php?id=<?php echo $post_id; ?>" method="POST" class="delete_form">
-
-                    <button type="submit" name="ja">Ja</button>
-                    <button type="submit" name="nej">Nej</button>
-                </form>
-            </div>
+            <form action="post.php?id=<?php echo $post_id; ?>" method="POST" class="delete_form">
+                <input type="hidden" name="delete_button" value="1"> 
+                <button type="submit" name="ja">Ja</button>
+                <button type="submit" name="nej">Nej</button>
+            </form>
         </div>
-    <?php endif ?>
+    </div>
+<?php endif ?>
 
 
 <script>

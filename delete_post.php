@@ -12,5 +12,6 @@ if (!isset($_SESSION['user_id'])) {
     $query = "DELETE FROM Posts WHERE id = :id";
     $stmt = $pdo->prepare($query);
     $stmt->execute(['id' => $_SESSION['delete']]);
+    $stmt->execute(['id' => $_SESSION['pictureDelete']]);
 
 ?>
