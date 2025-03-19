@@ -15,6 +15,7 @@ if (isset($_GET['guest_id'])) {
 $user_id = $_SESSION['GuestID'];
 $visitProfile = $_SESSION['GuestID'];
 
+ # en kontroll så man inte Besöker sin egna sida
 if($user_id == $_SESSION['user_id']) {
     header("Location: profile.php");
     exit;
@@ -159,7 +160,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Profil - <?php echo htmlspecialchars($user['username']); ?></title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="body_main">
 <header>
     <!-- "Gör ett inlägg" knappen längst till vänster -->
     <div class="header-button left-button">
@@ -182,7 +183,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
 
-<main class="guest-main">
+<main>
     <!-- Profilsektionen -->
     <div class="profile-info">
         <div class="profile-info-box">
@@ -235,7 +236,9 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <form class="create-post-form" method="POST">
             <div class="form-group">
                 
+                <div class="meddelande-button">
                     <button class="DM_funktion" id="toggleEditForm">Skriv ett Meddelande</button>
+                </div>
 
                     <div id="editForm2" class="edit-form" style="display: none;">
                         <h2>Chatt</h2>
