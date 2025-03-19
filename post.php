@@ -190,7 +190,7 @@ foreach($likes as $like) {
 <?php if ($comments): ?>
     <?php foreach ($comments as $comment): ?>
         <div class="comment">
-            <p style="margin-bottom: 0.5rem;"><strong>
+            <p style="margin-bottom: 0.5rem; margin-top: 0.3rem;"><strong>
                 <a href="guest_profile.php?guest_id=<?= $comment['userID'] ?>" class="a_normal" >                     
                     <?php echo htmlspecialchars($comment['username']);?>:
                 </a>
