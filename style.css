@@ -1470,6 +1470,30 @@ form button {
     box-sizing: border-box;
   }
 
+  .search-main .search-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 0 auto 20px auto;
+  }
+
+  .search-main .search-form input{
+    width: 300px;
+    padding: 10px;
+    font-size: 18px;
+  }
+
+  .search-main .search-form button {
+    padding: 10px 15px;
+    font-size: 18px;
+    min-width: 80px;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
 
 
 /* .post-image{
