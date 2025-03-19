@@ -178,6 +178,12 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
 <main>
+<?php if($user_id == $_SESSION['user_id']): ?>
+        <?php 
+            header("Location: profile.php");
+            exit;
+        ?>
+<?php endif ?>
     <!-- Profilsektionen -->
     <div class="profile-info">
         <div class="profile-info-box">
@@ -224,10 +230,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php endif ?>
     </form>
 
-    <!-- Skicka DM -->
-    <?php if($user_id == $_SESSION['user_id']): ?>
-        <?php header("Location: profile.php") ?>
-    <?php else: ?>
+    <!-- Skicka DM -->    
         <form class="create-post-form" method="POST">
             <div class="form-group">
                 
@@ -256,7 +259,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
             
         </form>
-    <?php endif ?>
+    
     
     <!-- Inlägg och notifieringar sida vid sida -->
     <div class="content-columns">
