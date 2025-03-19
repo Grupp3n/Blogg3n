@@ -185,13 +185,13 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
 <?php if ($post['imagePath'] != null): ?>    
     <img class="post-image" src="data:image/*;base64,<?php echo $post2['image'] ?>" alt="<?php echo htmlspecialchars($post['header']); ?>" >
 <?php endif; ?>
-<p style="color: white; margin-top: 2rem;"><?php echo htmlspecialchars($post['textInput']); ?></p>
+<p style="color: white; margin-top: 2rem; margin-bottom: 0.6rem;"><?php echo htmlspecialchars($post['textInput']); ?></p>
 
 <hr>
 
 <div>
     <form method="POST" class="commentsAndLike">        
-        <h2 style="color: white;">Comments</h2>  
+        <h2 style="color: white; margin-top: 0.6rem; margin-bottom: 0.6rem;">Comments</h2>  
     
         <?php if($INLOGGAD && $post['userID'] == $_SESSION['user_id']): ?>
             <button name="delete_button" style="background-color: red; width: 8rem;">Delete</button>
