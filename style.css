@@ -1601,7 +1601,7 @@ form button {
 
 .remember-me {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-self: center;
   align-items: center;
   align-self: center;
