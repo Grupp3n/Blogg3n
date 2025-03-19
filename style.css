@@ -118,6 +118,8 @@ button {
   color: white;
 }
 
+
+
 .text_create_post {
   display: flex;
   font-size: 1.5rem;
@@ -142,7 +144,7 @@ button {
   margin: 2rem auto;
   max-width: 500px;
   padding: 1rem;
-  background-color: white;
+  background-color: #1a2a44;
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -1588,6 +1590,7 @@ form button {
 
   .post-länk{
     color: #007BFF;
+    
   }
   .sök-header{
     color: white;
