@@ -96,6 +96,7 @@ button {
 }
 
 .main_create_post_text {
+  display: flex;  
   align-self: center;
   margin-bottom: 10px;
 }
@@ -208,7 +209,7 @@ button {
 
 .body_follow__div {
   display: flex;
-  align-items: center;
+  
   justify-content: space-around;
   flex-direction: row;
   margin-top: 4rem;
@@ -216,6 +217,7 @@ button {
 }
 
 .cube {
+  display: flex;
   width: 100%;
   flex-direction: column;
 }
@@ -1762,7 +1764,7 @@ header {
 
 @media (max-width: 768px) {
   header {
-    flex-direction: column;
+    flex-direction: row;
     position: static;
     padding: 10px;
   }
