@@ -100,6 +100,9 @@ button {
   align-self: center;
 }
 
+.guestProfile_main {
+  background-color: white;
+}
 .form_create_post {
   display: flex;
   flex-direction: column;    
