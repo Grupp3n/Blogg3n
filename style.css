@@ -1599,6 +1599,14 @@ form button {
   color: #fff;
 }
 
+.remember-me {
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  align-items: center;
+  align-self: center;
+}
+
 .posts h4 {
   color: #fff;
   text-decoration: underline;
