@@ -1,5 +1,11 @@
 <?php
-session_start();
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
+// Inkludera nödvändiga filer, t.ex. databasanslutning och chattfunktionen
+require_once 'db_connect.php';
+include 'chatt.php';
 
 // Test-användare:
 if (!isset($_SESSION['user_id'])) {
@@ -11,7 +17,7 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-require_once 'db_connect.php';
+// require_once 'db_connect.php';
 
 $user_id = $_SESSION['user_id'];
 $message = '';
@@ -33,8 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         }
     }
 
-    $blogHeader = htmlspecialchars($_POST['post_header']);
-    $blogText = htmlspecialchars($_POST['post_content']);
+    $blogHeader = isset($_POST['post_header']);
+    $blogText = isset($_POST['post_content']);
     $time = date_create();
     $getTime = date_format($time, "Y-m-d H:i:s");
 
@@ -224,6 +230,7 @@ $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <main">
     <!-- Profilsektionen -->
     <div class="profile-info">
+        <h2 style="color:white; margin-top: 1rem;"><?php echo htmlspecialchars($user['username']); ?></h2>
         <div class="profile-info-box">
             <?php if($user['image'] == null): ?>
                 <img src="img/transparent logo.png" alt="Profilbild">
@@ -233,6 +240,9 @@ $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
             <form  method="POST" enctype="multipart/form-data">                
                 <button class="DM_funktion" id="toggleEditForm" name="picture_change">Ändra bild</button>
+                <div class="form-group2">
+                <button name="follower_button"><a href="follow.php" name="follower_button_a">Followers</a></button>
+        </div>
 
                 <div id="editForm2" class="edit-form" style="display: <?php echo $toggle ?>;">
                     <h2>Ändra bild</h2>
@@ -260,7 +270,6 @@ $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     });
                 </script>   
             </form>
-        <h2 style="color:white; margin-top: 1rem;"><?php echo htmlspecialchars($user['username']); ?></h2>
     </div>
     
     <?php if ($message): ?>
@@ -299,9 +308,51 @@ $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <button type="submit" name="create_post">Publicera</button>
     </form>
 
-    <div class="form-group2">
-        <button name="follower_button"><a href="follow.php" name="follower_button_a">Followers</a></button>
+    <!-- Chat-ruta -->
+<div class="chat-container">
+    <div class="chat-header">
+        <h3>Chatt</h3>
     </div>
+    <div class="chat-users">
+        <h4>Konversationer</h4>
+        <?php foreach ($chat_users as $chat_user): ?>
+            <form method="POST">
+                <button type="submit" name="selected_user" value="<?php echo $chat_user['id']; ?>">
+                    <?php echo htmlspecialchars($chat_user['username']); ?>
+                </button>
+            </form>
+        <?php endforeach; ?>
+    </div>
+
+    <div class="chat-body">
+        <h4>Meddelanden</h4>
+        <?php 
+        if (isset($_POST['selected_user'])) {
+            $selected_user_id = $_POST['selected_user'];
+
+            foreach ($messages as $msg) {
+                if (
+                    ($msg['senderID'] == $selected_user_id && $msg['receiverID'] == $user_id) || 
+                    ($msg['senderID'] == $user_id && $msg['receiverID'] == $selected_user_id)
+                ) {
+                    echo "<div class='chat-message'>";
+                    echo "<strong>" . htmlspecialchars($msg['sender_name']) . ":</strong> " . htmlspecialchars($msg['text']);
+                    echo "<small>" . htmlspecialchars($msg['timeCreated']) . "</small>";
+                    echo "</div>";
+                }
+            }
+        } else {
+            echo "<p>Välj en konversation</p>";
+        }
+        ?>
+    </div>
+
+    <form method="POST" class="chat-form">
+        <input type="hidden" name="receiver_id" value="<?php echo $selected_user_id ?? ''; ?>">
+        <input type="text" name="message_text" placeholder="Skriv ett svar..." required>
+        <button type="submit" name="reply_message">Skicka</button>
+    </form>
+</div>
     
     <!-- Inlägg och notifieringar sida vid sida -->
     <div class="content-columns">
