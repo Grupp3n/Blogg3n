@@ -55,6 +55,7 @@
 <div class="body-container">
 
         <div class="body-logo">
+        <a href="login.php">
             <img src="./img\transparent logo.png" alt="Logotyp">
         </div>
 
