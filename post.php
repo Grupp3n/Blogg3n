@@ -118,6 +118,11 @@ foreach($likes as $like) {
     </head>
 <body class="body_main">
 <header>
+<form action="search.php" method="GET" class="search-form">
+    <input type="text" name="sökning" placeholder="Search for posts..." required>
+    <button type="submit">Search</button>
+    </form>
+            
     <div class="dropdown">
         <button class="dropbtn">Meny</button>
         <div class="dropdown-content">            

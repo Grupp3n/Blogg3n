@@ -215,6 +215,12 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body class="body_main">
 <header>
+
+<form action="search.php" method="GET" class="search-form">
+    <input type="text" name="sökning" placeholder="Search for posts..." required>
+    <button type="submit">Search</button>
+    </form>
+            
     <!-- "Gör ett inlägg" knappen längst till vänster -->
     <div class="header-button left-button">
         <a href="create_post.php" class="btn">Gör ett inlägg</a>
