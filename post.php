@@ -160,7 +160,7 @@ foreach($likes as $like) {
                 <?php echo htmlspecialchars($post['username']); ?>                
             </a>
         </p>
-<?php if ($post['imagePath']): ?>    
+<?php if ($post['imagePath'] != null): ?>    
     <img class="post-image" src="data:image/*;base64,<?php echo $post2['image'] ?>" alt="<?php echo htmlspecialchars($post['header']); ?>" >
 <?php endif; ?>
 <p style="color: white; margin-top: 2rem;"><?php echo htmlspecialchars($post['textInput']); ?></p>

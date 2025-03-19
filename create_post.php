@@ -48,6 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         } catch (PDOException $e) {
             echo "<p style='color: red;'>Fel: " . $e->getMessage() . "</p>";
         }          
+    } else {
+        $_SESSION['check'] = null;
     }
     
     if (isset($_POST['post_submit_button']) && $blogText != null || $blogHeader != null) {   
