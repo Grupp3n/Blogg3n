@@ -78,7 +78,7 @@ button {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 2rem;
+
   padding: 1rem;
   background: linear-gradient(135deg, #1a2a44 0%, #2a3a54 100%);
   position: relative;
@@ -98,6 +98,7 @@ button {
 
 .main_create_post_text {
   align-self: center;
+  margin-bottom: 10px;
 }
 
 .guestProfile_main {
@@ -257,7 +258,7 @@ button {
   flex-direction: row;
   justify-content: center;  
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
 }
 
 .div_create_post2:hover {
