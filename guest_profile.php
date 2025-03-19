@@ -15,6 +15,11 @@ if (isset($_GET['guest_id'])) {
 $user_id = $_SESSION['GuestID'];
 $visitProfile = $_SESSION['GuestID'];
 
+if($user_id == $_SESSION['user_id']) {
+    header("Location: profile.php");
+    exit;
+}
+
 $message = '';
 
 
@@ -178,12 +183,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
 <main class="guestProfile_main">
-    <?php if($user_id == $_SESSION['user_id']): ?>
-            <?php 
-                header("Location: profile.php");
-                exit;
-            ?>
-    <?php endif ?>
+    <div class="main_stuff">
 
     <!-- Profilsektionen -->
     <div class="profile-info">
@@ -283,7 +283,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 
-
+    </div>
 </main>
 </body>
 </html>
