@@ -1478,8 +1478,18 @@ form button {
     margin: 0 auto;
     overflow-x: hidden;
     box-sizing: border-box;
+    position: relative;
   }
 
+  .search-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: -650px;
+    width: 100%;
+
+  }
   .search-main .search-form{
     display: flex;
     justify-content: center;
