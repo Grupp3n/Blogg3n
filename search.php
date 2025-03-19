@@ -58,21 +58,23 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <button type="submit">Search</button>
     </div>
 </form>
-        <h1>Related Posts</h1>
+        <h1 class="sök-header">Related Posts</h1>
         
         <?php if ($posts): ?>
-            <ul>
+            
                 <?php foreach ($posts as $post): ?>
-                    <li>
+                    
+                        <div class="search-post">
                         <h3><a class="post-länk" class href="post.php?id=<?php echo $post['id']; ?>">
                             <?php echo htmlspecialchars($post['header']); ?>
                         </a></h3>
-                        <p><?php echo htmlspecialchars(substr($post['textInput'], 0, 100)); ?></p>
-                    </li>
+                        <p class="sök-text"><?php echo htmlspecialchars(substr($post['textInput'], 0, 100)); ?></p>
+                        </div>
+                    
                 <?php endforeach; ?>
-            </ul>
+            
         <?php else: ?>
-            <p>No posts found for "<?php echo htmlspecialchars($_GET['sökning']); ?>".</p>
+            <p class="sök-text">No posts found for "<?php echo htmlspecialchars($_GET['sökning']); ?>".</p>
         <?php endif; ?>
     </main>
 </body>

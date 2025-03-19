@@ -1472,9 +1472,9 @@ form button {
     background: linear-gradient(135deg, #1a2a44 0%, #2a3a54 100%);
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    padding: 20px;
+    padding: 100px 20px 20px;
     min-height: calc(100vh - 100px);
     background-color: #1a2a44;
     width: 100%;
@@ -1490,8 +1490,8 @@ form button {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    margin-top: -650px;
     width: 100%;
+    margin-top: 20px;
 
   }
   .search-main .search-form{
@@ -1500,6 +1500,7 @@ form button {
     align-items: center;
     width: 100%;
     margin: 0 auto 20px auto;
+
   }
 
   .search-main .search-form input{
@@ -1520,6 +1521,18 @@ form button {
 
   .post-länk{
     color: #007BFF;
+  }
+  .sök-header{
+    color: white;
+  }
+  .sök-text{
+    color: white;
+  }
+  .search-post{
+    border: 1px solid #135abf;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
   }
 
 /* .post-image{
