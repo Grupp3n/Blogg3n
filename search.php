@@ -52,12 +52,13 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     
     <main class="search-main">
-        
+    <div class="search-container">
     <form action="search.php" method="GET" class="search-form">
     <input type="text" name="sökning" placeholder="Search for posts..." required>
     <button type="submit">Search</button>
+    </div>
 </form>
-        <h1>Search Results</h1>
+        <h1>Related Posts</h1>
         
         <?php if ($posts): ?>
             <ul>
