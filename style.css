@@ -578,7 +578,6 @@ button {
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
   min-height: calc(100vh - 100px);
   background-color: #1a2a44;
   width: 100%;
@@ -586,6 +585,16 @@ button {
   margin: 0 auto;
   overflow-x: hidden;
   box-sizing: border-box;
+}
+
+.guest-buttons {
+  align-self: center;
+  width: 50%;
+}
+
+.DM-funtkion {
+  align-self: center;
+  width: 50%;
 }
 
 .index-main {
@@ -1482,7 +1491,7 @@ margin: 10px auto;
   height: 150px;
   border-radius: 50%;
   overflow: hidden;
-  margin: 0 auto 1rem;
+
   border: 2px solid #fff;
   display: flex;
   justify-content: center;
@@ -1509,6 +1518,7 @@ form.create-post-form {
 }
 .form-group {
   margin-bottom: 1rem;
+  align-items: center;
 }
 form label {
   display: block;

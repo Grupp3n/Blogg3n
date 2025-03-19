@@ -215,13 +215,15 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php endforeach ?>           
                     
         <!-- HÄR SKALL ÄNDRAS TILL DEN sidans ID man är inne på-->
-            <?php if($visitProfile != $_SESSION['user_id']): ?> <!-- KONTROLLERA SÅ ATT INTE PROFILSIDAN MAN ÄR INNE PÅ ÄR ENS EGNA PROFIL -->
-                <?php if($bool): ?>
-                        <button name="follow-button">Follow</button>
-                    <?php else: ?>
-                        <button name="unfollow-button">Unfollow</button>
-                <?php endif ?>                
-            <?php endif ?>
+         <div class="guest-buttons">
+             <?php if($visitProfile != $_SESSION['user_id']): ?> <!-- KONTROLLERA SÅ ATT INTE PROFILSIDAN MAN ÄR INNE PÅ ÄR ENS EGNA PROFIL -->
+                 <?php if($bool): ?>
+                         <button name="follow-button">Follow</button>
+                     <?php else: ?>
+                         <button name="unfollow-button">Unfollow</button>
+                 <?php endif ?>                
+             <?php endif ?>
+         </div>
     </form>
 
     <!-- Skicka DM -->    
