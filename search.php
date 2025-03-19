@@ -49,8 +49,14 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </header>
 
+
     
-    <main>
+    <main class="search-main">
+        
+    <form action="search.php" method="GET" class="search-form">
+    <input type="text" name="sökning" placeholder="Search for posts..." required>
+    <button type="submit">Search</button>
+</form>
         <h1>Search Results</h1>
         
         <?php if ($posts): ?>
