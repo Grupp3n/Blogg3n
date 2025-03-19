@@ -235,7 +235,9 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <form class="create-post-form" method="POST">
             <div class="form-group">
                 
+                <div class="meddelande-button">
                     <button class="DM_funktion" id="toggleEditForm">Skriv ett Meddelande</button>
+                </div>
 
                     <div id="editForm2" class="edit-form" style="display: none;">
                         <h2>Chatt</h2>
