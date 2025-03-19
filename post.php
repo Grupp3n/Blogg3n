@@ -174,12 +174,13 @@ foreach($likes as $like) {
 <?php if ($comments): ?>
     <?php foreach ($comments as $comment): ?>
         <div class="comment">
-            <p style="color: white;"><strong>
+            <p style="color: white; align-self: center;"><strong>
                 <a href="guest_profile.php?guest_id=<?= $comment['userID'] ?>" class="a_normal" >                     
                     <?php echo htmlspecialchars($comment['username']);?>:
                 </a>
             </strong></p>
-            <p style="color: white;"><?php echo nl2br(htmlspecialchars($comment['textInput'])); ?></p>
+            <div class="comments-text"></div>
+            <p style="color: white; "><?php echo nl2br(htmlspecialchars($comment['textInput'])); ?></p>
             <p style="color: white;"><small><?php echo $comment['timeCreated']; ?></small></p>
         </div>
     <?php endforeach; ?>
@@ -194,7 +195,7 @@ foreach($likes as $like) {
     <form action="post_comment.php" method="post">
         <input type="hidden" name="post_id" value="<?php echo $post_id; ?>">
         <textarea name="comment" placeholder="Write a comment!" required></textarea>
-        <button type="submit">Post Comment</button>
+        <button class="P-Comment" type="submit">Post Comment</button>
     </form>
 <?php else: ?>
     <p><a href="login.php">Log in</a> to comment.</p>
