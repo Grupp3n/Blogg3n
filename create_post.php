@@ -52,7 +52,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     
     if (isset($_POST['post_submit_button']) && $blogText != null || $blogHeader != null) {   
         
-        var_dump($_SESSION['checking']);
+        
+        if($_SESSION['checking'] == false) {
+            $_SESSION['checking'] = null;
+        }
+
         if(isset($_SESSION['checking'])) {
             $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated, combinedID, imagePath) 
                     VALUES (:textInput, :header, :userID, :timeCreated, :combinedID, :imagePath)");  
@@ -86,7 +90,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         }
     }
 }
-var_dump($_SESSION['checking']);
 ?>
 
 
