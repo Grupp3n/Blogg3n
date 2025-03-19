@@ -1,7 +1,7 @@
 <?php
 session_start();
 require 'db_connect.php';
-
+$INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
 
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     die("The requested post doesnt exist.");
@@ -117,20 +117,36 @@ foreach($likes as $like) {
         <link rel="stylesheet" href="style.css">
     </head>
 <body class="body_main">
-<header>
-    <div class="dropdown">
-        <button class="dropbtn">Meny</button>
-        <div class="dropdown-content">            
-            <a href="profile.php">Profile</a>
-            <a href="follow.php">Followers</a>
-            <a href="logout.php">Logga ut</a>              
-        </div>        
-    </div>
-        
+<header> 
+    <div class="header-button left-button">
+        <?php if ($INLOGGAD) : ?>
+            <a href="create_post.php" class="btn">Gör ett inlägg</a>
+        <?php else: ?>
+            <div></div>
+        <?php endif; ?>
+    </div>   
+    
+    <form action="search.php" method="GET" class="search-form">
+    <input type="text" name="sökning" placeholder="Search for posts..." required>
+    <button type="submit">Search</button>
+</form>
+            
     <div class="logo-con">
         <a href="index.php"><img src="img/transparent logo.png" alt="Nexlify"></a>
     </div>
-   
+        
+    <div class="dropdown">
+        <button class="dropbtn">Meny</button>
+        <div class="dropdown-content">
+            <?php if (!$INLOGGAD) : ?>
+                <a href="login.php">Log in</a>
+            <?php else : ?>
+                <a href="profile.php">Profile</a>
+                <a href="follow.php">Followers</a>
+                <a href="logout.php">Logga ut</a>
+            <?php endif; ?>
+        </div>
+    </div>
 </header>
 
     <main class="post-main">
