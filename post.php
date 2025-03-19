@@ -76,18 +76,20 @@ if(isset($_POST['likeButton'])){
 }
 
 //Hämtar alla Post för att se om man gillat eller inte. För att sätta färg
-$sql_comments = 'SELECT * 
-                 FROM Likes                 
-                 WHERE userID = :id';                     
-$stmt_comments = $pdo->prepare($sql_comments);
-$stmt_comments->execute(['id' => $_SESSION['user_id']]);
-$comments3 = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);    
+if($INLOGGAD) {
+    $sql_comments = 'SELECT * 
+                    FROM Likes                 
+                    WHERE userID = :id';                     
+    $stmt_comments = $pdo->prepare($sql_comments);
+    $stmt_comments->execute(['id' => $_SESSION['user_id']]);
+    $comments3 = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);    
 
-$color = false;
-foreach($comments3 as $comment) {        
-        if($comment['userID'] == $_SESSION['user_id'] && $comment['postID'] == $_GET['id']){
-            $color = true;
-        }
+    $color = false;
+    foreach($comments3 as $comment) {        
+            if($comment['userID'] == $_SESSION['user_id'] && $comment['postID'] == $_GET['id']){
+                $color = true;
+            }
+    }
 }
 
 

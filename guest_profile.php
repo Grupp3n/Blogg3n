@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+$INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
@@ -209,17 +209,16 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php endif; ?>
     
     <!-- Visa profil -->
-    <div class="update-profile-form2">
-    <form class="update-profile-form2" method="POST" action="">
-        <div class="form-group">
+    <form class="update-profile-form" method="POST" action="" style="display: flex; align-items: center; justify-content: center;">       
+        <div class="form-group" style="display: flex; align-items: center; justify-content: center; flex-direction: column; ">
             <label for="username">Förnamn:</label>
             <p class="guest_profile__p"><?php echo htmlspecialchars($user['firstname']); ?></p>
         </div>
-        <div class="form-group">
+        <div class="form-group" style="display: flex; align-items: center; justify-content: center; flex-direction: column; ">
             <label for="username">Efternamn:</label>
             <p class="guest_profile__p"><?php echo htmlspecialchars($user['lastname']); ?></p>
         </div>
-        <div class="form-group">
+        <div class="form-group" style="display: flex; align-items: center; justify-content: center; flex-direction: column; ">
             <label for="email">E-post:</label>
             <p class="guest_profile__p"><?php echo htmlspecialchars($user['email']); ?></p>
         </div>
@@ -243,8 +242,8 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                  <?php endif ?>                
              <?php endif ?>
          </div>
+        
         </form>
-    </div>
 
     <!-- Skicka DM -->    
         <form class="create-post-form" method="POST">
