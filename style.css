@@ -1514,7 +1514,9 @@ form button {
     justify-content: center;
   }
 
-
+  .post-länk{
+    color: #007BFF;
+  }
 
 /* .post-image{
 max-width: 200px;

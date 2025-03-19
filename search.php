@@ -64,7 +64,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <ul>
                 <?php foreach ($posts as $post): ?>
                     <li>
-                        <h3><a href="post.php?id=<?php echo $post['id']; ?>">
+                        <h3><a class="post-länk" class href="post.php?id=<?php echo $post['id']; ?>">
                             <?php echo htmlspecialchars($post['header']); ?>
                         </a></h3>
                         <p><?php echo htmlspecialchars(substr($post['textInput'], 0, 100)); ?></p>
