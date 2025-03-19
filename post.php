@@ -152,7 +152,7 @@ foreach($likes as $like) {
     <main class="post-main">
         
         <h1 style="color: white;"><?php echo htmlspecialchars($post['header']); ?></h1>
-        <p style="color: white;">Posted by:
+        <p style="color: white; margin-bottom: 2rem;">Posted by:
             <a href="guest_profile.php" class="a_normal">                   
                 <?php $_SESSION['GuestID'] = $post['userID']?> 
                 <?php echo htmlspecialchars($post['username']); ?>                
@@ -161,7 +161,7 @@ foreach($likes as $like) {
 <?php if ($post['imagePath']): ?>    
     <img class="post-image" src="data:image/*;base64,<?php echo $post2['image'] ?>" alt="<?php echo htmlspecialchars($post['header']); ?>" >
 <?php endif; ?>
-<p style="color: white;"><?php echo htmlspecialchars($post['textInput']); ?></p>
+<p style="color: white; margin-top: 2rem;"><?php echo htmlspecialchars($post['textInput']); ?></p>
 
 <hr>
 
