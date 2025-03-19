@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: index.php");
+    header("Location: login.php");
     exit;
 }
 
@@ -161,23 +161,31 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="body_main">
-<header>
-    <!-- "Gör ett inlägg" knappen längst till vänster -->
-    <div class="header-button left-button">
-        <a href="create_post.php" class="btn">Gör ett inlägg</a>
-    </div>
-    <!-- Logotypen centrerad -->
+<header> 
+    <div class="header-button left-button">        
+        <a href="create_post.php" class="btn">Gör ett inlägg</a>        
+    </div>   
+    
+    <form action="search.php" method="GET" class="search-form">
+    <input type="text" name="sökning" placeholder="Search for posts..." required>
+    <button type="submit">Search</button>
+    </form>
+            
     <div class="logo-con">
         <a href="index.php"><img src="img/transparent logo.png" alt="Nexlify"></a>
     </div>
-    <!-- Dropdown-menyn "Meny" längst till höger -->
-    <div class="dropdown right-dropdown">
+        
+    <div class="dropdown">
         <button class="dropbtn">Meny</button>
-        <div class="dropdown-content">            
-            <a href="profile.php">Profile</a>
-            <a href="follow.php">Followers</a>
-            <a href="logout.php">Logga ut</a>           
-        </div>        
+        <div class="dropdown-content">
+            <?php if (!$INLOGGAD) : ?>
+                <a href="login.php">Log in</a>
+            <?php else : ?>
+                <a href="profile.php">Profile</a>
+                <a href="follow.php">Followers</a>
+                <a href="logout.php">Logga ut</a>
+            <?php endif; ?>
+        </div>
     </div>
 </header>
 
@@ -201,7 +209,8 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php endif; ?>
     
     <!-- Visa profil -->
-    <form class="update-profile-form" method="POST" action="">
+    <div class="update-profile-form2">
+    <form class="update-profile-form2" method="POST" action="">
         <div class="form-group">
             <label for="username">Förnamn:</label>
             <p class="guest_profile__p"><?php echo htmlspecialchars($user['firstname']); ?></p>
@@ -234,7 +243,8 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                  <?php endif ?>                
              <?php endif ?>
          </div>
-    </form>
+        </form>
+    </div>
 
     <!-- Skicka DM -->    
         <form class="create-post-form" method="POST">
@@ -275,7 +285,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <h3>Senaste inlägg</h3>
             <?php if (!empty($posts)): ?>
                 <?php foreach ($posts as $post): ?>
-                    <div class="post">
+                    <div class="post_guest">
                         <h4><?php echo nl2br(htmlspecialchars($post['header'])); ?></h4>
                         <p><?php echo nl2br(htmlspecialchars($post['textInput'])); ?></p>
                         <small>Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
@@ -290,7 +300,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 
-    </div>
+</div>
 </main>
 </body>
 </html>

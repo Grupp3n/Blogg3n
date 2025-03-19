@@ -51,9 +51,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     }
     
     if (isset($_POST['post_submit_button'])) {   
-        $_SESSION['check'];
+        
 
-        if($_SESSION['check']) {
+        if(isset($_SESSION['check'])) {
             $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated, combinedID, imagePath) 
                     VALUES (:textInput, :header, :userID, :timeCreated, :combinedID, :imagePath)");
         } else {
@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $stmt->bindParam(':userID', $userID);
         $stmt->bindParam(':timeCreated', $getTime);
         $stmt->bindParam(':combinedID', $number);
-        if($_SESSION['check']) {
+        if(isset($_SESSION['check'])) {
             $stmt->bindParam(':imagePath', $_SESSION['pictureID']);
             $_SESSION['check'] = false;
         }

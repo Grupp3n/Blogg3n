@@ -96,6 +96,7 @@ button {
 }
 
 .main_create_post_text {
+  display: flex;  
   align-self: center;
   margin-bottom: 10px;
 }
@@ -137,6 +138,16 @@ button {
   width: 5rem;
 }
 
+.form.update-profile-form2 {
+  margin: 2rem auto;
+  max-width: 500px;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .no_arrow {
   list-style: none;
  }       
@@ -149,7 +160,7 @@ button {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+  align-items: center;  
 }
 
 .thumbsup {
@@ -170,7 +181,25 @@ button {
   color: white;  
 }
 
-/* .form-group2 > button,
+.post_guest>h4,p {
+margin-bottom: 0.3rem;
+}
+
+.post_guest {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border-bottom: 1px solid #ccc;
+  padding: 1rem 0;  
+}
+
+.post_guest:last-child {
+  border-bottom: none;
+}
+
+
+.form-group2 > button,
 .form-group2 > button>a {
   width: 100%;
   display: flex;
@@ -221,7 +250,7 @@ button {
 
 .body_follow__div {
   display: flex;
-  align-items: center;
+  
   justify-content: space-around;
   flex-direction: row;
   margin-top: 4rem;
@@ -229,6 +258,7 @@ button {
 }
 
 .cube {
+  display: flex;
   width: 100%;
   flex-direction: column;
 }
@@ -532,12 +562,36 @@ button {
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
+.P-Comment {
+  align-self: center;
+  margin-bottom: 20px;
+  width: 25%;
+}
+
+.comment {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  
+  align-self: center;
+  border: 2px solid #000;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  align-items: center;
+  background-color: #0056b3;
+  width: 100%;
+}
+
 .guest-buttons {
   align-self: center;
 }
 
 .meddelande-button {
+  display: flex;
   align-self: center;
+  justify-content: center;
+  margin-bottom: -1rem;
 }
 
 .sticky-ad {
@@ -576,7 +630,7 @@ button {
   padding: 20px;
   min-height: calc(100vh - 100px);
   background-color: #1a2a44;
-  width: 75%;
+  width: 55%;
   max-width: 100%;
 }
 
@@ -1216,7 +1270,7 @@ button {
 
 /* HÄR SKRIVER Amer SIN KOD */
 
-.Amer {
+.Amer{
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
@@ -1224,7 +1278,11 @@ button {
   color: #ffffff;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 100vh;   
+}
+
+.amer_a {
+  color: white;
 }
 
 .body-container {
@@ -1309,7 +1367,7 @@ form input, form button {
 .register 
 {
     text-align: center;
-   
+    margin-right: 1.5rem;   
 }
 
 form button {
@@ -1481,9 +1539,9 @@ form button {
     background: linear-gradient(135deg, #1a2a44 0%, #2a3a54 100%);
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    padding: 20px;
+    padding: 100px 20px 20px;
     min-height: calc(100vh - 100px);
     background-color: #1a2a44;
     width: 100%;
@@ -1491,14 +1549,25 @@ form button {
     margin: 0 auto;
     overflow-x: hidden;
     box-sizing: border-box;
+    position: relative;
   }
 
+  .search-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    margin-top: 20px;
+
+  }
   .search-main .search-form{
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     margin: 0 auto 20px auto;
+
   }
 
   .search-main .search-form input{
@@ -1517,7 +1586,21 @@ form button {
     justify-content: center;
   }
 
-
+  .post-länk{
+    color: #007BFF;
+  }
+  .sök-header{
+    color: white;
+  }
+  .sök-text{
+    color: white;
+  }
+  .search-post{
+    border: 1px solid #135abf;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+  }
 
 /* .post-image{
 max-width: 200px;
@@ -1610,6 +1693,23 @@ form button {
   text-align: center;
   margin-bottom: 1rem;
   color: #fff;
+}
+
+.remember-me {
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  align-items: center;
+  align-self: center;
+  margin-left: 1.5rem;
+}
+
+.before_remember-me {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
 .posts h4 {
@@ -1742,11 +1842,11 @@ header {
 
 @media (max-width: 768px) {
   header {
-    flex-direction: column;
+    flex-direction: row;
     position: static;
     padding: 10px;
   }
-  .header-button.left-button,
+  /* .header-button.left-button,
   .dropdown.right-dropdown,
   .logo-con {
     position: static;
@@ -1755,58 +1855,19 @@ header {
   }
   .logo-con {
     margin: 5px auto;
-  }
+  } */
 }
 
-.chat-container {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 300px;
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  padding: 10px;
-}
-
-.chat-header {
-  background-color: #007bff;
-  color: white;
-  padding: 10px;
-  font-weight: bold;
-  text-align: center;
-}
-
-.chat-body {
-  max-height: 200px;
-  overflow-y: auto;
-  padding: 10px;
-}
-
-.chat-message {
-  padding: 5px;
-  border-bottom: 1px solid #ddd;
-}
-
-.chat-form {
+.comments-text {
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
-  padding: 10px;
 }
 
-.chat-form input {
-  padding: 5px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
-
-.chat-form button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-  border-radius: 5px;
+.comment {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }

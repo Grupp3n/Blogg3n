@@ -1,7 +1,7 @@
 <?php
 session_start();
 require 'db_connect.php';
-
+$INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
 
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     die("The requested post doesnt exist.");
@@ -117,26 +117,42 @@ foreach($likes as $like) {
         <link rel="stylesheet" href="style.css">
     </head>
 <body class="body_main">
-<header>
-    <div class="dropdown">
-        <button class="dropbtn">Meny</button>
-        <div class="dropdown-content">            
-            <a href="profile.php">Profile</a>
-            <a href="follow.php">Followers</a>
-            <a href="logout.php">Logga ut</a>              
-        </div>        
-    </div>
-        
+<header> 
+    <div class="header-button left-button">
+        <?php if ($INLOGGAD) : ?>
+            <a href="create_post.php" class="btn">Gör ett inlägg</a>
+        <?php else: ?>
+            <div></div>
+        <?php endif; ?>
+    </div>   
+    
+    <form action="search.php" method="GET" class="search-form">
+    <input type="text" name="sökning" placeholder="Search for posts..." required>
+    <button type="submit">Search</button>
+</form>
+            
     <div class="logo-con">
         <a href="index.php"><img src="img/transparent logo.png" alt="Nexlify"></a>
     </div>
-   
+        
+    <div class="dropdown">
+        <button class="dropbtn">Meny</button>
+        <div class="dropdown-content">
+            <?php if (!$INLOGGAD) : ?>
+                <a href="login.php">Log in</a>
+            <?php else : ?>
+                <a href="profile.php">Profile</a>
+                <a href="follow.php">Followers</a>
+                <a href="logout.php">Logga ut</a>
+            <?php endif; ?>
+        </div>
+    </div>
 </header>
 
     <main class="post-main">
         
         <h1 style="color: white;"><?php echo htmlspecialchars($post['header']); ?></h1>
-        <p style="color: white;">Posted by:
+        <p style="color: white; margin-bottom: 2rem;">Posted by:
             <a href="guest_profile.php" class="a_normal">                   
                 <?php $_SESSION['GuestID'] = $post['userID']?> 
                 <?php echo htmlspecialchars($post['username']); ?>                
@@ -145,7 +161,7 @@ foreach($likes as $like) {
 <?php if ($post['imagePath']): ?>    
     <img class="post-image" src="data:image/*;base64,<?php echo $post2['image'] ?>" alt="<?php echo htmlspecialchars($post['header']); ?>" >
 <?php endif; ?>
-<p style="color: white;"><?php echo htmlspecialchars($post['textInput']); ?></p>
+<p style="color: white; margin-top: 2rem;"><?php echo htmlspecialchars($post['textInput']); ?></p>
 
 <hr>
 
@@ -174,13 +190,15 @@ foreach($likes as $like) {
 <?php if ($comments): ?>
     <?php foreach ($comments as $comment): ?>
         <div class="comment">
-            <p style="color: white;"><strong>
+            <p style="margin-bottom: 0.5rem; margin-top: 0.3rem;"><strong>
                 <a href="guest_profile.php?guest_id=<?= $comment['userID'] ?>" class="a_normal" >                     
                     <?php echo htmlspecialchars($comment['username']);?>:
                 </a>
             </strong></p>
-            <p style="color: white;"><?php echo nl2br(htmlspecialchars($comment['textInput'])); ?></p>
-            <p style="color: white;"><small><?php echo $comment['timeCreated']; ?></small></p>
+            <div class="comments-text">
+                <p style="color: white; "><?php echo nl2br(htmlspecialchars($comment['textInput'])); ?></p>
+                <p style="color: white; margin-top: 0.2rem;"><small><?php echo $comment['timeCreated']; ?></small></p>
+            </div>
         </div>
     <?php endforeach; ?>
 <?php else: ?>
@@ -194,7 +212,7 @@ foreach($likes as $like) {
     <form action="post_comment.php" method="post">
         <input type="hidden" name="post_id" value="<?php echo $post_id; ?>">
         <textarea name="comment" placeholder="Write a comment!" required></textarea>
-        <button type="submit">Post Comment</button>
+        <button class="P-Comment" type="submit">Post Comment</button>
     </form>
 <?php else: ?>
     <p><a href="login.php">Log in</a> to comment.</p>
