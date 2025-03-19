@@ -59,7 +59,9 @@ button {
   background-color: #fff;
   color: #000;
   border: none;
+  
   cursor: pointer;
+  
   max-width: 400px;
   max-height: 75px;
   
@@ -100,8 +102,21 @@ button {
 }
 
 .guestProfile_main {
+  display: flex;
+  width: 100%;
   background-color: white;
 }
+
+.bodyShieeet {
+  background-color: white;
+}
+
+.main_stuff {
+  display: flex;
+  width: 100%;
+  background-color: white;
+}
+
 .form_create_post {
   display: flex;
   flex-direction: column;    
@@ -1692,3 +1707,4 @@ header {
     margin: 5px auto;
   }
 }
+
