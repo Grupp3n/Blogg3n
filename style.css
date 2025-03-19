@@ -521,6 +521,22 @@ button {
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
+.P-Comment {
+  align-self: center;
+  margin-bottom: 20px;
+  width: 25%;
+}
+
+.comment {
+  align-self: center;
+  border: 2px solid #000;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  align-items: center;
+  background-color: #0056b3;
+  width: 100%;
+}
+
 .guest-buttons {
   align-self: center;
 }
@@ -565,7 +581,7 @@ button {
   padding: 20px;
   min-height: calc(100vh - 100px);
   background-color: #1a2a44;
-  width: 75%;
+  width: 55%;
   max-width: 100%;
 }
 
