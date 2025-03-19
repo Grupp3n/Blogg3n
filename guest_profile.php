@@ -182,9 +182,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
 
-<main class="guestProfile_main">
-    <div class="main_stuff">
-
+<main class="guest-main">
     <!-- Profilsektionen -->
     <div class="profile-info">
         <div class="profile-info-box">
