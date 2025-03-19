@@ -296,7 +296,7 @@ $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </form>
 
     <!-- Skapa inlägg -->
-    <<form method="POST" enctype="multipart/form-data" class="form_create_post">
+    <form method="POST" enctype="multipart/form-data" class="form_create_post">
         <div class="form-group">
             <label for="post_header">Skapa ett inlägg:</label>
             <input type="text" name="post_header" id="post_header" placeholder="Ange rubrik" required>

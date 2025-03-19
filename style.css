@@ -101,6 +101,11 @@ button {
   margin-bottom: 10px;
 }
 
+.delete_form {
+  display: flex;
+  flex-direction: row;
+}
+
 .guestProfile_main {
   background-color: white;
 }

@@ -23,8 +23,9 @@ if (!$post) {
     die("Post not found.");
 }
 
+
 # Den första If-satsen med !isset($_POST['likeButton']) är till för att få bort felmeddelande över header!
-if(!isset($_POST['likeButton'])) {
+if(!isset($_POST['likeButton']) && !isset($_POST['delete_button'])) {
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id']) && $_SESSION['user_id'] == $post['userID']) {
         $new_header = trim($_POST['header']);
         $new_text = trim($_POST['textInput']);
@@ -107,6 +108,22 @@ foreach($likes as $like) {
     $counter += 1;
 }
 
+$button = false;
+
+# Bygger logiken för att ta bort ett inlägg
+if($_SERVER['REQUEST_METHOD'] == "POST") {
+    if(isset($_POST['delete_button'])) {
+        $button = true;    
+    
+        if(isset($_POST['ja'])) {
+            $_SESSION['delete'] = $post['id'];
+            require 'delete_post.php';  
+        }  elseif(isset($_POST['ja'])) {
+            exit;
+        }
+    }    
+}
+
 
 ?>
 
@@ -152,6 +169,9 @@ foreach($likes as $like) {
 </header>
 
     <main class="post-main">
+
+            
+    
         
         <h1 style="color: white;"><?php echo htmlspecialchars($post['header']); ?></h1>
         <p style="color: white; margin-bottom: 2rem;">Posted by:
@@ -168,9 +188,12 @@ foreach($likes as $like) {
 <hr>
 
 <div>
-    <form method="POST" class="commentsAndLike">
-    <h2 style="color: white;">Comments</h2>  
+    <form method="POST" class="commentsAndLike">        
+        <h2 style="color: white;">Comments</h2>  
     
+        <?php if($INLOGGAD && $post['userID'] == $_SESSION['user_id']): ?>
+            <button name="delete_button" style="background-color: red; width: 8rem;">Delete</button>
+        <?php endif ?>
         <div class="commentsAndLike">
 
             <?php if(!empty($_SESSION['user_id'])): ?>
@@ -248,6 +271,26 @@ foreach($likes as $like) {
         </form>
     </div>
 </div>
+
+
+<!-- En popup för Ja eller Nej vid delete av Post -->
+<?php if($button): ?>
+        <div class="edit-post-container" style="background-color: transparent; height: 0rem;">
+            <div id="editForm" class="edit-form" style="display: block; height: 8rem; margin-top: 20rem;">
+                <h2>Vill du fortsätta med en delete?</h2>
+                <?php if (!empty($error_message)): ?>
+                    <p style="color: red;"> <?php echo $error_message; ?></p>
+                <?php endif; ?>
+
+                <form action="post.php?id=<?php echo $post_id; ?>" method="POST" class="delete_form">
+
+                    <button type="submit" name="ja">Ja</button>
+                    <button type="submit" name="nej">Nej</button>
+                </form>
+            </div>
+        </div>
+    <?php endif ?>
+
 
 <script>
     document.getElementById('toggleEditForm').addEventListener('click', function () {
