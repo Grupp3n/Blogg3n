@@ -233,6 +233,10 @@ if($main_post != NULL) {
                         <p>No posts have been liked yet</p>
                     </div>         
                 <?php endif; ?>
+            <?php else: ?>
+                <div class="thumbnail">
+                    <p>No posts have been liked yet</p>
+                </div>      
             <?php endif; ?>
         </div>
     </aside>
