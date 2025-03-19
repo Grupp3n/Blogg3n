@@ -177,14 +177,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
 
-<main class="guestProfile_main">
-    <?php if($user_id == $_SESSION['user_id']): ?>
-            <?php 
-                header("Location: profile.php");
-                exit;
-            ?>
-    <?php endif ?>
-
+<main class="guest-main">
     <!-- Profilsektionen -->
     <div class="profile-info">
         <div class="profile-info-box">
