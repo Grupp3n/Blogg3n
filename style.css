@@ -59,9 +59,8 @@ button {
   background-color: #fff;
   color: #000;
   border: none;
-  
-  cursor: pointer;
-  
+  padding: 15px 25px; 
+  cursor: pointer; 
   max-width: 400px;
   max-height: 75px;
   
@@ -102,21 +101,8 @@ button {
 }
 
 .guestProfile_main {
-  display: flex;
-  width: 100%;
   background-color: white;
 }
-
-.bodyShieeet {
-  background-color: white;
-}
-
-.main_stuff {
-  display: flex;
-  width: 100%;
-  background-color: white;
-}
-
 .form_create_post {
   display: flex;
   flex-direction: column;    
@@ -582,32 +568,6 @@ button {
 
 .post-image:hover {
   transform: scale(1.03); 
-}
-
-.guest-main {
-  background: linear-gradient(135deg, #1a2a44 0%, #2a3a54 100%);
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  min-height: calc(100vh - 100px);
-  background-color: #1a2a44;
-  width: 100%;
-  max-width: 100%;
-  margin: 0 auto;
-  overflow-x: hidden;
-  box-sizing: border-box;
-}
-
-.guest-buttons {
-  align-self: center;
-  width: 50%;
-}
-
-.DM-funtkion {
-  align-self: center;
-  width: 50%;
 }
 
 .index-main {
@@ -1450,14 +1410,13 @@ form button {
 
 .search-form{
 display: flex;
-flex-direction: row;
 align-items: center;
-margin-left: 150px;
-gap: 5px;
+margin-left: -400px;
+gap: 0px;
 
 }
 .search-form input{
-  width: 160px;
+  width: 150px;
   padding: 5px;
   font-size: 14px;
   border: 1px;
@@ -1465,7 +1424,7 @@ gap: 5px;
 }
 
 .search-form button {
-  padding: 7px 10px;
+  padding: 5px 8px;
   background-color: #007BFF;
   color: white;
   width: 50px;
@@ -1505,7 +1464,7 @@ margin: 10px auto;
   height: 150px;
   border-radius: 50%;
   overflow: hidden;
-
+  margin: 0 auto 1rem;
   border: 2px solid #fff;
   display: flex;
   justify-content: center;
@@ -1532,7 +1491,6 @@ form.create-post-form {
 }
 .form-group {
   margin-bottom: 1rem;
-  align-items: center;
 }
 form label {
   display: block;
@@ -1707,4 +1665,3 @@ header {
     margin: 5px auto;
   }
 }
-
