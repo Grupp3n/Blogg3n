@@ -213,7 +213,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Profil - <?php echo htmlspecialchars($user['username']); ?></title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="body_main">
 <header>
     <!-- "Gör ett inlägg" knappen längst till vänster -->
     <div class="header-button left-button">
@@ -234,7 +234,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </header>
 
-<main>
+<main">
     <!-- Profilsektionen -->
     <div class="profile-info">
         <div class="profile-info-box">
