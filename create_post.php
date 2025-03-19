@@ -48,8 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         } catch (PDOException $e) {
             echo "<p style='color: red;'>Fel: " . $e->getMessage() . "</p>";
         }          
-    } else {
-        $_SESSION['check'] = null;
     }
     
     if (isset($_POST['post_submit_button']) && $blogText != null || $blogHeader != null) {   
@@ -58,6 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         if(isset($_SESSION['check'])) {
             $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated, combinedID, imagePath) 
                     VALUES (:textInput, :header, :userID, :timeCreated, :combinedID, :imagePath)");
+                    $_SESSION['check'] = false;
         } else {
             $stmt = $pdo->prepare("INSERT INTO posts (textInput, header, userID, timeCreated, combinedID, imagePath) 
                     VALUES (:textInput, :header, :userID, :timeCreated, :combinedID, imagePath = NULL)");
