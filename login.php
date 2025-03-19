@@ -64,9 +64,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <br>
         </form>
-        <a href="register.php">Inte medlem? Registrera dig här</a>
-        <a href="ChangePassword.php">Byt lösenord?</a>
-        <a href="glömt_lösenord.php">Glömt lösenord?</a>
+        <a href="register.php" class="amer_a">Inte medlem? Registrera dig här</a>
+        <a href="ChangePassword.php" class="amer_a">Byt lösenord?</a>
+        <a href="glömt_lösenord.php" class="amer_a">Glömt lösenord?</a>
     </div>
 </div>
 
