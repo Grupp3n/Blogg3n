@@ -25,7 +25,7 @@ $message = '';
 
 
 // Hämta aktuell användardata från databasen
-$stmt = $pdo->prepare("SELECT id, username, firstname, email, image FROM users WHERE id = :id");
+$stmt = $pdo->prepare("SELECT id, username, firstname, lastname, email, image FROM users WHERE id = :id");
 $stmt->execute([':id' => $user_id]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -203,8 +203,12 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <!-- Visa profil -->
     <form class="update-profile-form" method="POST" action="">
         <div class="form-group">
-            <label for="username">Användarnamn:</label>
-            <p class="guest_profile__p"><?php echo htmlspecialchars($user['username']); ?></p>
+            <label for="username">Förnamn:</label>
+            <p class="guest_profile__p"><?php echo htmlspecialchars($user['firstname']); ?></p>
+        </div>
+        <div class="form-group">
+            <label for="username">Efternamn:</label>
+            <p class="guest_profile__p"><?php echo htmlspecialchars($user['lastname']); ?></p>
         </div>
         <div class="form-group">
             <label for="email">E-post:</label>

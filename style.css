@@ -1601,11 +1601,22 @@ form button {
 
 .posts h4 {
   color: #fff;
+  text-decoration: underline;
 }
+
+.posts p {
+  color: #fff;
+}
+
+.posts small {
+  color: #fff;
+}
+
 .post {
   border-bottom: 1px solid #ccc;
-  padding: 1rem 0;
+  padding: 1rem 0;  
 }
+
 .post:last-child {
   border-bottom: none;
 }
