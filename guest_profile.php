@@ -275,7 +275,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <h3>Senaste inlägg</h3>
             <?php if (!empty($posts)): ?>
                 <?php foreach ($posts as $post): ?>
-                    <div class="post">
+                    <div class="post_guest">
                         <h4><?php echo nl2br(htmlspecialchars($post['header'])); ?></h4>
                         <p><?php echo nl2br(htmlspecialchars($post['textInput'])); ?></p>
                         <small>Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
@@ -290,7 +290,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 
-    </div>
+</div>
 </main>
 </body>
 </html>

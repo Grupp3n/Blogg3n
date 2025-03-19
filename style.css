@@ -171,6 +171,24 @@ button {
   color: white;  
 }
 
+.post_guest>h4,p {
+margin-bottom: 0.3rem;
+}
+
+.post_guest {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border-bottom: 1px solid #ccc;
+  padding: 1rem 0;  
+}
+
+.post_guest:last-child {
+  border-bottom: none;
+}
+
+
 .form-group2 > button,
 .form-group2 > button>a {
   width: 100%;
