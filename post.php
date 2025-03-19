@@ -215,7 +215,7 @@ foreach($likes as $like) {
         <button class="P-Comment" type="submit">Post Comment</button>
     </form>
 <?php else: ?>
-    <p><a href="login.php">Log in</a> to comment.</p>
+    <p style="color: white;"><button style="background-color: #007BFF; color: white; border-radius: 10px; padding: 9px; margin:5px;" href="login.php" >Log in</button> to comment.</p>
 <?php endif; ?>
 
 <hr>
