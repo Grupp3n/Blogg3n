@@ -209,7 +209,8 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php endif; ?>
     
     <!-- Visa profil -->
-    <form class="update-profile-form" method="POST" action="">
+    <div class="update-profile-form2">
+    <form class="update-profile-form2" method="POST" action="">
         <div class="form-group">
             <label for="username">Förnamn:</label>
             <p class="guest_profile__p"><?php echo htmlspecialchars($user['firstname']); ?></p>
@@ -242,7 +243,8 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                  <?php endif ?>                
              <?php endif ?>
          </div>
-    </form>
+        </form>
+    </div>
 
     <!-- Skicka DM -->    
         <form class="create-post-form" method="POST">
