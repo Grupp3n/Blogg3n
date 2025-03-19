@@ -54,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label>Lösenord:</label>
             <input type="password" name="password" placeholder="Lösenord" required>
             <div class="remember-me">
-                <input type="checkbox" name="remember_me" id="remember_me" style="width: 2rem;">
+                <input type="checkbox" name="remember_me" id="remember_me" style="width: 2rem; margin-left: 7rem;">
                 <label for="remember_me" style="width: 7rem;">Kom ihåg mig</label>
             </div>
             <div class="register">
