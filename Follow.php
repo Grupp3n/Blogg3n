@@ -1,6 +1,8 @@
 <?php
 session_start();
     
+$INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit;
@@ -8,8 +10,9 @@ if (!isset($_SESSION['user_id'])) {
       
     require 'db_connect.php';
 
-        $query = '  SELECT * 
-                    FROM Follower                 
+        $query = '  SELECT Follower.*, U.*
+                    FROM Follower  
+                    LEFT JOIN Users as U on followerID = U.id               
                     WHERE followedID = :id
                 ';  
         $stmt = $pdo->prepare($query);
@@ -24,25 +27,26 @@ if (!isset($_SESSION['user_id'])) {
         foreach($follower as $follow) { 
 
             if($follow['followerID']) {
-                $counterFollowed += 1;
+                $counterFollower += 1;
             }
             
         }
 
-        $query = '  SELECT * 
-                    FROM Follower                 
+        $query2 = '  SELECT Follower.*, U.*
+                    FROM Follower  
+                    LEFT JOIN Users as U on followerID = U.id                     
                     WHERE followerID = :id
                 ';  
-        $stmt = $pdo->prepare($query);
+        $stmt2 = $pdo->prepare($query2);
         
-        $stmt->execute(['id' => $_SESSION['user_id']]);  # Skall ändra till USERID
-        $follower2 = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt2->execute(['id' => $_SESSION['user_id']]);  # Skall ändra till USERID
+        $follower2 = $stmt2->fetchAll(PDO::FETCH_ASSOC);
 
         # Denna skall räkna hur många användaren följer
         foreach($follower2 as $follow) {
             
             if($follow['followedID']) {
-                $counterFollower += 1;
+                $counterFollowed += 1;
             }
         }
 
@@ -57,7 +61,6 @@ if (!isset($_SESSION['user_id'])) {
         $bool = true;  
         $deleteID = 0;
         
-        $visitProfile = $_SESSION['GuestID'];
         $userID = 3;
 
         if($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -97,33 +100,77 @@ if (!isset($_SESSION['user_id'])) {
     <title>Document</title>
 </head>
 <body class="body_follow">
-    <form method="POST">        
-
-            <p>Alma</p>
-            <?php foreach($followAll as $follow): ?>  
+    <header>    
                 
-                <!-- DET FÖRSTA ÄR USERID ---------  DET ANDRA ÄR PROFILSIDAN MAN ÄR INNE PÅ -->
-                <?php if($follow['followerID'] == $_SESSION['user_id'] && $follow['followedID'] == $_SESSION['GuestID']): ?> <!-- HÄR SKALL ÄVEN EN KONTROLL AV USERS SAMT EN KONTROLL EMOT ANVÄNDARENS PROFIL. SÅ MAN INTE KAN GILLA SIN EGNA SIDA-->
-                    <?php $bool = false; ?>
-                    <?php $_SESSION['deleteid'] = $follow['id']; ?>
-                <?php endif ?>
-            <?php endforeach ?>           
-                    
-        <!-- HÄR SKALL ÄNDRAS TILL DEN sidans ID man är inne på-->
-            <?php if($visitProfile != $_SESSION['user_id']): ?> <!-- KONTROLLERA SÅ ATT INTE PROFILSIDAN MAN ÄR INNE PÅ ÄR ENS EGNA PROFIL -->
-                <?php if($bool): ?>
-                        <button name="follow-button">Follow</button>
-                    <?php else: ?>
-                        <button name="unfollow-button">Unfollow</button>
-                <?php endif ?>                
-            <?php endif ?>
+        <div class="logo-con">
+            <a href="index.php"><img src="img/transparent logo.png" alt="Nexlify"></a>
+        </div>
+            
+        <div class="dropdown">
+            <button class="dropbtn">Meny</button>
+            <div class="dropdown-content">
+                <?php if (!$INLOGGAD) : ?>
+                    <a href="login.php">Log in</a>
+                <?php else : ?>
+                    <a href="profile.php">Profile</a>
+                    <a href="follow.php">Followers</a>
+                    <a href="logout.php">Logga ut</a>
+                <?php endif; ?>
+            </div>
+        </div>
+    </header> 
 
-            <p>Following: <?php echo $counterFollowed ?></p>
-            <p>Follower: <?php echo $counterFollower ?></p>
-        
+<main class="index-main">
+    <form method="POST">        
+        <div class="body_follow__div">
+
+        <div>
+            <p>Following: <?php echo $counterFollowed ?></p>                    
+           <?php foreach($follower2 as $follow) { 
+
+                $query = '  SELECT id, firstname, lastname
+                FROM Users                                      
+                WHERE id = :id
+                ';  
+                $stmt = $pdo->prepare($query);
+
+                $stmt->execute(['id' => $follow['followedID']]); 
+                $follower3 = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                
+                foreach($follower3 as $follow) { ?>
+                <a href="guest_profile.php?guest_id=<?php echo $follow['id']; ?>" class="a_normal">
+                    <?php echo htmlspecialchars($follow['firstname'] . " " . $follow['lastname']);?>
+                    <br>
+                </a>
+               <?php }
+            } ?>
+        </div>
+       
+        <div>
+            <p>Followers: <?php echo $counterFollower ?></p>
+            
+            <?php if($counterFollower > 0): ?>
+                <?php foreach($follower as $follow) { 
+
+                    $query = '  SELECT id, firstname, lastname
+                                FROM Users                                      
+                                WHERE id = :id';  
+                    $stmt = $pdo->prepare($query);
+                    $stmt->execute(['id' => $follow['followerID']]);  
+                    $followerData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                    foreach ($followerData as $fData) { ?>
+                        <a href="guest_profile.php?guest_id=<?php echo htmlspecialchars($fData['id']); ?>" class="a_normal">
+                            <?php echo htmlspecialchars($fData['firstname'] . " " . $fData['lastname']); ?>
+                            <br>
+                        </a>
+                <?php }
+                } ?>
+           <?php endif ?>
+        </div>
 
 
-
-    </form>
+    </div>
+</main>
 </body>
 </html>

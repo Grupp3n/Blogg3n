@@ -24,10 +24,7 @@ try {
     if($base64Image) {       
         echo '<img style ="width: 300px; " src="data:image/*;base64,' . $base64Image . '" />';
     } 
-    /*else 
-    {
-        echo "<p style='color: red;'>Ingen bild hittades med detta ID.</p>";
-    }*/
+    
 } catch (PDOException $e) {
     echo "<p style='color: red;'>Fel: " . $e->getMessage() . "</p";
 }

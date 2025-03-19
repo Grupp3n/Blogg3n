@@ -43,13 +43,20 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <button class="dropbtn">Meny</button>
         <div class="dropdown-content">            
             <a href="profile.php">Profile</a>
-            <a href="logout.php">Logga ut</a>            
+            <a href="follow.php">Followers</a>
+            <a href="logout.php">Logga ut</a>              
         </div>        
     </div>
 </header>
 
+
     
-    <main>
+    <main class="search-main">
+        
+    <form action="search.php" method="GET" class="search-form">
+    <input type="text" name="sökning" placeholder="Search for posts..." required>
+    <button type="submit">Search</button>
+</form>
         <h1>Search Results</h1>
         
         <?php if ($posts): ?>

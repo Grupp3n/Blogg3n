@@ -60,8 +60,7 @@ button {
   color: #000;
   border: none;
   padding: 15px 25px; 
-  cursor: pointer;
-  margin: 1%;
+  cursor: pointer; 
   max-width: 400px;
   max-height: 75px;
   
@@ -76,8 +75,17 @@ button {
 .main_create_post {
   display: flex;
   flex-direction: column;
-  margin-top: 2rem;
+  justify-content: center;
+  align-items: center;
+
   padding: 1rem;
+  background: linear-gradient(135deg, #1a2a44 0%, #2a3a54 100%);
+  position: relative;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  padding: 25px;
+  width: 100%;
 }
 
 .main_create_post>img {
@@ -87,6 +95,14 @@ button {
   margin-top: 3rem;    
 }
 
+.main_create_post_text {
+  align-self: center;
+  margin-bottom: 10px;
+}
+
+.guestProfile_main {
+  background-color: white;
+}
 .form_create_post {
   display: flex;
   flex-direction: column;    
@@ -105,9 +121,16 @@ button {
   display: flex;
   font-size: 1.5rem;
   width: 80rem;
+  max-height: 375px;
+  max-width: 750px;
+  margin-bottom: 20px;
   background: #333;
   color: white;
   resize: none;
+}
+
+.body_main {
+  background: linear-gradient(135deg, #1a2a44 0%, #2a3a54 100%);
 }
 
 .post_submit_button {
@@ -129,6 +152,14 @@ button {
   align-items: center;
 }
 
+.thumbsup {
+  transition: all 0.3s ease;
+}
+
+.thumbsup:hover {
+  transform: scale(1.2); 
+}
+
 .a_normal {
   text-decoration: underline;
   color: whitesmoke;
@@ -136,12 +167,52 @@ button {
 }
 
 .guest_profile__p {
+  color: white;  
+}
+
+.form-group2 > button,
+.form-group2 > button>a {
+  width: 100%;
+  display: flex;
+  justify-self: center;
+  align-self: center;
+  background-color: #1b73e8;
+  text-decoration: none;
   color: white;
+  padding: 10px 20px;  
+  font-size: large;
+  border: none; 
+  border-radius: 5px;
+  width: auto;
+}
+
+.profile-info>form>button {
+  width: 50%;
+  display: flex;
+  justify-self: center;
+  align-self: center;
+  background-color: #1b73e8;
+  text-decoration: none;
+  color: white;
+  padding: 10px 20px;  
+  font-size: large;
+  border: none; 
+  border-radius: 5px;
+  width: auto;
 }
 
 .body_follow {
     background-color: black;
-    color: white;    
+    color: white;     
+}
+
+.body_follow__div {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: row;
+  margin-top: 4rem;
+  font-size: 2rem;
 }
 
 .cube {
@@ -183,17 +254,31 @@ button {
 }
 
 .div_create_post2 { 
+  background: radial-gradient(circle, rgba(26, 42, 68, 0.9) 0%, rgba(42, 58, 84, 0.7) 100%);
   display: flex;
-  width: 100%;
+  width: 70%;
+  align-self: center;
   flex-direction: row;
   justify-content: center;  
   align-items: center;
+  margin-bottom: 50px;
+}
+
+.div_create_post2:hover {
+  background: radial-gradient(circle, rgba(26, 42, 68, 0.9) 0%, rgba(42, 58, 84, 0.7) 100%);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.4), 0 0 15px rgba(229, 231, 235, 0.3); 
 }
 
 .div_create_post_left {
   flex: 1;
   display: flex;
+  flex-direction: column;
   justify-content: flex-start;
+  
+}
+
+.div_create_post_left button {
+  width: 150px;
 }
 
 .div_create_post_middle {
@@ -434,6 +519,14 @@ button {
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
+.guest-buttons {
+  align-self: center;
+}
+
+.meddelande-button {
+  align-self: center;
+}
+
 .sticky-ad {
   position: fixed;
   top: 22%;
@@ -465,6 +558,45 @@ button {
   opacity: 0.8;
 }
 
+.post-main {
+  background: linear-gradient(135deg, #1a2a44 0%, #2a3a54 100%);
+  padding: 20px;
+  min-height: calc(100vh - 100px);
+  background-color: #1a2a44;
+  width: 75%;
+  max-width: 100%;
+}
+
+.post-image {
+  max-width: 400px; 
+  width: 100%; 
+  height: 100%;
+  max-height: 600px; 
+  display: block; 
+  margin: auto;
+  transition: all 0.3s ease;
+}
+
+.post-image:hover {
+  transform: scale(1.03); 
+}
+
+.guest-main {
+  background: linear-gradient(135deg, #1a2a44 0%, #2a3a54 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  min-height: calc(100vh - 100px);
+  background-color: #1a2a44;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
 .index-main {
   background: linear-gradient(135deg, #1a2a44 0%, #2a3a54 100%);
   display: flex;
@@ -475,7 +607,7 @@ button {
   padding: 20px;
   min-height: calc(100vh - 100px);
   background-color: #1a2a44;
-  width: 95%;
+  width: 100%;
   max-width: 100%;
   margin: 0 auto;
   overflow-x: hidden;
@@ -1304,32 +1436,73 @@ form button {
 }
 
 .search-form{
-display: flex;
-align-items: center;
-margin-left: -400px;
-gap: 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 145px;
+  gap: 4px;
+  
+  }
+  .search-form input{
+    width: 150px;
+    padding: 5px;
+    font-size: 14px;
+    border: 1px;
+    border-radius: 5px;
+  }
+  
+  .search-form button {
+    padding: 7px 9px;
+    background-color: #007BFF;
+    color: white;
+    width: 50px;
+    font-size: 10px;
+    border: none;
+    cursor: pointer;
+    margin-left: 5px;
+    border-radius: 5px;
+    white-space: nowrap;
+  }
+  
+  .search-main{
+    background: linear-gradient(135deg, #1a2a44 0%, #2a3a54 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    min-height: calc(100vh - 100px);
+    background-color: #1a2a44;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
 
-}
-.search-form input{
-  width: 150px;
-  padding: 5px;
-  font-size: 14px;
-  border: 1px;
-  border-radius: 5px;
-}
+  .search-main .search-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 0 auto 20px auto;
+  }
 
-.search-form button {
-  padding: 5px 8px;
-  background-color: #007BFF;
-  color: white;
-  width: 50px;
-  font-size: 10px;
-  border: none;
-  cursor: pointer;
-  margin-left: 5px;
-  border-radius: 5px;
-  white-space: nowrap;
-}
+  .search-main .search-form input{
+    width: 300px;
+    padding: 10px;
+    font-size: 18px;
+  }
+
+  .search-main .search-form button {
+    padding: 10px 15px;
+    font-size: 18px;
+    min-width: 80px;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
 
 
@@ -1428,11 +1601,22 @@ form button {
 
 .posts h4 {
   color: #fff;
+  text-decoration: underline;
 }
+
+.posts p {
+  color: #fff;
+}
+
+.posts small {
+  color: #fff;
+}
+
 .post {
   border-bottom: 1px solid #ccc;
-  padding: 1rem 0;
+  padding: 1rem 0;  
 }
+
 .post:last-child {
   border-bottom: none;
 }

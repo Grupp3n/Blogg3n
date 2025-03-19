@@ -47,6 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="body-form-container">
         <h2>Logga in</h2>
+        <br>
         <form method="post">
             <label>Användarnamn eller Email:</label>
             <input type="text" name="username_email" placeholder="Användarnamn eller Email" required>
@@ -61,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </form>
         <a href="register.php">Inte medlem? Registrera dig här</a>
-        <a href="#">Har du glömt lösenord eller användar namn?</a>
+        <a href="ChangePassword.php">Har du glömt lösenord eller användar namn?</a>
     </div>
 </div>
 

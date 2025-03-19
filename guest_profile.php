@@ -15,11 +15,17 @@ if (isset($_GET['guest_id'])) {
 $user_id = $_SESSION['GuestID'];
 $visitProfile = $_SESSION['GuestID'];
 
+ # en kontroll så man inte Besöker sin egna sida
+if($user_id == $_SESSION['user_id']) {
+    header("Location: profile.php");
+    exit;
+}
+
 $message = '';
 
 
 // Hämta aktuell användardata från databasen
-$stmt = $pdo->prepare("SELECT username, firstname, email, image FROM users WHERE id = :id");
+$stmt = $pdo->prepare("SELECT id, username, firstname, lastname, email, image FROM users WHERE id = :id");
 $stmt->execute([':id' => $user_id]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -154,7 +160,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Profil - <?php echo htmlspecialchars($user['username']); ?></title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="body_main">
 <header>
     <!-- "Gör ett inlägg" knappen längst till vänster -->
     <div class="header-button left-button">
@@ -169,20 +175,22 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <button class="dropbtn">Meny</button>
         <div class="dropdown-content">            
             <a href="profile.php">Profile</a>
-            <a href="logout.php">Logga ut</a>            
+            <a href="follow.php">Followers</a>
+            <a href="logout.php">Logga ut</a>           
         </div>        
     </div>
 </header>
+
+
 
 <main>
     <!-- Profilsektionen -->
     <div class="profile-info">
         <div class="profile-info-box">
-            <?php if($user['image'] === null): ?>
+            <?php if($user['image'] == null): ?>
                 <img src="img/transparent logo.png" alt="Profilbild">
             <?php else: ?>
-               <?php $_SESSION['guest'] == true ?>
-                <img src="<?php require 'visaProfilBild.php' ?>" alt="Profilbild"> <!-- Här skall bilden för användaren visas om det finns någon -->
+               <img src="data:image/*;base64, <?php echo $user['image'] ?>"> <!-- Här skall bilden för användaren visas om det finns någon -->
             <?php endif ?>
         </div>
         <h2 style="color: white;"><?php echo htmlspecialchars($user['username']); ?></h2>
@@ -195,8 +203,12 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <!-- Visa profil -->
     <form class="update-profile-form" method="POST" action="">
         <div class="form-group">
-            <label for="username">Användarnamn:</label>
-            <p class="guest_profile__p"><?php echo htmlspecialchars($user['username']); ?></p>
+            <label for="username">Förnamn:</label>
+            <p class="guest_profile__p"><?php echo htmlspecialchars($user['firstname']); ?></p>
+        </div>
+        <div class="form-group">
+            <label for="username">Efternamn:</label>
+            <p class="guest_profile__p"><?php echo htmlspecialchars($user['lastname']); ?></p>
         </div>
         <div class="form-group">
             <label for="email">E-post:</label>
@@ -213,23 +225,24 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php endforeach ?>           
                     
         <!-- HÄR SKALL ÄNDRAS TILL DEN sidans ID man är inne på-->
-            <?php if($visitProfile != $_SESSION['user_id']): ?> <!-- KONTROLLERA SÅ ATT INTE PROFILSIDAN MAN ÄR INNE PÅ ÄR ENS EGNA PROFIL -->
-                <?php if($bool): ?>
-                        <button name="follow-button">Follow</button>
-                    <?php else: ?>
-                        <button name="unfollow-button">Unfollow</button>
-                <?php endif ?>                
-            <?php endif ?>
+         <div class="guest-buttons">
+             <?php if($visitProfile != $_SESSION['user_id']): ?> <!-- KONTROLLERA SÅ ATT INTE PROFILSIDAN MAN ÄR INNE PÅ ÄR ENS EGNA PROFIL -->
+                 <?php if($bool): ?>
+                         <button name="follow-button">Follow</button>
+                     <?php else: ?>
+                         <button name="unfollow-button">Unfollow</button>
+                 <?php endif ?>                
+             <?php endif ?>
+         </div>
     </form>
 
-    <!-- Skicka DM -->
-    <?php if($user_id == $_SESSION['user_id']): ?>
-        <?php header("Location: profile.php") ?>
-    <?php else: ?>
+    <!-- Skicka DM -->    
         <form class="create-post-form" method="POST">
             <div class="form-group">
                 
+                <div class="meddelande-button">
                     <button class="DM_funktion" id="toggleEditForm">Skriv ett Meddelande</button>
+                </div>
 
                     <div id="editForm2" class="edit-form" style="display: none;">
                         <h2>Chatt</h2>
@@ -254,7 +267,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
             
         </form>
-    <?php endif ?>
+    
     
     <!-- Inlägg och notifieringar sida vid sida -->
     <div class="content-columns">
@@ -277,7 +290,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 
-
+    </div>
 </main>
 </body>
 </html>

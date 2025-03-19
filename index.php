@@ -8,10 +8,12 @@ $INLOGGAD = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
 
 
     // Fetcha från posts för main content (Stora bilden)
-    $sql_main = 'SELECT p.id, p.userID, p.textInput, p.header, p.imagePath, u.username
+    $sql_main = 'SELECT p.id, p.userID, p.textInput, p.header, p.imagePath, u.username, p.combinedID
                 FROM Posts p
-                LEFT JOIN Users u ON p.userID = u.id
-                ORDER BY p.timeCreated DESC LIMIT 1';
+                LEFT JOIN Users u ON p.userID = u.id  
+                WHERE p.combinedID IS NOT NULL              
+                ORDER BY p.timeCreated DESC LIMIT 1
+                ';
 
     $stmt_main = $pdo->prepare($sql_main);
     $stmt_main->execute();
@@ -22,7 +24,9 @@ if($main_post != NULL) {
     if(!empty($main_post['imagePath'])) {
         //hämtar vald 'BILD' genom postID
         $pictureID = $main_post['imagePath'];
-    } 
+    } else {
+        $pictureID = null;
+    }
 
     $sql_post = 'SELECT p.id, p.userID, p.textInput, p.header, p.image, u.username
                 FROM Posts p
@@ -114,6 +118,7 @@ if($main_post != NULL) {
                 <a href="login.php">Log in</a>
             <?php else : ?>
                 <a href="profile.php">Profile</a>
+                <a href="follow.php">Followers</a>
                 <a href="logout.php">Logga ut</a>
             <?php endif; ?>
         </div>
@@ -186,49 +191,48 @@ if($main_post != NULL) {
     
     <!-- Most Like Posts -->
         <h2>Most Liked Posts</h2>
-        <div class="post-thumbnails">
-            <?php if ($most_liked_posts): ?>
-                <?php foreach($most_liked_posts as $post): ?>                    
-                    <?php if($post['like_count'] >= 1): ?>                        
-                        <a href="post.php?id=<?= $post['id']; ?>" style="text-decoration: none; color: inherit;">
-                        
-                        <div class="thumbnail">
-                        <?php 
-                                //hämtar vald 'BILD' genom postID
-                            $pictureID = $main_post['imagePath'];
+        <div class="post-thumbnails">            
+            <?php if ($most_liked_posts): ?> 
+                <?php if($most_liked_posts[0]['like_count'] > 0): ?>               
+                    <?php foreach($most_liked_posts as $post): ?>                    
+                        <?php if($post['like_count'] >= 1): ?>                        
+                            <a href="post.php?id=<?= $post['id']; ?>" style="text-decoration: none; color: inherit;">
+                            
+                            <div class="thumbnail">
+                            <?php 
+                                    //hämtar vald 'BILD' genom postID
+                                $pictureID = $main_post['imagePath'];
 
-                            $sql_post = 'SELECT p.id, p.userID, p.textInput, p.header, p.image, u.username
-                                        FROM Posts p
-                                        LEFT JOIN Users u ON p.userID = u.id
-                                        WHERE p.id = :post_id';
-                            $stmt_post = $pdo->prepare($sql_post);
-                            $stmt_post->execute(['post_id' => $post['imagePath']]);
-                            $post2 = $stmt_post->fetch(PDO::FETCH_ASSOC); 
-                        ?>
-                            <?php if ($post['imagePath']): ?>                        
-                                <img src="data:image/*;base64, <?php echo $post2['image'] ?>" 
-                                alt="<?php echo htmlspecialchars($post['header']); ?>" 
-                                style="max-width: 100%; height: auto;">
-                            <?php endif; ?>
+                                $sql_post = 'SELECT p.id, p.userID, p.textInput, p.header, p.image, u.username
+                                            FROM Posts p
+                                            LEFT JOIN Users u ON p.userID = u.id
+                                            WHERE p.id = :post_id';
+                                $stmt_post = $pdo->prepare($sql_post);
+                                $stmt_post->execute(['post_id' => $post['imagePath']]);
+                                $post2 = $stmt_post->fetch(PDO::FETCH_ASSOC); 
+                            ?>
+                                <?php if ($post['imagePath']): ?>                        
+                                    <img src="data:image/*;base64, <?php echo $post2['image'] ?>" 
+                                    alt="<?php echo htmlspecialchars($post['header']); ?>" 
+                                    style="max-width: 100%; height: auto;">
+                                <?php endif; ?>
 
-                            <div class="text-container">
-                            <h4><?= htmlspecialchars($post['header']); ?> 
-                                (<?= $post['like_count'] ?> likes)</h4>
-                            <p><?= htmlspecialchars($post['textInput']); ?></p>
-                        </div>
+                                <div class="text-container">
+                                <h4><?= htmlspecialchars($post['header']); ?> 
+                                    (<?= $post['like_count'] ?> likes)</h4>
+                                <p><?= htmlspecialchars($post['textInput']); ?></p>
+                            </div>
 
-                        </div>
-                        </a> 
-                    <?php elseif($counter == 0): ?>
-                        <?php $counter++ ?>
-                    <?php endif ?>
-                <?php endforeach; ?>
-            <?php else: ?>
-                
-                <div class="thumbnail">
-                    <p>No posts have been liked yet</p>
-                </div>                  
-            
+                            </div>
+                            </a> 
+                            
+                        <?php endif ?>
+                    <?php endforeach; ?>  
+                <?php else: ?>
+                    <div class="thumbnail">
+                        <p>No posts have been liked yet</p>
+                    </div>         
+                <?php endif; ?>
             <?php endif; ?>
         </div>
     </aside>
