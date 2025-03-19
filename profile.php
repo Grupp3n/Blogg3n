@@ -191,7 +191,6 @@ $stmt = $pdo->prepare("
 ");
 $stmt->execute([':userID' => $user_id]);
 $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
-var_dump($comments);
 ?>
 
 <!DOCTYPE html>
