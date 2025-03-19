@@ -1768,7 +1768,7 @@ header {
     position: static;
     padding: 10px;
   }
-  .header-button.left-button,
+  /* .header-button.left-button,
   .dropdown.right-dropdown,
   .logo-con {
     position: static;
@@ -1777,5 +1777,5 @@ header {
   }
   .logo-con {
     margin: 5px auto;
-  }
+  } */
 }
