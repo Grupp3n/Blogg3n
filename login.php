@@ -60,9 +60,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="register">
                 <button type="submit">Logga in</button>
             </div>
+            <br>
         </form>
         <a href="register.php">Inte medlem? Registrera dig här</a>
-        <a href="ChangePassword.php">Har du glömt lösenord eller användar namn?</a>
+        <a href="ChangePassword.php">Byt lösenord?</a>
+        <a href="glömt_lösenord.php">Glömt lösenord?</a>
     </div>
 </div>
 
