@@ -122,6 +122,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
             header("Location: index.php");
             exit;
         }  elseif(isset($_POST['nej'])) {
+            header("Location: post.php?id=$post_id");
             exit;
         }
     }    
