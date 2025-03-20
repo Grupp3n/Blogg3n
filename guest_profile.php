@@ -36,7 +36,7 @@ if (!$user) {
 
 
 // Hämta inlägg från DB för den inloggade användaren
-$stmt = $pdo->prepare("SELECT header, textInput, timeCreated FROM posts WHERE userID = :userID ORDER BY timeCreated DESC");
+$stmt = $pdo->prepare("SELECT * FROM posts WHERE userID = :userID ORDER BY timeCreated DESC");
 $stmt->execute([':userID' => $user_id]);
 $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -281,23 +281,49 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <!-- Inlägg och notifieringar sida vid sida -->
     <div class="content-columns">
         <div class="posts">
-            <h3>Senaste inlägg</h3>
-            <?php if (!empty($posts)): ?>
-                <?php foreach ($posts as $post): ?>
-                    <div class="post_guest">
-                        <h4><?php echo nl2br(htmlspecialchars($post['header'])); ?></h4>
-                        <p><?php echo nl2br(htmlspecialchars($post['textInput'])); ?></p>
-                        <small>Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p>Inga inlägg ännu.</p>
-            <?php endif; ?>
-        </div>
-        <div class="notifications">
-            <h3>Nya kommentarer</h3>
-        </div>
+        <h3>Senaste inlägg</h3>
+        <?php if (!empty($posts)): ?>
+            <?php foreach ($posts as $post): ?>
+                <?php if($post['combinedID'] != null): ?>
+                <div class="post">
+                    <h4 style="margin-bottom: 0.7rem;">
+                        <a href="post.php?id=<?php echo htmlspecialchars($post['id']); ?>" style="text-decoration: none; color: white;">
+                            <?php echo nl2br(htmlspecialchars($post['header'])); ?>
+                        </a>
+                    </h4>
+                    <p style="margin-bottom: 0.9rem;">
+                        <a href="post.php?id=<?php echo htmlspecialchars($post['id']); ?>" style="text-decoration: none; color: white;">
+                            <?php echo nl2br(htmlspecialchars($post['textInput'])); ?>
+                        </a>
+                    </p>
+                    <small>Postat: <?php echo htmlspecialchars($post['timeCreated']); ?></small>
+                </div>
+                <?php endif ?>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>Inga inlägg ännu.</p>
+        <?php endif; ?>
     </div>
+    <div class="notifications">
+        <h3>Nya kommentarer</h3>
+        <?php if (!empty($comments)): ?>
+            <?php foreach ($comments as $comment): ?>
+                <div class="comment">
+                    <p>
+                        <a href="post.php?id=<?php echo htmlspecialchars($comment['post_id']); ?>">
+                            <?php echo nl2br(htmlspecialchars($comment['textInput'])); ?>
+                        </a>
+                    </p>
+                    <small>
+                        Kommentar tid: <?php echo htmlspecialchars($comment['timeCreated']); ?> 
+                        | På inlägg: <?php echo htmlspecialchars($comment['header']); ?>
+                    </small>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>Inga nya kommentarer.</p>
+        <?php endif; ?>
+</div>
 
 </div>
 </main>
